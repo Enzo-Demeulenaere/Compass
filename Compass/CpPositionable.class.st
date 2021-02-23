@@ -7,3 +7,24 @@ Class {
 	],
 	#category : #Compass
 }
+
+{ #category : #'instance creation' }
+CpPositionable class >> x: anInteger y: anInteger2 [ 
+	^ self new x: anInteger y: anInteger2 
+]
+
+{ #category : #accessing }
+CpPositionable >> x [
+	^ x
+]
+
+{ #category : #accessing }
+CpPositionable >> x: anInteger y: anInteger2 [ 
+	x := anInteger.
+	y := anInteger2 
+]
+
+{ #category : #accessing }
+CpPositionable >> y [
+	^ y
+]
