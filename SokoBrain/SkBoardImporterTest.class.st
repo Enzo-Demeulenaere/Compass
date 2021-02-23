@@ -36,6 +36,17 @@ SkBoardImporterTest >> testAllSubclassesDefinesATextualMapCharacter [
 ]
 
 { #category : #'tests - basic' }
+SkBoardImporterTest >> testAsciiMap [
+
+	| importer map |
+	self skip.
+	importer := SkBoardImporter new. 
+	map := importer buildMapFor: self map1.
+	self halt.
+	map printString
+]
+
+{ #category : #'tests - basic' }
 SkBoardImporterTest >> testBuilder [
 
 	| importer k |
@@ -47,7 +58,28 @@ SkBoardImporterTest >> testBuilder [
 ]
 
 { #category : #'tests - basic' }
+SkBoardImporterTest >> testBuilderHasCorrectBinding [
+
+	| importer k |
+	importer := SkBoardImporter new. 
+	k := (importer classFor: self firstLine first).
+	self assert: k equals: SkGround.
+		k := (importer classFor: self firstLine last).
+	self assert: k equals: SkWall
+]
+
+{ #category : #'tests - basic' }
 SkBoardImporterTest >> testBuildingEmptyMap [
+
+	| importer map |
+	importer := SkBoardImporter new. 
+	map := importer buildMapFor: self map1.
+	self assert: map lineNumber equals: 11.
+	self assert: map columnNumber equals: 19.
+]
+
+{ #category : #'tests - basic' }
+SkBoardImporterTest >> testBuildingMap [
 
 	| importer map |
 	importer := SkBoardImporter new. 

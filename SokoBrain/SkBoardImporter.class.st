@@ -1,11 +1,6 @@
 Class {
 	#name : #SkBoardImporter,
-	#superclass : #Object,
-	#instVars : [
-		'characterClassBinding',
-		'map',
-		'lines'
-	],
+	#superclass : #SkBoardTool,
 	#category : #SokoBrain
 }
 
@@ -59,6 +54,17 @@ SkBoardImporter >> initialize [
 SkBoardImporter >> maxLineLength [
 	
 	^ lines max: [ :each | each size ]
+]
+
+{ #category : #printing }
+SkBoardImporter >> printOn: aStream [
+	
+	1 to: map numberOfRows do: [ :row |
+		1 to: map numberOfColumns do: [ :column |
+			(map at: row at: column) ifNotNil: [ :el |
+					aStream nextPutAll: 
+						el class textualMapCharacter].
+			aStream cr ]]
 ]
 
 { #category : #extract }

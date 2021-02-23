@@ -26,3 +26,14 @@ SkGame >> columnNumber [
 SkGame >> lineNumber [
 	^ map numberOfRows
 ]
+
+{ #category : #printing }
+SkGame >> printOn: aStream [
+	
+	1 to: map numberOfRows do: [ :row |
+		1 to: map numberOfColumns do: [ :column |
+			(map at: row at: column) ifNotNil: [ :el |
+					aStream nextPut: 
+						el class textualMapCharacter].
+			aStream cr ]]
+]
