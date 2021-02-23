@@ -51,9 +51,9 @@ SkBoardImporterTest >> testBuildingEmptyMap [
 
 	| importer map |
 	importer := SkBoardImporter new. 
-	map := importer buildEmptyMapFor: self map1.
+	map := importer buildMapFor: self map1.
 	self assert: map lineNumber equals: 11.
-	self assert: map columnNumber equals: self firstLine size.
+	self assert: map columnNumber equals: 19.
 ]
 
 { #category : #'tests - basic' }

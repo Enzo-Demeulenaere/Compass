@@ -17,25 +17,52 @@ SkBoardImporter >> buildEmptyMapFor: aString [
 	^ map 
 ]
 
+{ #category : #building }
+SkBoardImporter >> buildMapFor: aString [
+	| game |
+	lines := self splitLines: aString.
+	game := SkGame new. 
+	
+	game buildMapOfExtent: self maxLineLength @ lines size.
+	lines doWithIndex: [ :aLine :lineNumber | 
+		aLine doWithIndex: [ :aChar :columNumber |
+			| new | 
+			new := (self classFor: aChar) new.
+			new position: columNumber @ lineNumber.
+			new game: game.
+			game at: lineNumber at: columNumber put: new ]
+		].
+	^ game 
+]
+
 { #category : #extract }
-SkBoardImporter >> classFor: aCharacter [
+SkBoardImporter >> classFor: aCharacter [ 
 	^ characterClassBinding at: aCharacter ifAbsent: [ SkElement ]
 ]
 
 { #category : #extract }
 SkBoardImporter >> fillMap [
+
 	characterClassBinding := Dictionary new. 
 	SkElement allSubclassesDo: [ :each | 
 		characterClassBinding at: (each textualMapCharacter) put: each ] 
 ]
 
 { #category : #extract }
-SkBoardImporter >> initialize [ 
+SkBoardImporter >> initialize [
+
 	super initialize.
 	self fillMap
 ]
 
+{ #category : #building }
+SkBoardImporter >> maxLineLength [
+	
+	^ lines max: [ :each | each size ]
+]
+
 { #category : #extract }
-SkBoardImporter >> splitLines: aString [ 
+SkBoardImporter >> splitLines: aString [
+
 	^ aString splitOn: Character cr
 ]

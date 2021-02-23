@@ -13,6 +13,11 @@ SkElement >> bringIn: aSkPlayer [
 	^ true
 ]
 
+{ #category : #accessing }
+SkElement >> game: aGame [ 
+	game := aGame
+]
+
 { #category : #move }
 SkElement >> moveIn: aLocation [ 
 	^ aLocation bringIn: self

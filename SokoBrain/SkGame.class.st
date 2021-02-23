@@ -8,6 +8,11 @@ Class {
 }
 
 { #category : #building }
+SkGame >> at: anInteger at: anInteger2 put: anElement [
+	map at: anInteger at: anInteger2 put: anElement 
+]
+
+{ #category : #building }
 SkGame >> buildMapOfExtent: aPoint [ 
 	map := Array2D rows: aPoint y columns: aPoint x 
 ]
