@@ -1,5 +1,5 @@
 Class {
-	#name : #SkGround,
+	#name : #SkTarget,
 	#superclass : #SkElement,
 	#category : #SokoBrain
 }

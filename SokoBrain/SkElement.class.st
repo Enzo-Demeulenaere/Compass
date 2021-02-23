@@ -7,6 +7,17 @@ Class {
 	#category : #SokoBrain
 }
 
+{ #category : #action }
+SkElement >> bringIn: aSkPlayer [ 
+	aSkPlayer position: self position.
+	^ true
+]
+
+{ #category : #move }
+SkElement >> moveIn: aLocation [ 
+	^ aLocation bringIn: self
+]
+
 { #category : #accessing }
 SkElement >> position [
 	^ position
