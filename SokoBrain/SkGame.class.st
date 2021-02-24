@@ -30,10 +30,9 @@ SkGame >> lineNumber [
 { #category : #printing }
 SkGame >> printOn: aStream [
 	
-	1 to: map numberOfRows do: [ :row |
-		1 to: map numberOfColumns do: [ :column |
-			(map at: row at: column) ifNotNil: [ :el |
-					aStream nextPut: 
-						el class textualMapCharacter].
-			aStream cr ]]
+	1 to: map numberOfRows do: [ :rowNumber |
+		1 to: map numberOfColumns do: [ :columnNumber |
+			(map at: rowNumber at: columnNumber) ifNotNil: [ :el |
+					aStream nextPut: el class textualMapCharacter]].
+			aStream cr ]
 ]

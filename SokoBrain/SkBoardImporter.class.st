@@ -1,6 +1,9 @@
 Class {
 	#name : #SkBoardImporter,
 	#superclass : #SkBoardTool,
+	#instVars : [
+		'characterClassBinding'
+	],
 	#category : #SokoBrain
 }
 
@@ -36,7 +39,7 @@ SkBoardImporter >> classFor: aCharacter [
 ]
 
 { #category : #extract }
-SkBoardImporter >> fillMap [
+SkBoardImporter >> fillBindingDictionary [
 
 	characterClassBinding := Dictionary new. 
 	SkElement allSubclassesDo: [ :each | 
@@ -47,13 +50,7 @@ SkBoardImporter >> fillMap [
 SkBoardImporter >> initialize [
 
 	super initialize.
-	self fillMap
-]
-
-{ #category : #building }
-SkBoardImporter >> maxLineLength [
-	
-	^ lines max: [ :each | each size ]
+	self fillBindingDictionary
 ]
 
 { #category : #printing }
@@ -65,10 +62,4 @@ SkBoardImporter >> printOn: aStream [
 					aStream nextPutAll: 
 						el class textualMapCharacter].
 			aStream cr ]]
-]
-
-{ #category : #extract }
-SkBoardImporter >> splitLines: aString [
-
-	^ aString splitOn: Character cr
 ]

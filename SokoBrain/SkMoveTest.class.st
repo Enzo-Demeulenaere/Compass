@@ -4,7 +4,7 @@ Class {
 	#category : #SokoBrain
 }
 
-{ #category : #tests }
+{ #category : #'tests - no chain - one to one' }
 SkMoveTest >> testBoxWantToMoveInAGround [
 
 	| box ground |
@@ -16,7 +16,7 @@ SkMoveTest >> testBoxWantToMoveInAGround [
 	
 ]
 
-{ #category : #tests }
+{ #category : #'tests - no chain - one to one' }
 SkMoveTest >> testBoxWantToMoveInATarget [
 
 	| box target |
@@ -29,7 +29,7 @@ SkMoveTest >> testBoxWantToMoveInATarget [
 	
 ]
 
-{ #category : #tests }
+{ #category : #'tests - no chain - one to one' }
 SkMoveTest >> testPlayerWantToMoveInAGround [
 
 	| player ground |
@@ -41,7 +41,7 @@ SkMoveTest >> testPlayerWantToMoveInAGround [
 	
 ]
 
-{ #category : #tests }
+{ #category : #'tests - no chain - one to one' }
 SkMoveTest >> testPlayerWantToMoveInAWall [
 
 	| player wall |

@@ -12,7 +12,7 @@ SkBoardImporterTest >> firstLine [
 
 { #category : #data }
 SkBoardImporterTest >> map1 [ 
-
+	"Pay attention that there is no return on the last line."
 ^ '    #####
     #   #
     #$  #
@@ -39,11 +39,23 @@ SkBoardImporterTest >> testAllSubclassesDefinesATextualMapCharacter [
 SkBoardImporterTest >> testAsciiMap [
 
 	| importer map |
-	self skip.
 	importer := SkBoardImporter new. 
 	map := importer buildMapFor: self map1.
-	self halt.
-	map printString
+	self assert: map printString equals: 
+'    #####
+    #   #
+    #$  #
+  ###  $##
+  #  $ $ #
+### # ## #   ######
+#   # ## #####  ..#
+# $  $          ..#
+##### ### #@##  ..#
+    #     #########
+    #######
+'.
+	
+	self assert: map printString allButLast equals: self map1
 ]
 
 { #category : #'tests - basic' }
