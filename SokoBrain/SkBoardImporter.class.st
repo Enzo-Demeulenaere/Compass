@@ -20,7 +20,7 @@ SkBoardImporter >> buildMapFor: aString [
 	| game |
 	lines := self splitLines: aString.
 	game := SkBoard new. 
-	
+	self checkMapValidity: aString.
 	game buildMapOfExtent: self maxLineLength @ lines size.
 	lines doWithIndex: [ :aLine :lineNumber | 
 		aLine doWithIndex: [ :aChar :columNumber |
@@ -31,6 +31,22 @@ SkBoardImporter >> buildMapFor: aString [
 			game at: lineNumber at: columNumber put: new ]
 		].
 	^ game 
+]
+
+{ #category : #building }
+SkBoardImporter >> checkMapValidity: aString [
+	"A map should 
+		have one and only one player
+		at least a target
+		the same amount of targets and boxes"
+	| playNumber boxNumber |	
+	playNumber := (aString occurrencesOf: SkPlayer textualMapCharacter).
+	playNumber = 1 ifFalse: [ self error: 'A game should have one and only one player'].
+	boxNumber := (aString occurrencesOf: SkBox textualMapCharacter).
+	boxNumber >= 0 
+		ifFalse: [ self error: 'A game should have a positive number of boxes' ].
+	(boxNumber =  (aString occurrencesOf: SkTarget textualMapCharacter))
+		ifFalse: [ self error: 'A game should have the same amount of boxes and targets' ]	
 ]
 
 { #category : #extract }

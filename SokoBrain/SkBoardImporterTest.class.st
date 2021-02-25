@@ -35,7 +35,7 @@ SkBoardImporterTest >> testAllSubclassesDefinesATextualMapCharacter [
 		self assert: (importer classFor: k textualMapCharacter) equals: k ]
 ]
 
-{ #category : #'tests - basic' }
+{ #category : #'tests - printing' }
 SkBoardImporterTest >> testAsciiMap [
 
 	| importer map |
@@ -80,7 +80,7 @@ SkBoardImporterTest >> testBuilderHasCorrectBinding [
 	self assert: k equals: SkWall
 ]
 
-{ #category : #'tests - basic' }
+{ #category : #'tests - building' }
 SkBoardImporterTest >> testBuildingEmptyMap [
 
 	| importer map |
@@ -90,7 +90,7 @@ SkBoardImporterTest >> testBuildingEmptyMap [
 	self assert: map columnNumber equals: 19.
 ]
 
-{ #category : #'tests - basic' }
+{ #category : #'tests - building' }
 SkBoardImporterTest >> testBuildingMap [
 
 	| importer map |
@@ -98,6 +98,33 @@ SkBoardImporterTest >> testBuildingMap [
 	map := importer buildMapFor: self map1.
 	self assert: map lineNumber equals: 11.
 	self assert: map columnNumber equals: 19.
+]
+
+{ #category : #'tests - validaty' }
+SkBoardImporterTest >> testCheckMapValidity [
+	| importer |
+	importer := SkBoardImporter new. 
+	self shouldnt: [ importer checkMapValidity: self map1 ] raise: Error.
+
+	
+]
+
+{ #category : #'tests - validaty' }
+SkBoardImporterTest >> testCheckMapValidityAMapShouldHaveAPlayer [
+	| importer |
+	importer := SkBoardImporter new. 
+	self should: [ importer checkMapValidity: (self map1 copyReplaceAll: SkPlayer textualMapCharacter  with: $Z )] raise: Error.
+
+	
+]
+
+{ #category : #'tests - validaty' }
+SkBoardImporterTest >> testCheckMapValidityAMapShouldHaveTheSameNumberOfBoxesAndTargets [
+	| importer |
+	importer := SkBoardImporter new. 
+	self should: [ importer checkMapValidity: (self map1, SkBox textualMapCharacter asString  )] raise: Error.
+
+	
 ]
 
 { #category : #'tests - basic' }
