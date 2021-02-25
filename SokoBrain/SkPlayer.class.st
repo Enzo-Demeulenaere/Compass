@@ -17,5 +17,5 @@ SkPlayer >> isPlayer [
 { #category : #move }
 SkPlayer >> move: aCpEastDirection [ 
 
-	^ board atPosition: (aCpEastDirection * self position)
+	^ self moveIn: (board atPosition: (aCpEastDirection * self position))
 ]
