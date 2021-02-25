@@ -30,6 +30,18 @@ SkMoveTest >> testBoxWantToMoveInATarget [
 ]
 
 { #category : #'tests - no chain - one to one' }
+SkMoveTest >> testBoxWantToMoveInAWall [
+
+	| box wall |
+	box := SkBox new.
+	wall := SkWall new.
+	"move in returns a boolean representing whether the receiver
+	changed position."
+	self deny: (box moveIn: wall)  
+	
+]
+
+{ #category : #'tests - no chain - one to one' }
 SkMoveTest >> testPlayerWantToMoveInAGround [
 
 	| player ground |
@@ -38,6 +50,18 @@ SkMoveTest >> testPlayerWantToMoveInAGround [
 	"move in returns a boolean representing whether the receiver
 	changed position."
 	self assert: (player moveIn: ground)  
+	
+]
+
+{ #category : #'tests - no chain - one to one' }
+SkMoveTest >> testPlayerWantToMoveInATarget [
+
+	| player target |
+	player := SkPlayer new.
+	target := SkTarget new.
+	"move in returns a boolean representing whether the receiver
+	changed position."
+	self assert: (player moveIn: target)  
 	
 ]
 

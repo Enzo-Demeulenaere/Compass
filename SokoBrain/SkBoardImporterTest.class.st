@@ -100,7 +100,7 @@ SkBoardImporterTest >> testBuildingMap [
 	self assert: map columnNumber equals: 19.
 ]
 
-{ #category : #'tests - validaty' }
+{ #category : #'tests - validity' }
 SkBoardImporterTest >> testCheckMapValidity [
 	| importer |
 	importer := SkBoardImporter new. 
@@ -109,7 +109,7 @@ SkBoardImporterTest >> testCheckMapValidity [
 	
 ]
 
-{ #category : #'tests - validaty' }
+{ #category : #'tests - validity' }
 SkBoardImporterTest >> testCheckMapValidityAMapShouldHaveAPlayer [
 	| importer |
 	importer := SkBoardImporter new. 
@@ -118,7 +118,7 @@ SkBoardImporterTest >> testCheckMapValidityAMapShouldHaveAPlayer [
 	
 ]
 
-{ #category : #'tests - validaty' }
+{ #category : #'tests - validity' }
 SkBoardImporterTest >> testCheckMapValidityAMapShouldHaveTheSameNumberOfBoxesAndTargets [
 	| importer |
 	importer := SkBoardImporter new. 
