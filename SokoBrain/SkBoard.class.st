@@ -8062,6 +8062,11 @@ SkBoard >> at: anInteger at: anInteger2 put: anElement [
 	map at: anInteger at: anInteger2 put: anElement 
 ]
 
+{ #category : #accessing }
+SkBoard >> atPosition: aCpPositionable [ 
+	^ map at: aCpPositionable y at: aCpPositionable x 
+]
+
 { #category : #building }
 SkBoard >> buildMapOfExtent: aPoint [ 
 	map := Array2D rows: aPoint y columns: aPoint x tabulate: [ :row :column | SkGround new position: column @ row ]

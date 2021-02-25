@@ -13,3 +13,9 @@ SkPlayer class >> textualMapCharacter [
 SkPlayer >> isPlayer [ 
 	^ true
 ]
+
+{ #category : #move }
+SkPlayer >> move: aCpEastDirection [ 
+
+	^ board atPosition: (aCpEastDirection * self position)
+]
