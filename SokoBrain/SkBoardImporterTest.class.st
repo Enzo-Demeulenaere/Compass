@@ -41,21 +41,18 @@ SkBoardImporterTest >> testAsciiMap [
 	| importer map |
 	importer := SkBoardImporter new. 
 	map := importer buildMapFor: self map1.
-	self assert: map printString equals: 
-'    #####
-    #   #
-    #$  #
-  ###  $##
-  #  $ $ #
+	self assert: map printString equals: '    #####          
+    #   #          
+    #$  #          
+  ###  $##         
+  #  $ $ #         
 ### # ## #   ######
 #   # ## #####  ..#
 # $  $          ..#
 ##### ### #@##  ..#
     #     #########
-    #######
-'.
-	" we do not consider the last cr"
-	self assert: map printString allButLast equals: self map1
+    #######        
+'
 ]
 
 { #category : #'tests - basic' }

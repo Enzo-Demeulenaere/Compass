@@ -13,20 +13,19 @@ Class {
 }
 
 { #category : #building }
-SkBoardImporter >> buildEmptyMapFor: aString [ 
-	game := SkBoard new.
-	lines := self splitLines: aString.
-	game buildMapOfExtent: lines first size @ lines size.
-	^ game 
-]
-
-{ #category : #building }
-SkBoardImporter >> buildMapFor: aString [
+SkBoardImporter >> buildEmptyFor: aString [
 
 	lines := self splitLines: aString.
 	self checkMapValidity: aString.
 	game := SkBoard new. 
 	game buildMapOfExtent: self maxLineLength @ lines size.
+	
+]
+
+{ #category : #building }
+SkBoardImporter >> buildMapFor: aString [
+
+	self buildEmptyFor: aString.
 	lines doWithIndex: [ :aLine :lineNumber | 
 		aLine doWithIndex: [ :aChar :columNumber |
 			| new | 
