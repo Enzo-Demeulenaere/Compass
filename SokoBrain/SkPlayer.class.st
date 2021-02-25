@@ -17,11 +17,10 @@ SkPlayer >> isPlayer [
 { #category : #move }
 SkPlayer >> move: aCpDirection [
 
-	| newPosition canNeighborMove neighbor |
+	| newPosition neighbor |
 	newPosition := aCpDirection * self position.
 	neighbor := board atPosition: newPosition.
-	canNeighborMove := neighbor moveIn: (board atPosition: (aCpDirection * newPosition)) going: aCpDirection.
-	^ canNeighborMove 
-		ifTrue: [ self moveIn: neighbor going: aCpDirection. true ]
-		ifFalse: [  false ]
+	^ self moveIn: neighbor going: aCpDirection
+	
+	
 ]

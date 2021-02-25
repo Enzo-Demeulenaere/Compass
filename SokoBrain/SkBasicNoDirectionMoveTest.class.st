@@ -12,7 +12,7 @@ SkBasicNoDirectionMoveTest >> testBoxWantToMoveInAGround [
 	ground := SkGround new.
 	"move in returns a boolean representing whether the receiver
 	changed position."
-	self assert: (box moveIn: ground)  
+	self assert: (box moveIn: ground going: nil)  
 	
 ]
 
@@ -24,7 +24,7 @@ SkBasicNoDirectionMoveTest >> testBoxWantToMoveInATarget [
 	target := SkTarget new.
 	"move in returns a boolean representing whether the receiver
 	changed position."
-	self assert: (box moveIn: target).
+	self assert: (box moveIn: target going: nil).
 	"we will have to test that a target is filled up."  
 	
 ]
@@ -37,7 +37,7 @@ SkBasicNoDirectionMoveTest >> testBoxWantToMoveInAWall [
 	wall := SkWall new.
 	"move in returns a boolean representing whether the receiver
 	changed position."
-	self deny: (box moveIn: wall)  
+	self deny: (box moveIn: wall going: nil)  
 	
 ]
 
@@ -49,7 +49,7 @@ SkBasicNoDirectionMoveTest >> testPlayerWantToMoveInAGround [
 	ground := SkGround new.
 	"move in returns a boolean representing whether the receiver
 	changed position."
-	self assert: (player moveIn: ground)  
+	self assert: (player moveIn: ground going: nil)  
 	
 ]
 
@@ -61,7 +61,7 @@ SkBasicNoDirectionMoveTest >> testPlayerWantToMoveInATarget [
 	target := SkTarget new.
 	"move in returns a boolean representing whether the receiver
 	changed position."
-	self assert: (player moveIn: target)  
+	self assert: (player moveIn: target going: nil)  
 	
 ]
 
@@ -73,6 +73,6 @@ SkBasicNoDirectionMoveTest >> testPlayerWantToMoveInAWall [
 	wall := SkWall new.
 	"move in returns a boolean representing whether the receiver
 	changed position."
-	self deny: (player moveIn: wall)  
+	self deny: (player moveIn: wall going: nil)  
 	
 ]

@@ -9,8 +9,10 @@ Class {
 }
 
 { #category : #action }
-SkElement >> bringIn: aSkPlayer [ 
-	aSkPlayer position: self position.
+SkElement >> bringIn: aSkMovable going: aDirection [
+	"By default when a movable wants to move in, we move it in."
+	
+	aSkMovable position: self position.
 	^ true
 ]
 
@@ -20,19 +22,11 @@ SkElement >> isPlayer [
 ]
 
 { #category : #move }
-SkElement >> moveIn: aLocation [ 
+SkElement >> moveIn: aNeighbor going: aDirection [
 	"To move in a position, we ask the entity where we want to get in to decide.
 	This is not a double dispatch per se because we do not have to discrimnate on the receiver."
 	
-	^ aLocation bringIn: self
-]
-
-{ #category : #move }
-SkElement >> moveIn: aLocation going: aDirection [
-	"To move in a position, we ask the entity where we want to get in to decide.
-	This is not a double dispatch per se because we do not have to discrimnate on the receiver."
-	
-	^ aLocation bringIn: self
+	^ aNeighbor bringIn: self going: aDirection
 ]
 
 { #category : #accessing }

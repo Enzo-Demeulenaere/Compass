@@ -49,12 +49,15 @@ SkMoveInSituationTest >> testPushingABoxOnGround [
 	importer := SkBoardImporter new. 
 	game := importer buildMapFor: '#@$  .#'.
 	game identifyPlayer.
-	position := game player position. 
+	position := game player position.
 	self assert: (game player move: CpDirection east).
 	self assert: game player position x equals: (CpDirection east * position) x.
-	self assert: game player position y equals: (CpDirection east * position) y.
+	self assert: game player position x equals: 3.
 	
 	"The player has moves, now cheking that the box has moved too"
+	"Now the board contents is not correctly updated."
+	self assert: (game atPosition: (3@1)) position x equals: 4.
+	"what!"
 	self assert: ((game atPosition: CpDirection east * game player position) isKindOf: SkBox)
 	
 ]

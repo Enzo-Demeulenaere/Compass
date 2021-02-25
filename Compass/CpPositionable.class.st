@@ -14,6 +14,16 @@ CpPositionable class >> x: anInteger y: anInteger2 [
 ]
 
 { #category : #accessing }
+CpPositionable >> printOn: aStream [
+	super printOn: aStream.
+	aStream nextPut: $(.
+	x printOn: aStream.
+	aStream nextPutAll: ', '.
+	y printOn: aStream.
+	aStream nextPut: $)
+]
+
+{ #category : #accessing }
 CpPositionable >> x [
 	^ x
 ]

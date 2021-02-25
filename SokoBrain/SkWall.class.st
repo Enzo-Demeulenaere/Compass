@@ -11,7 +11,7 @@ SkWall class >> textualMapCharacter [
 ]
 
 { #category : #move }
-SkWall >> bringIn: anActor [
+SkWall >> bringIn: anActor going: aDirection [
 	"anActor does not move in a wall. Nothing enter a wall."
 	
 	^ false
