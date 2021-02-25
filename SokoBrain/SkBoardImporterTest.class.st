@@ -54,7 +54,7 @@ SkBoardImporterTest >> testAsciiMap [
     #     #########
     #######
 '.
-	
+	" we do not consider the last cr"
 	self assert: map printString allButLast equals: self map1
 ]
 

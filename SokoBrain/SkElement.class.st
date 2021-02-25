@@ -2,7 +2,8 @@ Class {
 	#name : #SkElement,
 	#superclass : #Object,
 	#instVars : [
-		'position'
+		'position',
+		'board'
 	],
 	#category : #SokoBrain
 }
@@ -11,11 +12,6 @@ Class {
 SkElement >> bringIn: aSkPlayer [ 
 	aSkPlayer position: self position.
 	^ true
-]
-
-{ #category : #accessing }
-SkElement >> game: aGame [ 
-	game := aGame
 ]
 
 { #category : #move }
@@ -31,4 +27,9 @@ SkElement >> position [
 { #category : #accessing }
 SkElement >> position: aPosition [
 	position := aPosition
+]
+
+{ #category : #accessing }
+SkElement >> setBoard: aGame [ 
+	game := aGame
 ]

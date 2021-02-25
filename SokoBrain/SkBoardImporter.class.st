@@ -9,7 +9,7 @@ Class {
 
 { #category : #building }
 SkBoardImporter >> buildEmptyMapFor: aString [ 
-	map := SkGame new.
+	map := SkBoard new.
 	lines := self splitLines: aString.
 	map buildMapOfExtent: lines first size @ lines size.
 	^ map 
@@ -19,7 +19,7 @@ SkBoardImporter >> buildEmptyMapFor: aString [
 SkBoardImporter >> buildMapFor: aString [
 	| game |
 	lines := self splitLines: aString.
-	game := SkGame new. 
+	game := SkBoard new. 
 	
 	game buildMapOfExtent: self maxLineLength @ lines size.
 	lines doWithIndex: [ :aLine :lineNumber | 
@@ -27,7 +27,7 @@ SkBoardImporter >> buildMapFor: aString [
 			| new | 
 			new := (self classFor: aChar) new.
 			new position: columNumber @ lineNumber.
-			new game: game.
+			new setBoard: game.
 			game at: lineNumber at: columNumber put: new ]
 		].
 	^ game 

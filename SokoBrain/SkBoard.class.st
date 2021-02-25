@@ -1,5 +1,5 @@
 Class {
-	#name : #SkGame,
+	#name : #SkBoard,
 	#superclass : #Object,
 	#instVars : [
 		'map'
@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #mazes }
-SkGame class >> mazesLoma [
+SkBoard class >> mazesLoma [
 	"hsasquatch/sokoban/loma.html"
 
 	^ IdentityDictionary new
@@ -100,7 +100,7 @@ SkGame class >> mazesLoma [
 ]
 
 { #category : #mazes }
-SkGame class >> mazesMicroban1 [
+SkBoard class >> mazesMicroban1 [
 	"sasquatch/sokoban/microban.html"
 
 	^ IdentityDictionary new
@@ -733,7 +733,7 @@ SkGame class >> mazesMicroban1 [
 ]
 
 { #category : #mazes }
-SkGame class >> mazesMicroban2 [
+SkBoard class >> mazesMicroban2 [
 	"sasquatch/sokoban/microban.html"
 
 	^ IdentityDictionary new
@@ -1474,7 +1474,7 @@ SkGame class >> mazesMicroban2 [
 ]
 
 { #category : #mazes }
-SkGame class >> mazesPack1 [
+SkBoard class >> mazesPack1 [
 	"sasquatch/sokoban/masmicroban.html"
 
 	^ IdentityDictionary new
@@ -2079,7 +2079,7 @@ SkGame class >> mazesPack1 [
 ]
 
 { #category : #mazes }
-SkGame class >> mazesPack2 [
+SkBoard class >> mazesPack2 [
 	"sasquatch/sokoban/masmicroban.html"
 
 	^ IdentityDictionary new
@@ -2893,7 +2893,7 @@ SkGame class >> mazesPack2 [
 ]
 
 { #category : #mazes }
-SkGame class >> mazesSasquatch [
+SkBoard class >> mazesSasquatch [
 	"sasquatch/sokoban/massasquatch.html"
 
 	^ IdentityDictionary new
@@ -3642,7 +3642,7 @@ SkGame class >> mazesSasquatch [
 ]
 
 { #category : #mazes }
-SkGame class >> mazesSasquatchIII [
+SkBoard class >> mazesSasquatchIII [
 	"sasquatch/sokoban/sasquatchiii.html"
 
 	^ IdentityDictionary new
@@ -4402,7 +4402,7 @@ SkGame class >> mazesSasquatchIII [
 ]
 
 { #category : #mazes }
-SkGame class >> mazesSasquatchIV [
+SkBoard class >> mazesSasquatchIV [
 	"sasquatch/sokoban/sasquatchiv.html"
 
 	^ IdentityDictionary new
@@ -5072,7 +5072,7 @@ SkGame class >> mazesSasquatchIV [
 ]
 
 { #category : #mazes }
-SkGame class >> mazesSasquatchV [
+SkBoard class >> mazesSasquatchV [
 	"sasquatch/sokoban/sasquatchv.html"
 
 	^ IdentityDictionary new
@@ -5798,7 +5798,7 @@ SkGame class >> mazesSasquatchV [
 ]
 
 { #category : #mazes }
-SkGame class >> mazesSasquatchVI [
+SkBoard class >> mazesSasquatchVI [
 	"sasquatch/sokoban/sasquatchvi.html"
 
 	^ IdentityDictionary new
@@ -6558,7 +6558,7 @@ SkGame class >> mazesSasquatchVI [
 ]
 
 { #category : #mazes }
-SkGame class >> mazesUAlberta [
+SkBoard class >> mazesUAlberta [
 
 	^ IdentityDictionary new
 		at: 1 put: '    #####
@@ -8057,27 +8057,27 @@ SkGame class >> mazesUAlberta [
 ]
 
 { #category : #building }
-SkGame >> at: anInteger at: anInteger2 put: anElement [
+SkBoard >> at: anInteger at: anInteger2 put: anElement [
 	map at: anInteger at: anInteger2 put: anElement 
 ]
 
 { #category : #building }
-SkGame >> buildMapOfExtent: aPoint [ 
+SkBoard >> buildMapOfExtent: aPoint [ 
 	map := Array2D rows: aPoint y columns: aPoint x 
 ]
 
 { #category : #accessing }
-SkGame >> columnNumber [
+SkBoard >> columnNumber [
 	^ map numberOfColumns
 ]
 
 { #category : #accessing }
-SkGame >> lineNumber [
+SkBoard >> lineNumber [
 	^ map numberOfRows
 ]
 
 { #category : #printing }
-SkGame >> printOn: aStream [
+SkBoard >> printOn: aStream [
 	
 	1 to: map numberOfRows do: [ :rowNumber |
 		1 to: map numberOfColumns do: [ :columnNumber |
