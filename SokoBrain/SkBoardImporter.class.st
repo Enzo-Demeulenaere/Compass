@@ -1,26 +1,31 @@
+"
+For now '   #   #' is a valid line we do not distinguish ground around the walls from ground inside. 
+This is left as an exercise. 
+For example we could introduce a new kind of bricks call SkNull to represent any ground before the first # and after the last #.
+
+To deal with such limitation it means that the board space should be fully initialized with a ground, else when the last # is not the last element of the list we will get nil or the default value of the underlying container. 
+
+"
 Class {
 	#name : #SkBoardImporter,
 	#superclass : #SkBoardTool,
-	#instVars : [
-		'characterClassBinding'
-	],
-	#category : #SokoBrain
+	#category : #'SokoBrain-Model'
 }
 
 { #category : #building }
 SkBoardImporter >> buildEmptyMapFor: aString [ 
-	map := SkBoard new.
+	game := SkBoard new.
 	lines := self splitLines: aString.
-	map buildMapOfExtent: lines first size @ lines size.
-	^ map 
+	game buildMapOfExtent: lines first size @ lines size.
+	^ game 
 ]
 
 { #category : #building }
 SkBoardImporter >> buildMapFor: aString [
-	| game |
+
 	lines := self splitLines: aString.
-	game := SkBoard new. 
 	self checkMapValidity: aString.
+	game := SkBoard new. 
 	game buildMapOfExtent: self maxLineLength @ lines size.
 	lines doWithIndex: [ :aLine :lineNumber | 
 		aLine doWithIndex: [ :aChar :columNumber |
@@ -49,32 +54,12 @@ SkBoardImporter >> checkMapValidity: aString [
 		ifFalse: [ self error: 'A game should have the same amount of boxes and targets' ]	
 ]
 
-{ #category : #extract }
-SkBoardImporter >> classFor: aCharacter [ 
-	^ characterClassBinding at: aCharacter ifAbsent: [ SkElement ]
-]
-
-{ #category : #extract }
-SkBoardImporter >> fillBindingDictionary [
-
-	characterClassBinding := Dictionary new. 
-	SkElement allSubclassesDo: [ :each | 
-		characterClassBinding at: (each textualMapCharacter) put: each ] 
-]
-
-{ #category : #extract }
-SkBoardImporter >> initialize [
-
-	super initialize.
-	self fillBindingDictionary
-]
-
 { #category : #printing }
 SkBoardImporter >> printOn: aStream [
 	
-	1 to: map numberOfRows do: [ :row |
-		1 to: map numberOfColumns do: [ :column |
-			(map at: row at: column) ifNotNil: [ :el |
+	1 to: game numberOfRows do: [ :row |
+		1 to: game numberOfColumns do: [ :column |
+			(game at: row at: column) ifNotNil: [ :el |
 					aStream nextPutAll: 
 						el class textualMapCharacter].
 			aStream cr ]]

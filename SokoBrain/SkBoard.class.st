@@ -2,9 +2,10 @@ Class {
 	#name : #SkBoard,
 	#superclass : #Object,
 	#instVars : [
-		'map'
+		'map',
+		'player'
 	],
-	#category : #SokoBrain
+	#category : #'SokoBrain-Model'
 }
 
 { #category : #mazes }
@@ -8063,7 +8064,7 @@ SkBoard >> at: anInteger at: anInteger2 put: anElement [
 
 { #category : #building }
 SkBoard >> buildMapOfExtent: aPoint [ 
-	map := Array2D rows: aPoint y columns: aPoint x 
+	map := Array2D rows: aPoint y columns: aPoint x tabulate: [ :row :column | SkGround new position: column @ row ]
 ]
 
 { #category : #accessing }
@@ -8071,9 +8072,20 @@ SkBoard >> columnNumber [
 	^ map numberOfColumns
 ]
 
+{ #category : #building }
+SkBoard >> identifyPlayer [
+
+	player := map detect: [ :each | each isPlayer ] 
+]
+
 { #category : #accessing }
 SkBoard >> lineNumber [
 	^ map numberOfRows
+]
+
+{ #category : #accessing }
+SkBoard >> player [
+	^ player
 ]
 
 { #category : #printing }

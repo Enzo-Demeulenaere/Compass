@@ -1,7 +1,7 @@
 Class {
 	#name : #SkBoardImporterTest,
 	#superclass : #TestCase,
-	#category : #SokoBrain
+	#category : #'SokoBrain-Tests'
 }
 
 { #category : #data }
@@ -56,17 +56,6 @@ SkBoardImporterTest >> testAsciiMap [
 '.
 	" we do not consider the last cr"
 	self assert: map printString allButLast equals: self map1
-]
-
-{ #category : #'tests - basic' }
-SkBoardImporterTest >> testBuilder [
-
-	| importer k |
-	importer := SkBoardImporter new. 
-	k := (importer classFor: self firstLine first).
-	self assert: k equals: SkGround.
-		k := (importer classFor: self firstLine last).
-	self assert: k equals: SkWall
 ]
 
 { #category : #'tests - basic' }

@@ -1,11 +1,11 @@
 Class {
-	#name : #SkMoveTest,
+	#name : #SkBasicNoDirectionMoveTest,
 	#superclass : #TestCase,
-	#category : #SokoBrain
+	#category : #'SokoBrain-Tests'
 }
 
 { #category : #'tests - no chain - one to one' }
-SkMoveTest >> testBoxWantToMoveInAGround [
+SkBasicNoDirectionMoveTest >> testBoxWantToMoveInAGround [
 
 	| box ground |
 	box := SkBox new.
@@ -17,7 +17,7 @@ SkMoveTest >> testBoxWantToMoveInAGround [
 ]
 
 { #category : #'tests - no chain - one to one' }
-SkMoveTest >> testBoxWantToMoveInATarget [
+SkBasicNoDirectionMoveTest >> testBoxWantToMoveInATarget [
 
 	| box target |
 	box := SkBox new.
@@ -30,7 +30,7 @@ SkMoveTest >> testBoxWantToMoveInATarget [
 ]
 
 { #category : #'tests - no chain - one to one' }
-SkMoveTest >> testBoxWantToMoveInAWall [
+SkBasicNoDirectionMoveTest >> testBoxWantToMoveInAWall [
 
 	| box wall |
 	box := SkBox new.
@@ -42,7 +42,7 @@ SkMoveTest >> testBoxWantToMoveInAWall [
 ]
 
 { #category : #'tests - no chain - one to one' }
-SkMoveTest >> testPlayerWantToMoveInAGround [
+SkBasicNoDirectionMoveTest >> testPlayerWantToMoveInAGround [
 
 	| player ground |
 	player := SkPlayer new.
@@ -54,7 +54,7 @@ SkMoveTest >> testPlayerWantToMoveInAGround [
 ]
 
 { #category : #'tests - no chain - one to one' }
-SkMoveTest >> testPlayerWantToMoveInATarget [
+SkBasicNoDirectionMoveTest >> testPlayerWantToMoveInATarget [
 
 	| player target |
 	player := SkPlayer new.
@@ -66,7 +66,7 @@ SkMoveTest >> testPlayerWantToMoveInATarget [
 ]
 
 { #category : #'tests - no chain - one to one' }
-SkMoveTest >> testPlayerWantToMoveInAWall [
+SkBasicNoDirectionMoveTest >> testPlayerWantToMoveInAWall [
 
 	| player wall |
 	player := SkPlayer new.

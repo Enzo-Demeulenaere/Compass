@@ -1,10 +1,15 @@
 Class {
 	#name : #SkPlayer,
 	#superclass : #SkElement,
-	#category : #SokoBrain
+	#category : #'SokoBrain-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'default encoding' }
 SkPlayer class >> textualMapCharacter [ 
 	^ $@
+]
+
+{ #category : #move }
+SkPlayer >> isPlayer [ 
+	^ true
 ]

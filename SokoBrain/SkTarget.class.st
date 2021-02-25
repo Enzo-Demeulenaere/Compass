@@ -1,10 +1,10 @@
 Class {
 	#name : #SkTarget,
 	#superclass : #SkElement,
-	#category : #SokoBrain
+	#category : #'SokoBrain-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'default encoding' }
 SkTarget class >> textualMapCharacter [ 
 
 	^ $.
