@@ -10,9 +10,10 @@ Class {
 
 { #category : #action }
 SkElement >> bringIn: aSkMovable going: aDirection [
-	"By default when a movable wants to move in, we move it in."
+	"By default when a movable wants to move in, we move it in. By default do not use the direction, it is only usd for case where we need to check the next element in that direction, e.g., Player push a Box and the box should check if there is a ground or a wall before moving in that direction."
 	
 	aSkMovable position: self position.
+	board updatePositionOf: self to: self position.
 	^ true
 ]
 
@@ -39,6 +40,14 @@ SkElement >> position: aPosition [
 	"A position is a x,y kind of object."
 	
 	position := aPosition
+]
+
+{ #category : #printing }
+SkElement >> printOn: aStream [ 
+
+	super printOn: aStream.
+	aStream nextPut: $-.
+	position printOn: aStream
 ]
 
 { #category : #accessing }

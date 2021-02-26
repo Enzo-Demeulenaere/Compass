@@ -27,13 +27,11 @@ SkBoardImporter >> buildMapFor: aString [
 
 	self buildEmptyFor: aString.
 	lines doWithIndex: [ :aLine :lineNumber | 
-		aLine doWithIndex: [ :aChar :columNumber |
-			"could be moved to board"
+		aLine doWithIndex: [ :aChar :columnNumber |
 			| new | 
 			new := (self classFor: aChar) new.
-			new position: columNumber @ lineNumber.
-			new setBoard: game.
-			game at: lineNumber at: columNumber put: (OrderedCollection with: new) ]
+			game initializeElement: new atLine: lineNumber column: columnNumber.
+		 ]
 		].
 	^ game 
 ]
@@ -52,15 +50,4 @@ SkBoardImporter >> checkMapValidity: aString [
 		ifFalse: [ self error: 'A game should have a positive number of boxes' ].
 	(boxNumber =  (aString occurrencesOf: SkTarget textualMapCharacter))
 		ifFalse: [ self error: 'A game should have the same amount of boxes and targets' ]	
-]
-
-{ #category : #printing }
-SkBoardImporter >> printOn: aStream [
-	
-	1 to: game numberOfRows do: [ :row |
-		1 to: game numberOfColumns do: [ :column |
-			(game at: row at: column) ifNotNil: [ :el |
-					aStream nextPutAll: 
-						el class textualMapCharacter].
-			aStream cr ]]
 ]

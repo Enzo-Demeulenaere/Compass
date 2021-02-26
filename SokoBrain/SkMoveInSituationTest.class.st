@@ -5,6 +5,20 @@ Class {
 }
 
 { #category : #'tests - building' }
+SkMoveInSituationTest >> testBoxMovingOnTarget [
+
+	| importer game position |
+	self skip.
+	importer := SkBoardImporter new. 
+	game := importer buildMapFor: '#@.$#'."The situation should be changed"
+	game identifyPlayer.
+	position := game player position. 
+	self assert: (game player move: CpDirection east).
+	self assert: game player position x equals: (CpDirection east * position) x.
+	self assert: game player position y equals: (CpDirection east * position) y.
+]
+
+{ #category : #'tests - building' }
 SkMoveInSituationTest >> testPlayerBumpingInWall [
 
 	| importer game position  |

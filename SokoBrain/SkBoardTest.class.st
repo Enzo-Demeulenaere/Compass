@@ -43,3 +43,43 @@ SkBoardTest >> testPlayerIsAvailable [
 	self assert: game player position x equals: 12.
 	self assert: game player position y equals: 9.
 ]
+
+{ #category : #tests }
+SkBoardTest >> testPrintOn [
+	| importer map |
+	importer := SkBoardImporter new. 
+	map := importer buildMapFor: self map1.
+	self assert: map printString equals: '    #####          
+    #   #          
+    #$  #          
+  ###  $##         
+  #  $ $ #         
+### # ## #   ######
+#   # ## #####  ..#
+# $  $          ..#
+##### ### #@##  ..#
+    #     #########
+    #######        
+'
+]
+
+{ #category : #tests }
+SkBoardTest >> testRawPrintOn [
+	| importer map contents |
+	importer := SkBoardImporter new. 
+	map := importer buildMapFor: self map1.
+	contents := String streamContents: [ :st |
+		map rawPrintOn: st ].
+	self assert: contents equals: '    [ ]    [ ]    [ ]    [ ]    [#]    [#]    [#]    [#]    [#]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]
+    [ ]    [ ]    [ ]    [ ]    [#]    [ ]    [ ]    [ ]    [#]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]
+    [ ]    [ ]    [ ]    [ ]    [#]    [$]    [ ]    [ ]    [#]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]
+    [ ]    [ ]    [#]    [#]    [#]    [ ]    [ ]    [$]    [#]    [#]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]
+    [ ]    [ ]    [#]    [ ]    [ ]    [$]    [ ]    [$]    [ ]    [#]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]
+    [#]    [#]    [#]    [ ]    [#]    [ ]    [#]    [#]    [ ]    [#]    [ ]    [ ]    [ ]    [#]    [#]    [#]    [#]    [#]    [#]
+    [#]    [ ]    [ ]    [ ]    [#]    [ ]    [#]    [#]    [ ]    [#]    [#]    [#]    [#]    [#]    [ ]    [ ]    [.]    [.]    [#]
+    [#]    [ ]    [$]    [ ]    [ ]    [$]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [.]    [.]    [#]
+    [#]    [#]    [#]    [#]    [#]    [ ]    [#]    [#]    [#]    [ ]    [#]    [@]    [#]    [#]    [ ]    [ ]    [.]    [.]    [#]
+    [ ]    [ ]    [ ]    [ ]    [#]    [ ]    [ ]    [ ]    [ ]    [ ]    [#]    [#]    [#]    [#]    [#]    [#]    [#]    [#]    [#]
+    [ ]    [ ]    [ ]    [ ]    [#]    [#]    [#]    [#]    [#]    [#]    [#]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]
+'
+]
