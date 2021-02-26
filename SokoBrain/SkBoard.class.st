@@ -1,3 +1,9 @@
+"
+I represent a 2 dimensional space of elements. 
+In fact, internally I maintain a list of elements so that I can simply push and pop elements when the movable 
+elements are moving. An alternate strategy would be to always keep the currently occupied one to restore after. 
+It looks like a space tradeoff and we do not have space problem. 
+"
 Class {
 	#name : #SkBoard,
 	#superclass : #Object,
@@ -8057,19 +8063,19 @@ SkBoard class >> mazesUAlberta [
 		yourself
 ]
 
-{ #category : #building }
+{ #category : #'low level access' }
 SkBoard >> at: anInteger at: anInteger2 put: anElement [
 	map at: anInteger at: anInteger2 put: anElement 
 ]
 
 { #category : #accessing }
 SkBoard >> atPosition: aCpPositionable [ 
-	^ map at: aCpPositionable y at: aCpPositionable x 
+	^ (map at: aCpPositionable y at: aCpPositionable x) first
 ]
 
 { #category : #building }
 SkBoard >> buildMapOfExtent: aPoint [ 
-	map := Array2D rows: aPoint y columns: aPoint x tabulate: [ :row :column | SkGround new position: column @ row ]
+	map := Array2D rows: aPoint y columns: aPoint x tabulate: [ :row :column | OrderedCollection with: (SkGround new position: column @ row) ]
 ]
 
 { #category : #accessing }
@@ -8080,7 +8086,7 @@ SkBoard >> columnNumber [
 { #category : #building }
 SkBoard >> identifyPlayer [
 
-	player := map detect: [ :each | each isPlayer ] 
+	player := (map detect: [ :each | each first isPlayer ]) first
 ]
 
 { #category : #accessing }
@@ -8099,6 +8105,6 @@ SkBoard >> printOn: aStream [
 	1 to: map numberOfRows do: [ :rowNumber |
 		1 to: map numberOfColumns do: [ :columnNumber |
 			(map at: rowNumber at: columnNumber) ifNotNil: [ :el |
-					aStream nextPut: el class textualMapCharacter]].
+					aStream nextPut: el first class textualMapCharacter]].
 			aStream cr ]
 ]

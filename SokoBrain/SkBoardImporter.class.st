@@ -28,11 +28,12 @@ SkBoardImporter >> buildMapFor: aString [
 	self buildEmptyFor: aString.
 	lines doWithIndex: [ :aLine :lineNumber | 
 		aLine doWithIndex: [ :aChar :columNumber |
+			"could be moved to board"
 			| new | 
 			new := (self classFor: aChar) new.
 			new position: columNumber @ lineNumber.
 			new setBoard: game.
-			game at: lineNumber at: columNumber put: new ]
+			game at: lineNumber at: columNumber put: (OrderedCollection with: new) ]
 		].
 	^ game 
 ]
