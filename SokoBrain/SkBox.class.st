@@ -23,12 +23,3 @@ SkBox >> bringIn: aPlayer going: aDirection [
 	didMove ifTrue: [ aPlayer position: currentPosition ].
 	^ didMove
 ]
-
-{ #category : #move }
-SkBox >> move: aCpDirection [
-
-	| newPosition neighbor |
-	newPosition := aCpDirection * self position.
-	neighbor := board atPosition: newPosition.
-	^ self moveIn: neighbor going: aCpDirection.
-]

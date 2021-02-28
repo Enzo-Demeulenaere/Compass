@@ -13,14 +13,3 @@ SkPlayer class >> textualMapCharacter [
 SkPlayer >> isPlayer [ 
 	^ true
 ]
-
-{ #category : #move }
-SkPlayer >> move: aCpDirection [
-
-	| newPosition neighbor |
-	newPosition := aCpDirection * self position.
-	neighbor := board atPosition: newPosition.
-	^ self moveIn: neighbor going: aCpDirection
-	
-	
-]

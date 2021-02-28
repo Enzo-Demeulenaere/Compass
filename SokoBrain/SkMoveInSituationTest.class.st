@@ -44,6 +44,20 @@ SkMoveInSituationTest >> testPlayerMovingOnGround [
 ]
 
 { #category : #'tests - building' }
+SkMoveInSituationTest >> testPlayerMovingOnGroundRestoreCorrectlyGround [
+
+	| importer game position |
+	importer := SkBoardImporter new. 
+	game := importer buildMapFor: '#@ #'.
+	game identifyPlayer.
+	position := game player position. 
+	self assert: (game player move: CpDirection east).
+	self assert: game printString equals: '# @#'.
+	
+
+]
+
+{ #category : #'tests - building' }
 SkMoveInSituationTest >> testPlayerMovingOnTarget [
 
 	| importer game position |
