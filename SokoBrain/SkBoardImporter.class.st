@@ -18,7 +18,7 @@ SkBoardImporter >> buildEmptyFor: aString [
 	lines := self splitLines: aString.
 	self checkMapValidity: aString.
 	game := SkBoard new. 
-	game buildMapOfExtent: self maxLineLength @ lines size.
+	game buildMapWidth: self maxLineLength height: lines size
 	
 ]
 

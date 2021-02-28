@@ -86,6 +86,19 @@ SkBoardImporterTest >> testBuildingMap [
 	self assert: map columnNumber equals: 19.
 ]
 
+{ #category : #'tests - building' }
+SkBoardImporterTest >> testBuildingMapHasGroundEveryWhereAsBackGround [
+
+	| importer game |
+	importer := SkBoardImporter new. 
+	game := importer buildMapFor: '#@$  .#'.	
+	self assert: (game atRow: 1 atColumn: 1) size equals: 2.
+	self assert: (game atRow: 1 atColumn: 2) size equals: 2.
+	self assert: (game atRow: 1 atColumn: 3) size equals: 2.
+	self assert: (game atRow: 1 atColumn: 6) size equals: 2.
+	self assert: (game atRow: 1 atColumn: 7) size equals: 2 
+]
+
 { #category : #'tests - validity' }
 SkBoardImporterTest >> testCheckMapValidity [
 	| importer |

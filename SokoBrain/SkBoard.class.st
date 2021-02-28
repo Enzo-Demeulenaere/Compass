@@ -9,7 +9,9 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'map',
-		'player'
+		'player',
+		'height',
+		'width'
 	],
 	#category : #'SokoBrain-Model'
 }
@@ -8092,7 +8094,7 @@ SkBoard >> at: anInteger at: anInteger2 put: anElement [
 
 { #category : #accessing }
 SkBoard >> atPosition: aCpPositionable [ 
-	^ (map at: aCpPositionable y at: aCpPositionable x) first
+	^ (map at: aCpPositionable y at: aCpPositionable x)
 ]
 
 { #category : #'low level access' }
@@ -8116,10 +8118,22 @@ SkBoard >> basicPrintOnInspector [
 
 { #category : #building }
 SkBoard >> buildMapOfExtent: aPoint [ 
+	height := aPoint y.
+	width := aPoint x.
 	map := Array2D 
 				rows: aPoint y 
 				columns: aPoint x 
-				tabulate: [ :row :column | OrderedCollection with: (SkGround new position: column @ row) ]
+				tabulate: [ :row :column | SkGround new position: column @ row ]
+]
+
+{ #category : #building }
+SkBoard >> buildMapWidth: x height: y [
+	height := y.
+	width := x.
+	map := Array2D 
+				rows: y 
+				columns: x 
+				tabulate: [ :row :column | SkGround new position: column @ row ]
 ]
 
 { #category : #accessing }
@@ -8128,9 +8142,27 @@ SkBoard >> columnNumber [
 ]
 
 { #category : #building }
+SkBoard >> do: aBlock [
+
+	map do: aBlock
+]
+
+{ #category : #printing }
+SkBoard >> finalize [
+	"A player and boxes should have a previous location set as ground."
+
+	player previousBackground: (SkGround new position: player position; yourself).
+	"in fact such behavior should be placed in each element like that at creation time we can do it without \
+	doing request and we take advantage of dispatch.
+	Next step"
+	map do: [ :each | ( each isKindOf: SkBox )
+								ifTrue: [ each previousBackground: (SkGround new position: each position; yourself)] ]
+]
+
+{ #category : #building }
 SkBoard >> identifyPlayer [
 
-	player := (map detect: [ :each | each first isPlayer ]) first
+	player := map detect: [ :each | each  isPlayer ].
 ]
 
 { #category : #initialization }
@@ -8140,7 +8172,7 @@ SkBoard >> initializeElement: anElement atLine: lineNumber column: columnNumber 
 	new := anElement.
 	new setBoard: self.
 	new position: columnNumber @ lineNumber.
-	self atRow: lineNumber atColumn: columnNumber put: (OrderedCollection with: new)
+	self atRow: lineNumber atColumn: columnNumber put: new
 ]
 
 { #category : #accessing }
@@ -8159,40 +8191,15 @@ SkBoard >> printOn: aStream [
 	1 to: map numberOfRows do: [ :rowNumber |
 		1 to: map numberOfColumns do: [ :columnNumber |
 			(self atRow: rowNumber atColumn: columnNumber) ifNotNil: [ :el |
-					aStream nextPut: el first class textualMapCharacter]].
+					aStream nextPut: el class textualMapCharacter]].
 			aStream cr ]
 ]
 
-{ #category : #printing }
-SkBoard >> rawPrintOn: aStream [
-	
-	1 to: map numberOfRows do: [ :rowNumber |
-		1 to: map numberOfColumns do: [ :columnNumber |
-			| padded |
-			padded := String streamContents: [ :str |
-							str nextPut: $[.
-							(self atRow: rowNumber atColumn: columnNumber) 
-								do: [ :each | str nextPut: each class textualMapCharacter]
-								separatedBy:  [ str nextPut: $| ].
-							str nextPut: $] ].
-			aStream nextPutAll: (padded padLeftTo: 7).
-			 ].
-		 aStream cr]
-	
-]
-
-{ #category : #inspector }
-SkBoard >> rawPrintOnInspector [
-	<inspectorPresentationOrder: 35 title: 'Internal'>
-
-	^ SpTextPresenter new 
-		text: (String streamContents: [:st | self rawPrintOn: st ]);
-		yourself
-]
-
 { #category : #move }
-SkBoard >> updatePositionOf: aSkMovable to: aPoint [ 
- 
-	(self atRow: aSkMovable position y atColumn: aSkMovable position x) removeFirst.
-	(self atRow: aSkMovable position y atColumn: aSkMovable position x) addFirst: aSkMovable.
+SkBoard >> updatePositionOf: aSkMovable from: previousPosition [ 
+ 	self halt.
+	"Put back the previous position element."
+	self atRow: previousPosition y atColumn: previousPosition x put: aSkMovable previousBackground.
+	"put the current position element as previous background of the moving element."
+	aSkMovable previousBackground: (self atRow: aSkMovable position y atColumn: aSkMovable position x).
 ]

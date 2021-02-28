@@ -1,6 +1,6 @@
 Class {
 	#name : #SkPlayer,
-	#superclass : #SkElement,
+	#superclass : #SkMovable,
 	#category : #'SokoBrain-Model'
 }
 

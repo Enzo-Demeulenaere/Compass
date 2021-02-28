@@ -34,6 +34,37 @@ SkBoardTest >> testAtPosition [
 ]
 
 { #category : #'tests - building' }
+SkBoardTest >> testIsBoxPlaygroundCorrectlySet [
+
+	| importer game |
+	importer := SkBoardImporter new. 
+	game := importer buildMapFor: self map1.
+	game identifyPlayer.
+	game finalize.
+	game do: [ :anEl | (anEl isKindOf: SkBox) 
+					ifTrue: [ 
+							self assert: anEl	position x equals: anEl previousBackground position x.
+							self assert: anEl	position y equals: anEl previousBackground position y]]
+							
+	
+]
+
+{ #category : #'tests - building' }
+SkBoardTest >> testIsPlayerPlaygroundCorrectlySet [
+
+	| importer game |
+	importer := SkBoardImporter new. 
+	game := importer buildMapFor: self map1.
+	game identifyPlayer.
+	game finalize.
+	self assert: game player position x equals: 12.
+	self assert: game player position y equals: 9.
+	
+	self assert: game player previousBackground position x equals: 12.
+	self assert: game player previousBackground position y equals: 9.
+]
+
+{ #category : #'tests - building' }
 SkBoardTest >> testPlayerIsAvailable [
 
 	| importer game |
@@ -60,26 +91,5 @@ SkBoardTest >> testPrintOn [
 ##### ### #@##  ..#
     #     #########
     #######        
-'
-]
-
-{ #category : #tests }
-SkBoardTest >> testRawPrintOn [
-	| importer map contents |
-	importer := SkBoardImporter new. 
-	map := importer buildMapFor: self map1.
-	contents := String streamContents: [ :st |
-		map rawPrintOn: st ].
-	self assert: contents equals: '    [ ]    [ ]    [ ]    [ ]    [#]    [#]    [#]    [#]    [#]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]
-    [ ]    [ ]    [ ]    [ ]    [#]    [ ]    [ ]    [ ]    [#]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]
-    [ ]    [ ]    [ ]    [ ]    [#]    [$]    [ ]    [ ]    [#]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]
-    [ ]    [ ]    [#]    [#]    [#]    [ ]    [ ]    [$]    [#]    [#]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]
-    [ ]    [ ]    [#]    [ ]    [ ]    [$]    [ ]    [$]    [ ]    [#]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]
-    [#]    [#]    [#]    [ ]    [#]    [ ]    [#]    [#]    [ ]    [#]    [ ]    [ ]    [ ]    [#]    [#]    [#]    [#]    [#]    [#]
-    [#]    [ ]    [ ]    [ ]    [#]    [ ]    [#]    [#]    [ ]    [#]    [#]    [#]    [#]    [#]    [ ]    [ ]    [.]    [.]    [#]
-    [#]    [ ]    [$]    [ ]    [ ]    [$]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [.]    [.]    [#]
-    [#]    [#]    [#]    [#]    [#]    [ ]    [#]    [#]    [#]    [ ]    [#]    [@]    [#]    [#]    [ ]    [ ]    [.]    [.]    [#]
-    [ ]    [ ]    [ ]    [ ]    [#]    [ ]    [ ]    [ ]    [ ]    [ ]    [#]    [#]    [#]    [#]    [#]    [#]    [#]    [#]    [#]
-    [ ]    [ ]    [ ]    [ ]    [#]    [#]    [#]    [#]    [#]    [#]    [#]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]    [ ]
 '
 ]
