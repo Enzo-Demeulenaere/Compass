@@ -4,7 +4,25 @@ Class {
 	#category : #'SokoBrain-Tests'
 }
 
-{ #category : #'tests - building' }
+{ #category : #'tests - basic' }
+SkMoveInSituationTest >> testBasicMoveInformation [
+
+	| importer game position |
+	importer := SkBoardImporter new. 
+	game := importer buildMapFor: '#@  $.#'.
+	game identifyPlayer.
+	game finalize.
+	position := game player position.
+	self assert: (game player move: CpDirection east).
+	"The player has moved!"
+	"No check that the player position is correct."
+	self assert: game player position x equals: (CpDirection east * position) x.
+	self assert: game player position x equals: 3.
+	self assert: game printString equals: '# @ $.#'
+
+]
+
+{ #category : #'tests - simple move' }
 SkMoveInSituationTest >> testBoxBumpingInWall [
 
 	| importer game box |
@@ -19,7 +37,7 @@ SkMoveInSituationTest >> testBoxBumpingInWall [
 	self assert: game asciiString equals: '#@ .$#'
 ]
 
-{ #category : #'tests - building' }
+{ #category : #'tests - simple move' }
 SkMoveInSituationTest >> testBoxMovingOnGround [
 
 	| importer game box |
@@ -34,7 +52,7 @@ SkMoveInSituationTest >> testBoxMovingOnGround [
 	self assert: game asciiString equals: '#@ . $#'
 ]
 
-{ #category : #'tests - building' }
+{ #category : #'tests - simple move' }
 SkMoveInSituationTest >> testBoxMovingOnTarget [
 
 	| importer game box |
@@ -49,7 +67,7 @@ SkMoveInSituationTest >> testBoxMovingOnTarget [
 	self assert: game asciiString equals: '#@  $ #'
 ]
 
-{ #category : #'tests - building' }
+{ #category : #'tests - simple move' }
 SkMoveInSituationTest >> testBoxMovingOnTargetAndRestore [
 
 	| importer game box |
@@ -66,21 +84,21 @@ SkMoveInSituationTest >> testBoxMovingOnTargetAndRestore [
 	self assert: game asciiString equals: '#@  .$#'.
 ]
 
-{ #category : #'tests - building' }
+{ #category : #'tests - simple move' }
 SkMoveInSituationTest >> testPlayerBumpingInWall [
 
 	| importer game position  |
 	importer := SkBoardImporter new. 
-	game := importer buildMapFor: '#@#'.
+	game := importer buildMapFor: '# @#'.
 	game identifyPlayer.
 	game finalize.
 	position := game player position.
 	self deny: (game player move: CpDirection east).
 	self assert: game player position equals: position.
-	self assert: game asciiString equals: '#@#'
+	self assert: game asciiString equals: '# @#'
 ]
 
-{ #category : #'tests - building' }
+{ #category : #'tests - simple move' }
 SkMoveInSituationTest >> testPlayerMovingOnGround [
 
 	| importer game position |
@@ -96,7 +114,7 @@ SkMoveInSituationTest >> testPlayerMovingOnGround [
 	self assert: game asciiString equals: '# @#'
 ]
 
-{ #category : #'tests - building' }
+{ #category : #'tests - simple move' }
 SkMoveInSituationTest >> testPlayerMovingOnGroundRestoreCorrectlyGround [
 
 	| importer game |
@@ -110,20 +128,22 @@ SkMoveInSituationTest >> testPlayerMovingOnGroundRestoreCorrectlyGround [
 
 ]
 
-{ #category : #'tests - building' }
+{ #category : #'tests - simple move' }
 SkMoveInSituationTest >> testPlayerMovingOnTarget [
 
-	| importer game position |
+	| importer game |
 	importer := SkBoardImporter new. 
-	game := importer buildMapFor: '#@.$#'.
+	game := importer buildMapFor: '#@.   $#'.
+	self assert: game asciiString equals: '#@.   $#'.
 	game identifyPlayer.
-	position := game player position. 
-	self assert: (game player move: CpDirection east).
-	self assert: game player position x equals: (CpDirection east * position) x.
-	self assert: game player position y equals: (CpDirection east * position) y.
+	game finalize.
+	self assert: game player moveEast.
+	self assert: game printString equals: '# @   $#'.
+	game player moveEast.
+	self assert: game printString equals: '# .@  $#'.
 ]
 
-{ #category : #'tests - building' }
+{ #category : #'tests - simple move' }
 SkMoveInSituationTest >> testPlayerMovingTwoTimesOnGroundRestoreCorrectlyGround [
 
 	| importer game |
@@ -143,7 +163,7 @@ SkMoveInSituationTest >> testPlayerMovingTwoTimesOnGroundRestoreCorrectlyGround 
 
 ]
 
-{ #category : #'tests - building' }
+{ #category : #'tests - pushing box' }
 SkMoveInSituationTest >> testPushingABoxOnGround [
 
 	| importer game position |
