@@ -19,25 +19,25 @@ SkMovable >> move: aCpDirection [
 { #category : #move }
 SkMovable >> moveEast [
 
-	self move: CpDirection east
+	^ self move: CpDirection east
 ]
 
 { #category : #move }
 SkMovable >> moveNorth [
 
-	self move: CpDirection north
+	^ self move: CpDirection north
 ]
 
 { #category : #move }
 SkMovable >> moveSouth [
 
-	self move: CpDirection south
+	^ self move: CpDirection south
 ]
 
 { #category : #move }
 SkMovable >> moveWest [
 
-	self move: CpDirection west
+	^ self move: CpDirection west
 ]
 
 { #category : #accessing }

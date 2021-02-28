@@ -80,7 +80,7 @@ SkBoardTest >> testPrintOn [
 	| importer map |
 	importer := SkBoardImporter new. 
 	map := importer buildMapFor: self map1.
-	self assert: map printString equals: '    #####          
+	self assert: map asciiString equals: '    #####          
     #   #          
     #$  #          
   ###  $##         
@@ -90,6 +90,17 @@ SkBoardTest >> testPrintOn [
 # $  $          ..#
 ##### ### #@##  ..#
     #     #########
-    #######        
-'
+    #######        '
+]
+
+{ #category : #tests }
+SkBoardTest >> testPrintOnOneLine [
+
+	| importer game |
+	importer := SkBoardImporter new. 
+	game := importer buildMapFor: '#@  #'.
+	self assert: game height equals: 1.
+	self assert: game width equals: '#@  #' size.
+	self assert: game asciiString equals: '#@  #'.
+	
 ]

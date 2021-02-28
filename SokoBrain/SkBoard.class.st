@@ -8080,6 +8080,14 @@ SkBoard class >> mazesUAlberta [
 		yourself
 ]
 
+{ #category : #printing }
+SkBoard >> asciiString [ 
+
+	^ String streamContents: [ :st |
+		self printOn: st ]	
+
+]
+
 { #category : #'low level access' }
 SkBoard >> at: anInteger at: anInteger2 [
 	^ map at: anInteger at: anInteger2
@@ -8180,11 +8188,13 @@ SkBoard >> player [
 { #category : #printing }
 SkBoard >> printOn: aStream [
 	
-	1 to: map numberOfRows do: [ :rowNumber |
-		1 to: map numberOfColumns do: [ :columnNumber |
-			(self atRow: rowNumber atColumn: columnNumber) ifNotNil: [ :el |
-					aStream nextPut: el class textualMapCharacter]].
-			aStream cr ]
+	(1 to: map numberOfRows)
+		do: [ :rowNumber |
+			1 to: map numberOfColumns do: [ :columnNumber |
+				| el |
+				el := (self atRow: rowNumber atColumn: columnNumber).
+				aStream nextPut: el class textualMapCharacter]]
+		separatedBy: [aStream cr ]
 ]
 
 { #category : #move }
