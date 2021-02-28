@@ -90,6 +90,7 @@ SkBoardImporterTest >> testBuildingMap [
 SkBoardImporterTest >> testBuildingMapHasGroundEveryWhereAsBackGround [
 
 	| importer game |
+		self skip.
 	importer := SkBoardImporter new. 
 	game := importer buildMapFor: '#@$  .#'.	
 	self assert: (game atRow: 1 atColumn: 1) size equals: 2.

@@ -9,9 +9,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'map',
-		'player',
-		'height',
-		'width'
+		'player'
 	],
 	#category : #'SokoBrain-Model'
 }
@@ -8117,19 +8115,8 @@ SkBoard >> basicPrintOnInspector [
 ]
 
 { #category : #building }
-SkBoard >> buildMapOfExtent: aPoint [ 
-	height := aPoint y.
-	width := aPoint x.
-	map := Array2D 
-				rows: aPoint y 
-				columns: aPoint x 
-				tabulate: [ :row :column | SkGround new position: column @ row ]
-]
-
-{ #category : #building }
 SkBoard >> buildMapWidth: x height: y [
-	height := y.
-	width := x.
+
 	map := Array2D 
 				rows: y 
 				columns: x 
@@ -8157,6 +8144,11 @@ SkBoard >> finalize [
 	Next step"
 	map do: [ :each | ( each isKindOf: SkBox )
 								ifTrue: [ each previousBackground: (SkGround new position: each position; yourself)] ]
+]
+
+{ #category : #accessing }
+SkBoard >> height [
+	^ map numberOfRows
 ]
 
 { #category : #building }
@@ -8202,4 +8194,9 @@ SkBoard >> updatePositionOf: aSkMovable from: previousPosition [
 	self atRow: previousPosition y atColumn: previousPosition x put: aSkMovable previousBackground.
 	"put the current position element as previous background of the moving element."
 	aSkMovable previousBackground: (self atRow: aSkMovable position y atColumn: aSkMovable position x).
+]
+
+{ #category : #accessing }
+SkBoard >> width [
+	^ map numberOfColumns
 ]
