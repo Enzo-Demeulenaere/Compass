@@ -8090,6 +8090,12 @@ SkBoard class >> mazesUAlberta [
 		yourself
 ]
 
+{ #category : #initialization }
+SkBoard >> addBox: aBox [
+
+	boxes add: aBox
+]
+
 { #category : #printing }
 SkBoard >> asciiString [ 
 
@@ -8152,39 +8158,25 @@ SkBoard >> do: aBlock [
 	map do: aBlock
 ]
 
-{ #category : #initialization }
-SkBoard >> finalize [
-	"A player and boxes should have a previous location set as ground."
-
-	player previousBackground: (SkGround new position: player position; yourself).
-	"in fact such behavior should be placed in each element like that at creation time we can do it without \
-	doing request and we take advantage of dispatch.
-	Next step"
-	map do: [ :each | ( each isKindOf: SkBox )
-								ifTrue: [ each previousBackground: (SkGround new position: each position; yourself)] ]
-]
-
 { #category : #accessing }
 SkBoard >> height [
 	^ map numberOfRows
 ]
 
-{ #category : #building }
-SkBoard >> identifyPlayer [
+{ #category : #initialization }
+SkBoard >> initialize [
 
-	player := map detect: [ :each | each  isPlayer ].
-	boxes := OrderedCollection new.
-	map do: [ :each | each isBox ifTrue: [ boxes add: each ] ]
+	super initialize.
+	boxes := OrderedCollection new. 
 ]
 
 { #category : #initialization }
 SkBoard >> initializeElement: anElement atLine: lineNumber column: columnNumber [
 
-	| new | 
-	new := anElement.
-	new setBoard: self.
-	new position: columnNumber @ lineNumber.
-	self atRow: lineNumber atColumn: columnNumber put: new
+	anElement setBoard: self.
+	anElement position: columnNumber @ lineNumber.
+	self atRow: lineNumber atColumn: columnNumber put: anElement.
+	anElement postCreationAction.
 ]
 
 { #category : #testing }
@@ -8218,6 +8210,11 @@ SkBoard >> printOn: aStream [
 				el := (self atRow: rowNumber atColumn: columnNumber).
 				aStream nextPut: el class textualMapCharacter]]
 		separatedBy: [aStream cr ]
+]
+
+{ #category : #initialization }
+SkBoard >> setPlayer: aPlayer [
+	player := aPlayer
 ]
 
 { #category : #move }

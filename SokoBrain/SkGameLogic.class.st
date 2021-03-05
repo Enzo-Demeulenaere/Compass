@@ -10,8 +10,6 @@ SkGameLogic >> testIsFinished [
 	| importer game |
 	importer := SkBoardImporter new. 
 	game := importer buildMapFor: '#@$ .#'.
-	game identifyPlayer.
-	game finalize.
 	self deny: game isFinished. 
 	game player moveEast.
 	game player moveEast.
@@ -24,8 +22,6 @@ SkGameLogic >> testIsFinishedThenUnfinish [
 	| importer game |
 	importer := SkBoardImporter new. 
 	game := importer buildMapFor: '#@$ . #'.
-	game identifyPlayer.
-	game finalize.
 	self deny: game isFinished. 
 	game player moveEast.
 	game player moveEast.
@@ -40,8 +36,6 @@ SkGameLogic >> testMoveSteps [
 	| importer game |
 	importer := SkBoardImporter new. 
 	game := importer buildMapFor: '#@$ . #'.
-	game identifyPlayer.
-	game finalize.
 	self deny: game isFinished. 
 	game moveSteps: { CpDirection east . CpDirection east}.
 	self assert: game isFinished. 

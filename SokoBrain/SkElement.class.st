@@ -59,6 +59,12 @@ SkElement >> position: aPosition [
 	position := aPosition
 ]
 
+{ #category : #action }
+SkElement >> postCreationAction [
+
+	self
+]
+
 { #category : #printing }
 SkElement >> printOn: aStream [ 
 

@@ -33,3 +33,10 @@ SkBox >> isBox [
 
 	^ true
 ]
+
+{ #category : #move }
+SkBox >> postCreationAction [ 
+
+	board addBox: self.
+	self previousBackground: (SkGround new position: self position; yourself)
+]

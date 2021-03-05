@@ -13,3 +13,10 @@ SkPlayer class >> textualMapCharacter [
 SkPlayer >> isPlayer [ 
 	^ true
 ]
+
+{ #category : #move }
+SkPlayer >> postCreationAction [ 
+
+	board setPlayer: self.
+	self previousBackground: (SkGround new position: self position; yourself).
+]

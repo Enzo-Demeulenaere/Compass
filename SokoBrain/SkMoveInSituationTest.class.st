@@ -10,8 +10,6 @@ SkMoveInSituationTest >> testBasicMoveInformation [
 	| importer game position |
 	importer := SkBoardImporter new. 
 	game := importer buildMapFor: '#@  $.#'.
-	game identifyPlayer.
-	game finalize.
 	position := game player position.
 	self assert: (game player move: CpDirection east).
 	"The player has moved!"
@@ -28,8 +26,6 @@ SkMoveInSituationTest >> testBoxBumpingInWall [
 	| importer game box |
 	importer := SkBoardImporter new. 
 	game := importer buildMapFor: '#@ .$#'.
-	game identifyPlayer.
-	game finalize.
 	box := game atRow: 1 atColumn: 5.
 	self assert: (box isKindOf: SkBox).
 	self deny: box moveEast.
@@ -43,8 +39,6 @@ SkMoveInSituationTest >> testBoxMovingOnGround [
 	| importer game box |
 	importer := SkBoardImporter new. 
 	game := importer buildMapFor: '#@ .$ #'.
-	game identifyPlayer.
-	game finalize.
 	box := game atRow: 1 atColumn: 5.
 	self assert: (box isKindOf: SkBox).
 	self assert: box moveEast.
@@ -58,8 +52,6 @@ SkMoveInSituationTest >> testBoxMovingOnTarget [
 	| importer game box |
 	importer := SkBoardImporter new. 
 	game := importer buildMapFor: '#@ $. #'.
-	game identifyPlayer.
-	game finalize.
 	box := game atRow: 1 atColumn: 4.
 	self assert: (box isKindOf: SkBox).
 	self assert: box moveEast.
@@ -73,8 +65,6 @@ SkMoveInSituationTest >> testBoxMovingOnTargetAndRestore [
 	| importer game box |
 	importer := SkBoardImporter new. 
 	game := importer buildMapFor: '#@ $. #'.
-	game identifyPlayer.
-	game finalize.
 	box := game atRow: 1 atColumn: 4.
 	self assert: (box isKindOf: SkBox).
 	self assert: box moveEast.
@@ -91,8 +81,6 @@ SkMoveInSituationTest >> testPlayerBumpingInWall [
 	| importer game position player |
 	importer := SkBoardImporter new. 
 	game := importer buildMapFor: '# @#'.
-	game identifyPlayer.
-	game finalize.
 	player := game atRow: 1 atColumn: 3.
 	position := game player position.
 	self deny: (game player move: CpDirection east).
@@ -107,8 +95,6 @@ SkMoveInSituationTest >> testPlayerMovingOnGround [
 	| importer game position player |
 	importer := SkBoardImporter new. 
 	game := importer buildMapFor: '#@ #'.
-	game identifyPlayer.
-	game finalize.
 	position := game player position. 
 	player := game atRow: 1 atColumn: 2.
 	self assert: (game player move: CpDirection east).
@@ -124,8 +110,6 @@ SkMoveInSituationTest >> testPlayerMovingOnGroundRestoreCorrectlyGround [
 	| importer game |
 	importer := SkBoardImporter new. 
 	game := importer buildMapFor: '#@   #'.
-	game identifyPlayer.
-	game finalize.
 	self assert: game player moveEast.
 	self assert: game printString equals: '# @  #'.
 	self assert: game player moveEast.
@@ -140,8 +124,6 @@ SkMoveInSituationTest >> testPlayerMovingOnTarget [
 	importer := SkBoardImporter new. 
 	game := importer buildMapFor: '#@.   $#'.
 	self assert: game asciiString equals: '#@.   $#'.
-	game identifyPlayer.
-	game finalize.
 	self assert: game player moveEast.
 	self assert: game printString equals: '# @   $#'.
 	game player moveEast.
@@ -157,8 +139,6 @@ SkMoveInSituationTest >> testPlayerMovingTwoTimesOnGroundRestoreCorrectlyGround 
 	self assert: game height equals: 1.
 	self assert: game width equals: '#@  #' size.
 	self assert: game printString equals: '#@  #'.
-	game identifyPlayer.
-	game finalize.
 	self assert: game printString equals: '#@  #'.
 	self assert: game player moveEast.
 	self assert: game printString equals: '# @ #'.
@@ -174,8 +154,6 @@ SkMoveInSituationTest >> testPushingABoxOnGround [
 	| importer game position |
 	importer := SkBoardImporter new. 
 	game := importer buildMapFor: '#@$ .#'.
-	game identifyPlayer.
-	game finalize.
 	position := game player position.
 	self assert: game asciiString equals:  '#@$ .#'.
 	self assert: game player moveEast.
@@ -198,8 +176,6 @@ SkMoveInSituationTest >> testPushingABoxOnTarget [
 	| importer game position |
 	importer := SkBoardImporter new. 
 	game := importer buildMapFor: '#@$.#'.
-	game identifyPlayer.
-	game finalize.
 	position := game player position.
 	self assert: game asciiString equals:  '#@$.#'.
 	self assert: game player moveEast.
@@ -222,8 +198,6 @@ SkMoveInSituationTest >> testPushingABoxOnWall [
 	| importer game position player box |
 	importer := SkBoardImporter new. 
 	game := importer buildMapFor: '#.@$#'.
-	game identifyPlayer.
-	game finalize.
 	player := game atRow: 1 atColumn: 3.
 	position := game player position.
 	self assert: game player position x equals: 3.
