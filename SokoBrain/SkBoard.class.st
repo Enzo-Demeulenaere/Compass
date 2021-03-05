@@ -7,7 +7,11 @@ Todo:
 - revisit position (rename position into basic + position with update)
 - game logic
 -- all on target
-- Make sure that we cannot push multiple boxes
+
+Extensions
+- Make sure that we cannot push multiple boxes.
+- Count the number of move.
+- Support game replay or revert.
 "
 Class {
 	#name : #SkBoard,
