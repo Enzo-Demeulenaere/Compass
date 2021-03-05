@@ -8180,7 +8180,7 @@ SkBoard >> initializeElement: anElement atLine: lineNumber column: columnNumber 
 
 { #category : #testing }
 SkBoard >> isFinished [
-	^ boxes allSatisfy: [ :each | each previousBackground isTarget ]
+	^ boxes allSatisfy: [ :each | each background isTarget ]
 ]
 
 { #category : #accessing }
@@ -8220,9 +8220,9 @@ SkBoard >> setPlayer: aPlayer [
 SkBoard >> updatePositionOf: aSkMovable from: previousPosition [ 
  	
 	"Put back the previous position element."
-	self atRow: previousPosition y atColumn: previousPosition x put: aSkMovable previousBackground.
+	self atRow: previousPosition y atColumn: previousPosition x put: aSkMovable background.
 	"put the current position element as previous background of the moving element."
-	aSkMovable previousBackground: (self atRow: aSkMovable position y atColumn: aSkMovable position x).
+	aSkMovable background: (self atRow: aSkMovable position y atColumn: aSkMovable position x).
 	"finally place the moving element to its new location"
 	self atRow: aSkMovable position y atColumn: aSkMovable position x put: aSkMovable.
 ]

@@ -38,5 +38,5 @@ SkBox >> isBox [
 SkBox >> postCreationAction [ 
 
 	board addBox: self.
-	self previousBackground: (SkGround new basicPosition: self position; yourself)
+	self background: (SkGround new basicPosition: self position; yourself)
 ]

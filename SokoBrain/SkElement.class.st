@@ -32,11 +32,6 @@ SkElement >> bringIn: aSkMovable going: aDirection [
 ]
 
 { #category : #move }
-SkElement >> isBox [
-	^ false
-]
-
-{ #category : #move }
 SkElement >> isPlayer [
 	^ false
 ]

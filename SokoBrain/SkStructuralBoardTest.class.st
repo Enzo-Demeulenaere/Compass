@@ -40,8 +40,8 @@ SkStructuralBoardTest >> testIsBoxPlaygroundCorrectlySet [
 	game := importer buildMapFor: self map1.
 	game do: [ :anEl | (anEl isKindOf: SkBox) 
 					ifTrue: [ 
-							self assert: anEl	position x equals: anEl previousBackground position x.
-							self assert: anEl	position y equals: anEl previousBackground position y]]
+							self assert: anEl	position x equals: anEl background position x.
+							self assert: anEl	position y equals: anEl background position y]]
 							
 	
 ]
@@ -55,8 +55,8 @@ SkStructuralBoardTest >> testIsPlayerPlaygroundCorrectlySet [
 	self assert: game player position x equals: 12.
 	self assert: game player position y equals: 9.
 	
-	self assert: game player previousBackground position x equals: 12.
-	self assert: game player previousBackground position y equals: 9.
+	self assert: game player background position x equals: 12.
+	self assert: game player background position y equals: 9.
 ]
 
 { #category : #'tests - building' }

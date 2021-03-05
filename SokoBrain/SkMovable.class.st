@@ -2,10 +2,22 @@ Class {
 	#name : #SkMovable,
 	#superclass : #SkElement,
 	#instVars : [
-		'previousBackground'
+		'background'
 	],
 	#category : #'SokoBrain-Model'
 }
+
+{ #category : #accessing }
+SkMovable >> background [
+
+	^ background
+]
+
+{ #category : #accessing }
+SkMovable >> background: anObject [
+
+	background := anObject
+]
 
 { #category : #move }
 SkMovable >> move: aCpDirection [
@@ -38,16 +50,4 @@ SkMovable >> moveSouth [
 SkMovable >> moveWest [
 
 	^ self move: CpDirection west
-]
-
-{ #category : #accessing }
-SkMovable >> previousBackground [
-
-	^ previousBackground
-]
-
-{ #category : #accessing }
-SkMovable >> previousBackground: anObject [
-
-	previousBackground := anObject
 ]
