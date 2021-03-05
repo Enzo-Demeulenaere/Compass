@@ -63,7 +63,7 @@ SkMoveInSituationTest >> testBoxMovingOnTarget [
 	box := game atRow: 1 atColumn: 4.
 	self assert: (box isKindOf: SkBox).
 	self assert: box moveEast.
-
+	self assert: box position x equals: 5.
 	self assert: game asciiString equals: '#@  $ #'
 ]
 
@@ -81,36 +81,40 @@ SkMoveInSituationTest >> testBoxMovingOnTargetAndRestore [
 
 	self assert: game asciiString equals: '#@  $ #'.
 	self assert: box moveEast.
+	self assert: box position x equals: 6.
 	self assert: game asciiString equals: '#@  .$#'.
 ]
 
 { #category : #'tests - simple move' }
 SkMoveInSituationTest >> testPlayerBumpingInWall [
 
-	| importer game position  |
+	| importer game position player |
 	importer := SkBoardImporter new. 
 	game := importer buildMapFor: '# @#'.
 	game identifyPlayer.
 	game finalize.
+	player := game atRow: 1 atColumn: 3.
 	position := game player position.
 	self deny: (game player move: CpDirection east).
 	self assert: game player position equals: position.
+	self assert: player position x equals: 3.
 	self assert: game asciiString equals: '# @#'
 ]
 
 { #category : #'tests - simple move' }
 SkMoveInSituationTest >> testPlayerMovingOnGround [
 
-	| importer game position |
+	| importer game position player |
 	importer := SkBoardImporter new. 
 	game := importer buildMapFor: '#@ #'.
 	game identifyPlayer.
 	game finalize.
 	position := game player position. 
+	player := game atRow: 1 atColumn: 2.
 	self assert: (game player move: CpDirection east).
 	self assert: game player position x equals: (CpDirection east * position) x.
 	self assert: game player position y equals: (CpDirection east * position) y.
-	
+	self assert: player position x equals: 3.
 	self assert: game asciiString equals: '# @#'
 ]
 
@@ -124,7 +128,8 @@ SkMoveInSituationTest >> testPlayerMovingOnGroundRestoreCorrectlyGround [
 	game finalize.
 	self assert: game player moveEast.
 	self assert: game printString equals: '# @  #'.
-	
+	self assert: game player moveEast.
+	self assert: game printString equals: '#  @ #'.
 
 ]
 

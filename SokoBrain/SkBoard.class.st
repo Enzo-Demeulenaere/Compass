@@ -1,8 +1,10 @@
 "
-I represent a 2 dimensional space of elements. 
-In fact, internally I maintain a list of elements so that I can simply push and pop elements when the movable 
-elements are moving. An alternate strategy would be to always keep the currently occupied one to restore after. 
+I represent a 2 dimensional space of elements. In fact, internally I maintain a list of elements so that I can simply push and pop elements when the movable elements are moving. An alternate strategy would be to always keep the currently occupied one to restore after. 
 It looks like a space tradeoff and we do not have space problem. 
+
+Todo:
+- revisit finalize
+- revisit position (rename position into basic + position with update)
 "
 Class {
 	#name : #SkBoard,
