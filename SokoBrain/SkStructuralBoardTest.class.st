@@ -26,7 +26,6 @@ SkStructuralBoardTest >> testAtPositionLowLevel [
 	| importer game |
 	importer := SkBoardImporter new. 
 	game := importer buildMapFor: self map1.
-	game identifyPlayer.
 	self assert: ((game atPosition: (CpDirection north * game player position) ) isKindOf: SkGround).
 	self assert: ((game atPosition: (CpDirection south * game player position) ) isKindOf: SkWall).
 	self assert: ((game atPosition: (CpDirection east * game player position) ) isKindOf: SkWall).
@@ -39,8 +38,6 @@ SkStructuralBoardTest >> testIsBoxPlaygroundCorrectlySet [
 	| importer game |
 	importer := SkBoardImporter new. 
 	game := importer buildMapFor: self map1.
-	game identifyPlayer.
-	game finalize.
 	game do: [ :anEl | (anEl isKindOf: SkBox) 
 					ifTrue: [ 
 							self assert: anEl	position x equals: anEl previousBackground position x.
@@ -55,8 +52,6 @@ SkStructuralBoardTest >> testIsPlayerPlaygroundCorrectlySet [
 	| importer game |
 	importer := SkBoardImporter new. 
 	game := importer buildMapFor: self map1.
-	game identifyPlayer.
-	game finalize.
 	self assert: game player position x equals: 12.
 	self assert: game player position y equals: 9.
 	
@@ -70,7 +65,6 @@ SkStructuralBoardTest >> testPlayerIsAvailable [
 	| importer game |
 	importer := SkBoardImporter new. 
 	game := importer buildMapFor: self map1.
-	game identifyPlayer.
 	self assert: game player position x equals: 12.
 	self assert: game player position y equals: 9.
 ]
