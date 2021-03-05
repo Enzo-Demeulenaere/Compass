@@ -23,7 +23,7 @@ SkBox >> bringIn: aPlayer going: aDirection [
 	didMove ifTrue: [ 
 		| playerPreviousPosition |
 		playerPreviousPosition := aPlayer position.
-		aPlayer position: boxPreviousPosition.
+		aPlayer basicPosition: boxPreviousPosition.
 		board updatePositionOf: aPlayer from: playerPreviousPosition ].
 	^ didMove
 ]
@@ -38,5 +38,5 @@ SkBox >> isBox [
 SkBox >> postCreationAction [ 
 
 	board addBox: self.
-	self previousBackground: (SkGround new position: self position; yourself)
+	self previousBackground: (SkGround new basicPosition: self position; yourself)
 ]

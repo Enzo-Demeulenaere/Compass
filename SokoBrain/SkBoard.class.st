@@ -3,7 +3,6 @@ I represent a 2 dimensional space of elements. In fact, internally I maintain a 
 It looks like a space tradeoff and we do not have space problem. 
 
 Todo:
-- revisit finalize
 - revisit position (rename position into basic + position with update)
 - game logic
 -- all on target
@@ -8144,7 +8143,7 @@ SkBoard >> buildMapWidth: x height: y [
 	map := Array2D 
 				rows: y 
 				columns: x 
-				tabulate: [ :row :column | SkGround new position: column @ row ]
+				tabulate: [ :row :column | SkGround new basicPosition: column @ row ]
 ]
 
 { #category : #accessing }
@@ -8174,7 +8173,7 @@ SkBoard >> initialize [
 SkBoard >> initializeElement: anElement atLine: lineNumber column: columnNumber [
 
 	anElement setBoard: self.
-	anElement position: columnNumber @ lineNumber.
+	anElement basicPosition: columnNumber @ lineNumber.
 	self atRow: lineNumber atColumn: columnNumber put: anElement.
 	anElement postCreationAction.
 ]

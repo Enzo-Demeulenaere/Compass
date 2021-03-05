@@ -18,5 +18,5 @@ SkPlayer >> isPlayer [
 SkPlayer >> postCreationAction [ 
 
 	board setPlayer: self.
-	self previousBackground: (SkGround new position: self position; yourself).
+	self previousBackground: (SkGround new basicPosition: self position; yourself).
 ]
