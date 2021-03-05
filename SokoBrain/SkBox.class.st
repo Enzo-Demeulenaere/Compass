@@ -27,3 +27,9 @@ SkBox >> bringIn: aPlayer going: aDirection [
 		board updatePositionOf: aPlayer from: playerPreviousPosition ].
 	^ didMove
 ]
+
+{ #category : #move }
+SkBox >> isBox [ 
+
+	^ true
+]

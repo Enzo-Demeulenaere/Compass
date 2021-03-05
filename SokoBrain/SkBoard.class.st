@@ -5,13 +5,17 @@ It looks like a space tradeoff and we do not have space problem.
 Todo:
 - revisit finalize
 - revisit position (rename position into basic + position with update)
+- game logic
+-- all on target
+- Make sure that we cannot push multiple boxes
 "
 Class {
 	#name : #SkBoard,
 	#superclass : #Object,
 	#instVars : [
 		'map',
-		'player'
+		'player',
+		'boxes'
 	],
 	#category : #'SokoBrain-Model'
 }
@@ -8165,6 +8169,8 @@ SkBoard >> height [
 SkBoard >> identifyPlayer [
 
 	player := map detect: [ :each | each  isPlayer ].
+	boxes := OrderedCollection new.
+	map do: [ :each | each isBox ifTrue: [ boxes add: each ] ]
 ]
 
 { #category : #initialization }
@@ -8175,6 +8181,11 @@ SkBoard >> initializeElement: anElement atLine: lineNumber column: columnNumber 
 	new setBoard: self.
 	new position: columnNumber @ lineNumber.
 	self atRow: lineNumber atColumn: columnNumber put: new
+]
+
+{ #category : #testing }
+SkBoard >> isFinished [
+	^ boxes allSatisfy: [ :each | each previousBackground isTarget ]
 ]
 
 { #category : #accessing }

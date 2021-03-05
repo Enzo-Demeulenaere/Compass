@@ -21,7 +21,7 @@ SkBoardTest >> map1 [
 ]
 
 { #category : #'tests - building' }
-SkBoardTest >> testAtPosition [
+SkBoardTest >> testAtPositionLowLevel [
 
 	| importer game |
 	importer := SkBoardImporter new. 

@@ -9,3 +9,8 @@ SkTarget class >> textualMapCharacter [
 
 	^ $.
 ]
+
+{ #category : #move }
+SkTarget >> isTarget [ 
+	^ true
+]
