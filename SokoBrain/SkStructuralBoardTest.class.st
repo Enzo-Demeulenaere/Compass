@@ -1,11 +1,11 @@
 Class {
-	#name : #SkBoardTest,
+	#name : #SkStructuralBoardTest,
 	#superclass : #TestCase,
 	#category : #'SokoBrain-Tests'
 }
 
 { #category : #data }
-SkBoardTest >> map1 [ 
+SkStructuralBoardTest >> map1 [ 
 	"Pay attention that there is no return on the last line."
 ^ '    #####
     #   #
@@ -21,7 +21,7 @@ SkBoardTest >> map1 [
 ]
 
 { #category : #'tests - building' }
-SkBoardTest >> testAtPositionLowLevel [
+SkStructuralBoardTest >> testAtPositionLowLevel [
 
 	| importer game |
 	importer := SkBoardImporter new. 
@@ -34,7 +34,7 @@ SkBoardTest >> testAtPositionLowLevel [
 ]
 
 { #category : #'tests - building' }
-SkBoardTest >> testIsBoxPlaygroundCorrectlySet [
+SkStructuralBoardTest >> testIsBoxPlaygroundCorrectlySet [
 
 	| importer game |
 	importer := SkBoardImporter new. 
@@ -50,7 +50,7 @@ SkBoardTest >> testIsBoxPlaygroundCorrectlySet [
 ]
 
 { #category : #'tests - building' }
-SkBoardTest >> testIsPlayerPlaygroundCorrectlySet [
+SkStructuralBoardTest >> testIsPlayerPlaygroundCorrectlySet [
 
 	| importer game |
 	importer := SkBoardImporter new. 
@@ -65,7 +65,7 @@ SkBoardTest >> testIsPlayerPlaygroundCorrectlySet [
 ]
 
 { #category : #'tests - building' }
-SkBoardTest >> testPlayerIsAvailable [
+SkStructuralBoardTest >> testPlayerIsAvailable [
 
 	| importer game |
 	importer := SkBoardImporter new. 
@@ -76,7 +76,7 @@ SkBoardTest >> testPlayerIsAvailable [
 ]
 
 { #category : #tests }
-SkBoardTest >> testPrintOn [
+SkStructuralBoardTest >> testPrintOn [
 	| importer map |
 	importer := SkBoardImporter new. 
 	map := importer buildMapFor: self map1.
@@ -94,7 +94,7 @@ SkBoardTest >> testPrintOn [
 ]
 
 { #category : #tests }
-SkBoardTest >> testPrintOnOneLine [
+SkStructuralBoardTest >> testPrintOnOneLine [
 
 	| importer game |
 	importer := SkBoardImporter new. 

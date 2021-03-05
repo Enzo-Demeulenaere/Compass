@@ -8148,7 +8148,7 @@ SkBoard >> do: aBlock [
 	map do: aBlock
 ]
 
-{ #category : #printing }
+{ #category : #initialization }
 SkBoard >> finalize [
 	"A player and boxes should have a previous location set as ground."
 
@@ -8191,6 +8191,12 @@ SkBoard >> isFinished [
 { #category : #accessing }
 SkBoard >> lineNumber [
 	^ map numberOfRows
+]
+
+{ #category : #move }
+SkBoard >> moveSteps: aCollectionOfDirection [
+
+	aCollectionOfDirection do: [ :each | player move: each ]
 ]
 
 { #category : #accessing }

@@ -33,3 +33,16 @@ SkGameLogic >> testIsFinishedThenUnfinish [
 	game player moveEast.
 	self deny: game isFinished
 ]
+
+{ #category : #tests }
+SkGameLogic >> testMoveSteps [
+
+	| importer game |
+	importer := SkBoardImporter new. 
+	game := importer buildMapFor: '#@$ . #'.
+	game identifyPlayer.
+	game finalize.
+	self deny: game isFinished. 
+	game moveSteps: { CpDirection east . CpDirection east}.
+	self assert: game isFinished. 
+]
