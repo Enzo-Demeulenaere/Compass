@@ -191,3 +191,54 @@ SkMoveInSituationTest >> testPushingABoxOnGround [
 	"Check that the board is updated, i.e., the player in the board should be at the player's position."
 	
 ]
+
+{ #category : #'tests - pushing box' }
+SkMoveInSituationTest >> testPushingABoxOnTarget [
+
+	| importer game position |
+	importer := SkBoardImporter new. 
+	game := importer buildMapFor: '#@$.#'.
+	game identifyPlayer.
+	game finalize.
+	position := game player position.
+	self assert: game asciiString equals:  '#@$.#'.
+	self assert: game player moveEast.
+	"The player has moved!"
+	
+	"Now check that the player position is correct."
+	self assert: game player position x equals: 3.
+	self assert: (game atPosition: (3@1)) isPlayer.
+	
+	self assert: game asciiString equals: '# @$#'.
+	
+	self deny: (game atPosition: (2@1)) isPlayer.
+	"Check that the board is updated, i.e., the player in the board should be at the player's position."
+	
+]
+
+{ #category : #'tests - pushing box' }
+SkMoveInSituationTest >> testPushingABoxOnWall [
+
+	| importer game position player box |
+	importer := SkBoardImporter new. 
+	game := importer buildMapFor: '#.@$#'.
+	game identifyPlayer.
+	game finalize.
+	player := game atRow: 1 atColumn: 3.
+	position := game player position.
+	self assert: game player position x equals: 3.
+	self assert: player position x equals: 3.
+	self assert: game asciiString equals: '#.@$#'.
+	box := game atRow: 1 atColumn: 4.
+	self assert: box position x equals: 4.
+	self deny: game player moveEast.
+	"The player has moved!"
+	
+	self assert: game player position x equals: 3.
+	self assert: player position x equals: 3.
+	box := game atRow: 1 atColumn: 4.
+	self assert: (box isKindOf: SkBox).
+	self assert: box position x equals: 4.
+
+
+]
