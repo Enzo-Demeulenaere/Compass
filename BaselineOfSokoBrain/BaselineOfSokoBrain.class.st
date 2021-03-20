@@ -9,7 +9,7 @@ BaselineOfSokoBrain >> baseline: spec [
 	<baseline>
 	spec for: #'common' do: [
 		spec 
-    		baseline: 'Array2D' 
+    		baseline: 'ContainersArray2D' 
     		with: [ spec repository: 'github://pharo-containers/Containers-Array2D/src' ].
 
 		spec 
