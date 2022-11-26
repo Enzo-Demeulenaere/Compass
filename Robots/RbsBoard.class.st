@@ -7,6 +7,18 @@ Class {
 	#category : #'Robots-Model'
 }
 
+{ #category : #geometry }
+RbsBoard class >> extent: aPoint [
+
+	^ self basicNew extent: aPoint; yourself
+]
+
+{ #category : #geometry }
+RbsBoard class >> new [
+
+	^ self extent: 10@12
+]
+
 { #category : #printing }
 RbsBoard >> asciiString [ 
 
@@ -68,6 +80,12 @@ RbsBoard >> do: aBlock [
 	map do: aBlock
 ]
 
+{ #category : #accessing }
+RbsBoard >> extent: aPoint [
+
+	self buildMapWidth: aPoint x height: aPoint y 
+]
+
 { #category : #building }
 RbsBoard >> groundClass [
 
@@ -77,13 +95,6 @@ RbsBoard >> groundClass [
 { #category : #accessing }
 RbsBoard >> height [
 	^ map numberOfRows
-]
-
-{ #category : #initialization }
-RbsBoard >> initialize [
-
-	super initialize.
-	self buildMapWidth: 10 height: 12
 ]
 
 { #category : #initialization }
