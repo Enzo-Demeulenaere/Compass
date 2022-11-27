@@ -1,10 +1,14 @@
+"
+I'm a board a kind of 2D space holding tile objects.
+A tile object should accept a position and a character based representation.
+"
 Class {
 	#name : #RbsBoard,
 	#superclass : #Object,
 	#instVars : [
 		'map'
 	],
-	#category : #'Robots-Model'
+	#category : #'Robots-BoardCore'
 }
 
 { #category : #geometry }
@@ -56,7 +60,7 @@ RbsBoard >> basicPrintOnInspector [
 	<inspectorPresentationOrder: 35 title: 'Game'>
 
 	^ SpTextPresenter new 
-		text: self printString;
+		text: self asciiString;
 		yourself
 ]
 
@@ -65,8 +69,9 @@ RbsBoard >> buildMapWidth: x height: y [
 
 	map := Array2D 
 				rows: y 
-				columns: x 
-				tabulate: [ :row :column | self groundClass new basicPosition: column @ row ]
+				columns: x.
+	map rowsColumnsDo: [ :row :column |
+			self initializeElement: self groundClass new atLine: row column: column ]
 ]
 
 { #category : #accessing }
@@ -76,7 +81,8 @@ RbsBoard >> columnNumber [
 
 { #category : #building }
 RbsBoard >> do: aBlock [
-
+	"Execute the block on each element of the board"
+	
 	map do: aBlock
 ]
 
@@ -97,7 +103,7 @@ RbsBoard >> height [
 	^ map numberOfRows
 ]
 
-{ #category : #initialization }
+{ #category : #building }
 RbsBoard >> initializeElement: anElement atLine: lineNumber column: columnNumber [
 
 	anElement setBoard: self.
@@ -112,7 +118,7 @@ RbsBoard >> lineNumber [
 ]
 
 { #category : #printing }
-RbsBoard >> printOn: aStream [
+RbsBoard >> printNicelyOn: aStream [
 	
 	(1 to: map numberOfRows)
 		do: [ :rowNumber |
