@@ -20,19 +20,14 @@ RbsBoard class >> extent: aPoint [
 { #category : #geometry }
 RbsBoard class >> new [
 
-	^ self extent: 10@12
+	^ self extent: 100@120
 ]
 
 { #category : #printing }
 RbsBoard >> asciiString [ 
 
-	^ String streamContents: [ :st | self printOn: st ]	
+	^ String streamContents: [ :st | self printNicelyOn: st ]	
 
-]
-
-{ #category : #'low level access' }
-RbsBoard >> at: anInteger at: anInteger2 [
-	^ map at: anInteger at: anInteger2
 ]
 
 { #category : #'low level access' }
@@ -46,13 +41,13 @@ RbsBoard >> atPosition: aCpPositionable [
 ]
 
 { #category : #'low level access' }
-RbsBoard >> atRow: anInteger atColumn: anInteger2 [
-	^ map at: anInteger at: anInteger2
+RbsBoard >> atX: xCoord atY: yCoord [
+	^ map at: yCoord at: xCoord
 ]
 
 { #category : #'low level access' }
-RbsBoard >> atRow: anInteger atColumn: anInteger2 put: anElement [
-	map at: anInteger at: anInteger2 put: anElement 
+RbsBoard >> atX: anInteger atY: anInteger2 put: anElement [
+	map at: anInteger2 at: anInteger put: anElement 
 ]
 
 { #category : #inspector }
@@ -71,7 +66,7 @@ RbsBoard >> buildMapWidth: x height: y [
 				rows: y 
 				columns: x.
 	map rowsColumnsDo: [ :row :column |
-			self initializeElement: self groundClass new atLine: row column: column ]
+			self initializeElement: self groundClass new atX: column Y: row ]
 ]
 
 { #category : #accessing }
@@ -104,11 +99,11 @@ RbsBoard >> height [
 ]
 
 { #category : #building }
-RbsBoard >> initializeElement: anElement atLine: lineNumber column: columnNumber [
+RbsBoard >> initializeElement: anElement atX: xCoord Y: yCoord [
 
 	anElement setBoard: self.
-	anElement basicPosition: columnNumber @ lineNumber.
-	self atRow: lineNumber atColumn: columnNumber put: anElement.
+	anElement basicPosition: xCoord @ yCoord.
+	self atX: xCoord atY: yCoord put: anElement.
 	anElement postCreationAction.
 ]
 
@@ -120,11 +115,11 @@ RbsBoard >> lineNumber [
 { #category : #printing }
 RbsBoard >> printNicelyOn: aStream [
 	
-	(1 to: map numberOfRows)
-		do: [ :rowNumber |
-			1 to: map numberOfColumns do: [ :columnNumber |
+	(1 to: self width)
+		do: [ :xCoord |
+			1 to: self height do: [ :yCoord |
 				| el |
-				el := (self atRow: rowNumber atColumn: columnNumber).
+				el := (self atX: xCoord atY: yCoord).
 				aStream nextPut: el class textualMapCharacter]]
 		separatedBy: [ aStream cr ]
 ]

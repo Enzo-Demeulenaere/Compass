@@ -4,8 +4,6 @@ Extension { #name : #Array2D }
 Array2D >> rowsColumnsDo: aTwoArgumentBlock [
 	"Perform aTwoArgumentBlock with row and column as inputs"
 
-	| i |
-	i := 0.
 	1 to: numberOfRows do: [:row |
 		1 to: numberOfColumns do: [:column |
 			aTwoArgumentBlock value: row value: column]].

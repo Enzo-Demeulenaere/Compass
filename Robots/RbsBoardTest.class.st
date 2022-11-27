@@ -8,9 +8,11 @@ Class {
 RbsBoardTest >> testCreatedBoard [
 
 	| b |
-	b := RbsBoard new.
-	self assert: b columnNumber equals: 10.
-	self assert: b lineNumber equals: 12.
+	b := RbsBoard extent: 5@2.
+	"	xxxxx
+		xxxxx"
+	self assert: b width equals: 5.
+	self assert: b height equals: 2.
 ]
 
 { #category : #tests }
@@ -18,8 +20,8 @@ RbsBoardTest >> testCreatedBoardWithExtent [
 
 	| b |
 	b := RbsBoard extent: 100@200.
-	self assert: b columnNumber equals: 100.
-	self assert: b lineNumber equals: 200.
+	self assert: b width equals: 100.
+	self assert: b height equals: 200.
 ]
 
 { #category : #tests }
@@ -27,7 +29,7 @@ RbsBoardTest >> testGroundIsSet [
 
 	| b |
 	b := RbsBoard new.
-	self assert: (b at: 1 at: 1) class equals: RbsGround
+	self assert: (b atX: 1 atY: 1) class equals: RbsGround
 ]
 
 { #category : #tests }
@@ -35,5 +37,27 @@ RbsBoardTest >> testTileKnowsItsBoard [
 
 	| b |
 	b := RbsBoard new.
-	self assert: (b at: 2 at: 2) board equals: b
+	self assert: (b atX: 2 atY: 2) board equals: b
+]
+
+{ #category : #tests }
+RbsBoardTest >> testTilePositionUpdatesBoard [
+
+	| b t |
+	b := RbsBoard new.
+	t := RbsTile new.
+	t setBoard: b.
+	t x: 2; y: 2.
+	self assert: (b atX: 2 atY: 2) equals: t
+]
+
+{ #category : #tests }
+RbsBoardTest >> testTilePositionUpdatesBoard2 [
+
+	| b t |
+	b := RbsBoard new.
+	t := RbsTile new.
+	t setBoard: b.
+	t x: 3; y: 1.
+	self assert: (b atX: 3 atY: 1) equals: t
 ]
