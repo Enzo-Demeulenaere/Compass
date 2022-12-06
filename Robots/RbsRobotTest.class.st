@@ -5,6 +5,24 @@ Class {
 }
 
 { #category : #tests }
+RbsRobotTest >> testExecute [
+
+
+	| rb b |
+	rb := RbsRobot new.
+	b := RbsBoard new.
+	rb setBoard: b.
+	rb startLocation: 4@1.
+	rb execute: 
+'direction #east
+move 2
+move 3
+direction #north
+move 3'.
+	self assert: rb position equals: 9@4
+]
+
+{ #category : #tests }
 RbsRobotTest >> testRobotAtLocation [
 
 	| rb b |

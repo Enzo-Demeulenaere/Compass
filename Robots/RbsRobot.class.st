@@ -3,7 +3,8 @@ Class {
 	#superclass : #RbsTile,
 	#instVars : [
 		'startLocation',
-		'direction'
+		'direction',
+		'orders'
 	],
 	#category : #'Robots-Bots'
 }
@@ -23,6 +24,19 @@ RbsRobot >> direction [
 RbsRobot >> direction: anObject [
 
 	direction := anObject
+]
+
+{ #category : #action }
+RbsRobot >> execute: aString [
+
+	orders := aString splitOn: Character cr.
+	orders := orders collect: [ :each | each splitOn: Character space ].
+	orders do: [ :each |
+			each first = #move
+				ifTrue: [ self move: (Object readFrom: each second) ]
+				ifFalse: [ each first = #direction
+								ifTrue: [ self direction: (Object readFrom: each second) ] ]
+		 ]
 ]
 
 { #category : #accessing }
@@ -58,6 +72,6 @@ RbsRobot >> startLocation: aPoint [
 
 	startLocation := aPoint.
 	self x: aPoint x y: aPoint y.
-	self board atX: aPoint x atY: aPoint y put: self
+
 	
 ]
