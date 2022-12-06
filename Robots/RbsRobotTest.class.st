@@ -14,11 +14,11 @@ RbsRobotTest >> testExecute [
 	rb setBoard: b.
 	rb startLocation: 4@1.
 	rb execute: 
-'direction #east
-move 2
-move 3
-direction #north
-move 3'.
+'dir #east
+mov 2
+mov 3
+dir #north
+mov 3'.
 	self assert: rb position equals: 9@4
 ]
 

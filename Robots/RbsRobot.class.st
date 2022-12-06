@@ -32,9 +32,9 @@ RbsRobot >> execute: aString [
 	orders := aString splitOn: Character cr.
 	orders := orders collect: [ :each | each splitOn: Character space ].
 	orders do: [ :each |
-			each first = #move
+			each first = #mov
 				ifTrue: [ self move: (Object readFrom: each second) ]
-				ifFalse: [ each first = #direction
+				ifFalse: [ each first = #dir
 								ifTrue: [ self direction: (Object readFrom: each second) ] ]
 		 ]
 ]
