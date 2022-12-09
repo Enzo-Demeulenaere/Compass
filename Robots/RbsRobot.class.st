@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'startLocation',
 		'direction',
-		'orders'
+		'orders',
+		'cmdMap'
 	],
 	#category : #'Robots-Bots'
 }
@@ -12,6 +13,12 @@ Class {
 { #category : #'default encoding' }
 RbsRobot class >> textualMapCharacter [
 	^ $X
+]
+
+{ #category : #commands }
+RbsRobot >> commandClassFor: aString [
+
+	^ cmdMap at: aString
 ]
 
 { #category : #accessing }
@@ -39,12 +46,33 @@ RbsRobot >> execute: aString [
 		 ]
 ]
 
+{ #category : #commands }
+RbsRobot >> executeCommandBased: aString [
+
+	orders := aString splitOn: Character cr.
+	orders := orders collect: [ :each | each splitOn: Character space ].
+	orders do: [ :each |
+			(self commandClassFor: each first) new
+				handleArguments: each allButFirst;
+				executeOn: self ]
+]
+
 { #category : #accessing }
 RbsRobot >> initialize [ 
 		
 	super initialize.
 	"like that it will quite ugly to move :) and we will introduce a nicer way."
-	direction := #east
+	direction := #east.
+	self initializeCommandMapping 
+]
+
+{ #category : #accessing }
+RbsRobot >> initializeCommandMapping [
+
+	cmdMap := Dictionary new.
+	RbsCommand allSubclassesDo: [ :each |
+		cmdMap at: each commandName put: each 	
+		]
 ]
 
 { #category : #action }

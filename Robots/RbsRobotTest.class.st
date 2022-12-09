@@ -22,6 +22,31 @@ mov 3'.
 	self assert: rb position equals: 9@4
 ]
 
+{ #category : #'tests - commands' }
+RbsRobotTest >> testExecuteCommandBased [
+
+	| rb b |
+	rb := RbsRobot new.
+	b := RbsBoard new.
+	rb setBoard: b.
+	rb startLocation: 4@1.
+	rb executeCommandBased: 
+'dir #east
+mov 2
+mov 3
+dir #north
+mov 3'.
+	self assert: rb position equals: 9@4
+]
+
+{ #category : #'tests - commands' }
+RbsRobotTest >> testMappingIsInitialized [
+
+	| r |
+	r := RbsRobot new.
+	self assert: (r commandClassFor: RbsDirectionCommand commandName) equals: RbsDirectionCommand
+]
+
 { #category : #tests }
 RbsRobotTest >> testRobotAtLocation [
 
