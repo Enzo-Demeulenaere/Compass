@@ -15,7 +15,7 @@ BaselineOfSokoBrain >> baseline: spec [
 		spec 
 			package: #'Compass';
 			package: #'SokoBrain'  with: [
-				spec requires:  #( #'Compass' 'Array2D') ]
+				spec requires:  #( #'Compass' 'ContainersArray2D') ]
 			]
 
 ]
