@@ -60,6 +60,47 @@ RbsRobotTest >> testMappingIsInitialized [
 	self assert: (r commandClassFor: RbsDirectionCommand commandName) equals: RbsDirectionCommand
 ]
 
+{ #category : #'tests - optimize' }
+RbsRobotTest >> testMergeCommands [
+
+	| cmd |
+	cmd := (RbsMoveCommand new distance: 10; yourself)
+		mergeWith: (RbsMoveCommand new distance: 10; yourself).
+	self assert: cmd distance equals: 20
+]
+
+{ #category : #'tests - optimize' }
+RbsRobotTest >> testMergeUNmergeableCommands [
+
+	| cmd |
+	cmd := (RbsDirectionCommand new direction: #east; yourself)
+		mergeWith: (RbsDirectionCommand new direction: #north; yourself).
+	self assert: cmd direction equals: #north
+]
+
+{ #category : #'tests - optimize' }
+RbsRobotTest >> testMergeUNmergeableCommandsBecauseDifferent [
+
+	| cmd |
+	cmd := (RbsMoveCommand new distance: 10; yourself)
+		mergeWith: (RbsDirectionCommand new direction: #east; yourself).
+	self assert: cmd direction equals: #east.
+	
+	
+	cmd := (RbsDirectionCommand new direction: #east; yourself)
+		mergeWith: (RbsMoveCommand new distance: 10; yourself).
+	self assert: cmd distance equals: 10
+]
+
+{ #category : #'tests - commands' }
+RbsRobotTest >> testPrintString [
+
+	self 
+		assert: (RbsMoveCommand new distance: 5; printString)
+		equals: 'mov 5'
+		
+]
+
 { #category : #tests }
 RbsRobotTest >> testRobotAtLocation [
 
