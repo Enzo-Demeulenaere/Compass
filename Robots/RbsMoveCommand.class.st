@@ -14,12 +14,12 @@ RbsMoveCommand class >> commandName [
 
 { #category : #execution }
 RbsMoveCommand >> executeOn: aRobot [
-
+	
 	aRobot move: distance
 ]
 
 { #category : #execution }
 RbsMoveCommand >> handleArguments: aCol [
-
+	
 	distance := Object readFrom: aCol first
 ]

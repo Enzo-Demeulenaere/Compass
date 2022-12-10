@@ -21,6 +21,6 @@ RbsDirectionCommand >> executeOn: aRobot [
 
 { #category : #'as yet unclassified' }
 RbsDirectionCommand >> handleArguments: aCollection [
-
-	direction := aCollection first asSymbol. 
+	
+	direction := Object readFrom: aCollection first 
 ]

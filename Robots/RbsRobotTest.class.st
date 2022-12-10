@@ -40,6 +40,19 @@ mov 3'.
 ]
 
 { #category : #'tests - commands' }
+RbsRobotTest >> testExecuteDirection [
+
+	| rb b |
+	rb := RbsRobot new.
+	b := RbsBoard new.
+	rb setBoard: b.
+	rb startLocation: 4@1.
+	rb executeCommandBased: 
+'dir #east'.
+	self assert: rb direction equals: #east
+]
+
+{ #category : #'tests - commands' }
 RbsRobotTest >> testMappingIsInitialized [
 
 	| r |
