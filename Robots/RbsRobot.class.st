@@ -5,7 +5,8 @@ Class {
 		'startLocation',
 		'direction',
 		'orders',
-		'cmdMap'
+		'cmdMap',
+		'path'
 	],
 	#category : #'Robots-Bots'
 }
@@ -87,6 +88,31 @@ RbsRobot >> move: anInteger [
 					ifFalse: [ self y: self y - anInteger ]
 				]
 			]
+]
+
+{ #category : #optimize }
+RbsRobot >> optimizePath: aString [
+	
+	"to be factored out"
+	| optimizedPath |
+	orders := aString splitOn: Character cr.
+	orders := orders collect: [ :each | each splitOn: Character space ].
+	
+	"to be factored out too."
+	path := orders collect: [ :each |
+			(self commandClassFor: each first) new
+				handleArguments: each allButFirst; 
+				yourself ].
+	path size > 1 ifFalse: [ ^  path ].
+	
+	optimizedPath := OrderedCollection new. 
+	path overlappingPairsCollect: [:first :second | optimizedPath add: (first mergeWith: second) ].
+	path := optimizedPath.
+]
+
+{ #category : #optimize }
+RbsRobot >> path [
+	^ path
 ]
 
 { #category : #accessing }

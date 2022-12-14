@@ -13,19 +13,21 @@ RbsCommand >> handleArguments: aCollection [
 { #category : #merging }
 RbsCommand >> mergeWith: anotherCommand [
 
-	^ anotherCommand mergeWithMove: self 
+	^ self subclassResponsibility 
 ]
 
 { #category : #merging }
 RbsCommand >> mergeWithDirection: aDirectionCommand [
-
-	^ self
+	"any command is never merged with a direction command"
+	
+	^ CTLinkedList new  add: aDirectionCommand; add: self ; yourself
 ]
 
 { #category : #merging }
 RbsCommand >> mergeWithMove: aMoveCommand [
-
-	^ self
+	"any command is never merged with a move command"
+	
+	^ CTLinkedList new add: self ; add: aMoveCommand ; yourself
 ]
 
 { #category : #printing }

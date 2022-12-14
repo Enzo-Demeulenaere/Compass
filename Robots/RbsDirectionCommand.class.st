@@ -41,6 +41,18 @@ RbsDirectionCommand >> mergeWith: anotherCommand [
 	^ anotherCommand mergeWithDirection: self
 ]
 
+{ #category : #merging }
+RbsDirectionCommand >> mergeWithDirection: aDirectionCommand [
+
+	^ LinkedList new add: self; yourself
+]
+
+{ #category : #merging }
+RbsDirectionCommand >> mergeWithMove: aMoveCommand [
+
+	^ CTLinkedList new add: aMoveCommand ;add: self;  yourself 
+]
+
 { #category : #printing }
 RbsDirectionCommand >> printArguments: aStream [
 

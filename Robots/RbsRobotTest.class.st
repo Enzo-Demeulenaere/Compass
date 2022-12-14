@@ -60,36 +60,66 @@ RbsRobotTest >> testMappingIsInitialized [
 	self assert: (r commandClassFor: RbsDirectionCommand commandName) equals: RbsDirectionCommand
 ]
 
-{ #category : #'tests - optimize' }
-RbsRobotTest >> testMergeCommands [
+{ #category : #'tests - merge' }
+RbsRobotTest >> testMergeDirectionCommandsReturnTheLastOne [
 
-	| cmd |
-	cmd := (RbsMoveCommand new distance: 10; yourself)
+	| cmdList |
+	cmdList := (RbsDirectionCommand new direction: #east; yourself)
+		mergeWith: (RbsDirectionCommand new direction: #north ; yourself).
+	self assert: cmdList size equals: 1.
+	self assert: cmdList first direction equals: #north.
+]
+
+{ #category : #'tests - merge' }
+RbsRobotTest >> testMergeMoveCommandsProducesTheSum [
+
+	| cmdList |
+	cmdList := (RbsMoveCommand new distance: 10; yourself)
 		mergeWith: (RbsMoveCommand new distance: 10; yourself).
-	self assert: cmd distance equals: 20
+	self assert: cmdList size equals: 1.
+	self assert: cmdList first distance equals: 20.
 ]
 
-{ #category : #'tests - optimize' }
-RbsRobotTest >> testMergeUNmergeableCommands [
-
-	| cmd |
-	cmd := (RbsDirectionCommand new direction: #east; yourself)
-		mergeWith: (RbsDirectionCommand new direction: #north; yourself).
-	self assert: cmd direction equals: #north
-]
-
-{ #category : #'tests - optimize' }
+{ #category : #'tests - merge' }
 RbsRobotTest >> testMergeUNmergeableCommandsBecauseDifferent [
 
-	| cmd |
-	cmd := (RbsMoveCommand new distance: 10; yourself)
+	| cmdList |
+	cmdList := (RbsMoveCommand new distance: 10; yourself)
 		mergeWith: (RbsDirectionCommand new direction: #east; yourself).
-	self assert: cmd direction equals: #east.
+	self assert: cmdList size equals: 2.
+	self assert: cmdList first distance equals: 10.
 	
 	
-	cmd := (RbsDirectionCommand new direction: #east; yourself)
+	
+]
+
+{ #category : #'tests - merge' }
+RbsRobotTest >> testMergeUNmergeableCommandsBecauseDifferent2 [
+
+	| cmdList |
+	cmdList := (RbsDirectionCommand new direction: #east; yourself)
 		mergeWith: (RbsMoveCommand new distance: 10; yourself).
-	self assert: cmd distance equals: 10
+	self assert: cmdList size equals: 2.
+	self assert: cmdList first direction equals: #east
+]
+
+{ #category : #'tests - optimize' }
+RbsRobotTest >> testOptimize [
+
+	| rb b |
+	rb := RbsRobot new.
+	b := RbsBoard new.
+	rb setBoard: b.
+	rb startLocation: 4@1.
+	rb optimizePath: 
+'dir #east
+mov 2
+mov 3
+dir #north
+mov 3'.
+	self 
+		assert: (rb path collect: [ :each | each printString ]) 
+		equals: #('dir #east' 'mov 5' 'dir #north' 'mov 3')
 ]
 
 { #category : #'tests - commands' }
@@ -193,4 +223,17 @@ RbsRobotTest >> testRobotMoveWest [
 	rb move: 10.
 	self assert: (rb board atX: 4 atY: 1) equals: rb.
 	
+]
+
+{ #category : #'tests - optimize' }
+RbsRobotTest >> testToOptimizeAPathWeNeedAtLeastTwoElements [
+
+	| rb b |
+	rb := RbsRobot new.
+	b := RbsBoard new.
+	rb setBoard: b.
+	rb startLocation: 4@1.
+	rb optimizePath: 
+'dir #east'.
+	self assert: (rb path collect: #printString) equals: #('dir #east') asOrderedCollection
 ]
