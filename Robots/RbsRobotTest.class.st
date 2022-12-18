@@ -104,7 +104,7 @@ RbsRobotTest >> testMergeUNmergeableCommandsBecauseDifferent2 [
 ]
 
 { #category : #'tests - optimize' }
-RbsRobotTest >> testOptimize [
+RbsRobotTest >> testOptimizeMergeThreeMoves [
 
 	| rb b |
 	rb := RbsRobot new.
@@ -112,14 +112,98 @@ RbsRobotTest >> testOptimize [
 	rb setBoard: b.
 	rb startLocation: 4@1.
 	rb optimizePath: 
-'dir #east
-mov 2
+'mov 2
 mov 3
-dir #north
+mov 4'.
+	self 
+		assert: (rb path collect: [ :each | each printString ]) 
+		equals: #( 'mov 9')
+]
+
+{ #category : #'tests - optimize' }
+RbsRobotTest >> testOptimizeMergeThreeMovesAndOthers [
+
+	| rb b |
+	rb := RbsRobot new.
+	b := RbsBoard new.
+	rb setBoard: b.
+	rb startLocation: 4@1.
+	rb optimizePath: 
+'mov 2
+mov 3
+mov 4
+dir #east'.
+	self 
+		assert: (rb path collect: [ :each | each printString ]) 
+		equals: #( 'mov 9' 'dir #east')
+]
+
+{ #category : #'tests - optimize' }
+RbsRobotTest >> testOptimizeMergeTwoMoves [
+
+	| rb b |
+	rb := RbsRobot new.
+	b := RbsBoard new.
+	rb setBoard: b.
+	rb startLocation: 4@1.
+	rb optimizePath: 
+'mov 2
 mov 3'.
 	self 
 		assert: (rb path collect: [ :each | each printString ]) 
-		equals: #('dir #east' 'mov 5' 'dir #north' 'mov 3')
+		equals: #( 'mov 5')
+]
+
+{ #category : #'tests - optimize' }
+RbsRobotTest >> testOptimizeMergeTwoMovesAndOthers [
+
+	| rb b |
+	rb := RbsRobot new.
+	b := RbsBoard new.
+	rb setBoard: b.
+	rb startLocation: 4@1.
+	rb optimizePath: 
+'mov 2
+mov 3
+dir #east'.
+	self 
+		assert: (rb path collect: [ :each | each printString ]) 
+		equals: #( 'mov 5' 'dir #east')
+]
+
+{ #category : #'tests - optimize' }
+RbsRobotTest >> testOptimizeNoMergeThenMergeThreeMovesAndOthers [
+
+	| rb b |
+	rb := RbsRobot new.
+	b := RbsBoard new.
+	rb setBoard: b.
+	rb startLocation: 4@1.
+	rb optimizePath: 
+'dir #north
+mov 2
+mov 3
+mov 4
+dir #east'.
+	self 
+		assert: (rb path collect: [ :each | each printString ]) 
+		equals: #( 'dir #north' 'mov 9' 'dir #east')
+]
+
+{ #category : #'tests - optimize' }
+RbsRobotTest >> testOptimizeTwoDirections [
+
+	| rb b |
+	rb := RbsRobot new.
+	b := RbsBoard new.
+	rb setBoard: b.
+	rb startLocation: 4@1.
+	rb optimizePath: 
+'dir #north
+dir #east'.
+	self 
+		assert: (rb path collect: [ :each | each printString ]) 
+		equals: #( 'dir #east')
 ]
 
 { #category : #'tests - commands' }

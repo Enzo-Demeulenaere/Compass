@@ -91,7 +91,29 @@ RbsRobot >> move: anInteger [
 ]
 
 { #category : #optimize }
-RbsRobot >> optimizePath: aString [
+RbsRobot >> optimize: aList [
+	"Returns an optimized list"
+	
+	| first second mergedList |
+	aList size > 1 ifFalse: [ ^ aList ].
+	"we have at least two elements."
+	first := aList first.
+	second := aList second.
+	mergedList := first mergeWith: second.
+	^ mergedList size = 1
+		ifTrue: [ 
+			aList size > 2
+			"here we got a merge so we optimise the merged and the rest because we can have three or more in a row"
+				ifTrue: [ self optimize: (mergedList addLast: aList firstLink nextLink nextLink; yourself) ]
+				ifFalse: [ mergedList ]]
+		ifFalse: [
+			"here we got no merges so we keep the first and optimize the rest."
+			 (CTLinkedList new add: first; yourself) append: 
+							(self optimize: (CTLinkedList new add: aList firstLink nextLink; yourself)) ]
+]
+
+{ #category : #optimize }
+RbsRobot >> optimizePath2: aString [
 	
 	"to be factored out"
 	| optimizedPath |
@@ -108,6 +130,27 @@ RbsRobot >> optimizePath: aString [
 	optimizedPath := OrderedCollection new. 
 	path overlappingPairsCollect: [:first :second | optimizedPath add: (first mergeWith: second) ].
 	path := optimizedPath.
+]
+
+{ #category : #optimize }
+RbsRobot >> optimizePath: aString [
+
+	self parseOrders: aString.
+	path := self optimize: path.
+]
+
+{ #category : #optimize }
+RbsRobot >> parseOrders: aString [
+
+	orders := aString splitOn: Character cr.
+	orders := orders collect: [ :each | each splitOn: Character space ].
+
+	"to be factored out too."
+	path := CTLinkedList new.
+	orders do: [ :each | 
+		path addLast: ((self commandClassFor: each first) new
+				 handleArguments: each allButFirst;
+				 yourself) ]
 ]
 
 { #category : #optimize }
