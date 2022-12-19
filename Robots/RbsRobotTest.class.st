@@ -81,7 +81,17 @@ RbsRobotTest >> testMergeMoveCommandsProducesTheSum [
 ]
 
 { #category : #'tests - merge' }
-RbsRobotTest >> testMergeUNmergeableCommandsBecauseDifferent [
+RbsRobotTest >> testMergeUNmergeableCommandsBecauseDifferent2 [
+
+	| cmdList |
+	cmdList := (RbsDirectionCommand new direction: #east; yourself)
+		mergeWith: (RbsMoveCommand new distance: 10; yourself).
+	self assert: cmdList size equals: 2.
+	self assert: cmdList first direction equals: #east
+]
+
+{ #category : #'tests - merge' }
+RbsRobotTest >> testMergeUnmergeableCommandsBecauseDifferent [
 
 	| cmdList |
 	cmdList := (RbsMoveCommand new distance: 10; yourself)
@@ -91,16 +101,6 @@ RbsRobotTest >> testMergeUNmergeableCommandsBecauseDifferent [
 	
 	
 	
-]
-
-{ #category : #'tests - merge' }
-RbsRobotTest >> testMergeUNmergeableCommandsBecauseDifferent2 [
-
-	| cmdList |
-	cmdList := (RbsDirectionCommand new direction: #east; yourself)
-		mergeWith: (RbsMoveCommand new distance: 10; yourself).
-	self assert: cmdList size equals: 2.
-	self assert: cmdList first direction equals: #east
 ]
 
 { #category : #'tests - optimize' }
@@ -215,6 +215,50 @@ RbsRobotTest >> testPrintString [
 		
 ]
 
+{ #category : #'tests - replay' }
+RbsRobotTest >> testReplay [
+
+	| rb b |
+	rb := RbsRobot new.
+	b := RbsBoard new.
+	rb setBoard: b.
+	rb executeCommandBased: 
+'base 4 1'.
+	rb executeCommandBased: 
+'dir #east
+mov 2
+mov 3
+dir #north
+mov 3'.
+	self assert: rb position equals: 9@4.
+	rb startLocation: 5@1.
+	rb replay.
+	self assert: rb position equals: 10@4
+	
+]
+
+{ #category : #'tests - replay' }
+RbsRobotTest >> testReplayAsCommand [
+
+	| rb b |
+	rb := RbsRobot new.
+	b := RbsBoard new.
+	rb setBoard: b.
+	rb executeCommandBased: 
+'base 4 1'.
+	rb executeCommandBased: 
+'dir #east
+mov 2
+mov 3
+dir #north
+mov 3'.
+	self assert: rb position equals: 9@4.
+rb executeCommandBased: 'base 5 1
+replay'.
+	self assert: rb position equals: 10@4
+	
+]
+
 { #category : #tests }
 RbsRobotTest >> testRobotAtLocation [
 
@@ -307,6 +351,23 @@ RbsRobotTest >> testRobotMoveWest [
 	rb move: 10.
 	self assert: (rb board atX: 4 atY: 1) equals: rb.
 	
+]
+
+{ #category : #'tests - new commands' }
+RbsRobotTest >> testStartPositionAsCommand [
+
+	| rb b |
+	rb := RbsRobot new.
+	b := RbsBoard new.
+	rb setBoard: b.
+	rb executeCommandBased: 
+'base 4 1
+dir #east
+mov 2
+mov 3
+dir #north
+mov 3'.
+	self assert: rb position equals: 9@4
 ]
 
 { #category : #'tests - optimize' }

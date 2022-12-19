@@ -4,7 +4,6 @@ Class {
 	#instVars : [
 		'startLocation',
 		'direction',
-		'orders',
 		'cmdMap',
 		'path'
 	],
@@ -37,25 +36,41 @@ RbsRobot >> direction: anObject [
 { #category : #action }
 RbsRobot >> execute: aString [
 
-	orders := aString splitOn: Character cr.
-	orders := orders collect: [ :each | each splitOn: Character space ].
-	orders do: [ :each |
-			each first = #mov
-				ifTrue: [ self move: (Object readFrom: each second) ]
-				ifFalse: [ each first = #dir
-								ifTrue: [ self direction: (Object readFrom: each second) ] ]
-		 ]
+	(self identifyOrdersOf: aString)
+		do: [ :each | 
+		each first = #mov
+			ifTrue: [ self move: (Object readFrom: each second) ]
+			ifFalse: [ 
+				each first = #dir ifTrue: [ 
+					self direction: (Object readFrom: each second) ] ] ]
 ]
 
 { #category : #commands }
 RbsRobot >> executeCommandBased: aString [
 
+	(self identifyOrdersOf: aString) do: [ :each |
+			| cmd |
+			cmd := ((self commandClassFor: each first) new
+				handleArguments: each allButFirst; yourself).
+			path addLast: cmd.
+			cmd executeOn: self ]
+]
+
+{ #category : #commands }
+RbsRobot >> executeCommandBasedV1: aString [
+
+	(self identifyOrdersOf: aString) do: [ :each |
+		((self commandClassFor: each first) new
+			handleArguments: each allButFirst; yourself) executeOn: self ]
+]
+
+{ #category : #action }
+RbsRobot >> identifyOrdersOf: aString [
+
+	| orders |
 	orders := aString splitOn: Character cr.
 	orders := orders collect: [ :each | each splitOn: Character space ].
-	orders do: [ :each |
-			(self commandClassFor: each first) new
-				handleArguments: each allButFirst;
-				executeOn: self ]
+	^ orders
 ]
 
 { #category : #accessing }
@@ -64,7 +79,8 @@ RbsRobot >> initialize [
 	super initialize.
 	"like that it will quite ugly to move :) and we will introduce a nicer way."
 	direction := #east.
-	self initializeCommandMapping 
+	self initializePath.
+	self initializeCommandMapping.
 ]
 
 { #category : #accessing }
@@ -74,6 +90,12 @@ RbsRobot >> initializeCommandMapping [
 	RbsCommand allSubclassesDo: [ :each |
 		cmdMap at: each commandName put: each 	
 		]
+]
+
+{ #category : #accessing }
+RbsRobot >> initializePath [
+
+	path := OrderedCollection new.
 ]
 
 { #category : #action }
@@ -113,26 +135,6 @@ RbsRobot >> optimize: aList [
 ]
 
 { #category : #optimize }
-RbsRobot >> optimizePath2: aString [
-	
-	"to be factored out"
-	| optimizedPath |
-	orders := aString splitOn: Character cr.
-	orders := orders collect: [ :each | each splitOn: Character space ].
-	
-	"to be factored out too."
-	path := orders collect: [ :each |
-			(self commandClassFor: each first) new
-				handleArguments: each allButFirst; 
-				yourself ].
-	path size > 1 ifFalse: [ ^  path ].
-	
-	optimizedPath := OrderedCollection new. 
-	path overlappingPairsCollect: [:first :second | optimizedPath add: (first mergeWith: second) ].
-	path := optimizedPath.
-]
-
-{ #category : #optimize }
 RbsRobot >> optimizePath: aString [
 
 	self parseOrders: aString.
@@ -142,12 +144,8 @@ RbsRobot >> optimizePath: aString [
 { #category : #optimize }
 RbsRobot >> parseOrders: aString [
 
-	orders := aString splitOn: Character cr.
-	orders := orders collect: [ :each | each splitOn: Character space ].
-
-	"to be factored out too."
 	path := CTLinkedList new.
-	orders do: [ :each | 
+	(self identifyOrdersOf: aString) do: [ :each | 
 		path addLast: ((self commandClassFor: each first) new
 				 handleArguments: each allButFirst;
 				 yourself) ]
@@ -156,6 +154,12 @@ RbsRobot >> parseOrders: aString [
 { #category : #optimize }
 RbsRobot >> path [
 	^ path
+]
+
+{ #category : #action }
+RbsRobot >> replay [
+
+	path do: [ :each | each executeOn: self ]
 ]
 
 { #category : #accessing }

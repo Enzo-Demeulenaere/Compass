@@ -6,8 +6,7 @@ Class {
 
 { #category : #execution }
 RbsCommand >> handleArguments: aCollection [
-
-	self subclassResponsibility 
+	
 ]
 
 { #category : #merging }
