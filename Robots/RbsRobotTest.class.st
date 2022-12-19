@@ -222,8 +222,8 @@ RbsRobotTest >> testReplay [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb executeCommandBased: 
-'base 4 1'.
+	rb startLocation: 4@1.
+	
 	rb executeCommandBased: 
 'dir #east
 mov 2
@@ -247,7 +247,8 @@ RbsRobotTest >> testReplayAsCommand [
 	rb executeCommandBased: 
 'base 4 1'.
 	rb executeCommandBased: 
-'dir #east
+'resM
+dir #east
 mov 2
 mov 3
 dir #north

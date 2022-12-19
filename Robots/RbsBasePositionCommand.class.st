@@ -30,19 +30,7 @@ RbsBasePositionCommand >> handleArguments: aCol [
 { #category : #merging }
 RbsBasePositionCommand >> mergeWith: aCommand [
 
-	^ aCommand mergeWithMove: self
-]
-
-{ #category : #merging }
-RbsBasePositionCommand >> mergeWithMove: aMoveCommand [
-	"We have two moves for now just add them not handling zero yet"
-
-	| merged |
-	merged := self class new 
-		distance: aMoveCommand distance + distance;
-		yourself.
-	^ CTLinkedList new add: merged ; yourself
-	
+	^ CTLinkedList new add: aCommand ;add: self;  yourself 
 ]
 
 { #category : #printing }
