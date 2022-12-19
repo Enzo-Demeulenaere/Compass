@@ -33,6 +33,17 @@ RbsBoardTest >> testGroundIsSet [
 ]
 
 { #category : #tests }
+RbsBoardTest >> testPrintingCreatedBoard [
+
+	| b |
+	b := RbsBoard extent: 5@2.
+	self assert: b width equals: 5.
+	self assert: b height equals: 2.
+	self assert: b asciiString equals: '_____
+_____'
+]
+
+{ #category : #tests }
 RbsBoardTest >> testTileKnowsItsBoard [
 
 	| b |

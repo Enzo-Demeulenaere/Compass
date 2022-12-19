@@ -11,16 +11,16 @@ Class {
 	#category : #'Robots-BoardCore'
 }
 
-{ #category : #geometry }
+{ #category : #'instance creation' }
 RbsBoard class >> extent: aPoint [
 
 	^ self basicNew extent: aPoint; yourself
 ]
 
-{ #category : #geometry }
+{ #category : #'instance creation' }
 RbsBoard class >> new [
 
-	^ self extent: 100@120
+	^ self extent: 30@12
 ]
 
 { #category : #printing }
@@ -42,6 +42,7 @@ RbsBoard >> atPosition: aCpPositionable [
 
 { #category : #'low level access' }
 RbsBoard >> atX: xCoord atY: yCoord [
+
 	^ map at: yCoord at: xCoord
 ]
 
@@ -115,9 +116,9 @@ RbsBoard >> lineNumber [
 { #category : #printing }
 RbsBoard >> printNicelyOn: aStream [
 	
-	(1 to: self width)
-		do: [ :xCoord |
-			1 to: self height do: [ :yCoord |
+	(1 to: self height) 
+		do: [ :yCoord |
+			1 to: self width do: [ :xCoord |
 				| el |
 				el := (self atX: xCoord atY: yCoord).
 				aStream nextPut: el class textualMapCharacter]]

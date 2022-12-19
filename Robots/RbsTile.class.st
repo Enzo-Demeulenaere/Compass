@@ -33,6 +33,12 @@ RbsTile >> board [
 	^ board 
 ]
 
+{ #category : #accessing }
+RbsTile >> character [
+
+	^ self class textualMapCharacter
+]
+
 { #category : #initialization }
 RbsTile >> initialize [ 
 	super initialize.
@@ -57,6 +63,19 @@ RbsTile >> postCreationAction [
 	"nothing by default"
 	
 	^ self
+]
+
+{ #category : #printing }
+RbsTile >> printOn: aStream [ 
+
+	super printOn: aStream.
+	aStream 
+		space ; 
+		nextPut: self character; 
+		space ; 
+		print: x ; 
+		space ; 
+		print: y
 ]
 
 { #category : #protected }

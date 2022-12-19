@@ -1,7 +1,7 @@
 Class {
 	#name : #RbsRobotTest,
 	#superclass : #TestCase,
-	#category : #'Robots-Bots'
+	#category : #'Robots-Test'
 }
 
 { #category : #tests }
@@ -353,6 +353,16 @@ RbsRobotTest >> testRobotMoveWest [
 	
 ]
 
+{ #category : #'tests - printing' }
+RbsRobotTest >> testRobotPrinting [
+	| rb b |
+	rb := RbsGround new.
+	b := RbsBoard new.
+	rb setBoard: b.
+	rb x: 5 y: 3.
+	self assert: rb printString equals: 'a RbsGround _ 5 3'
+]
+
 { #category : #'tests - new commands' }
 RbsRobotTest >> testStartPositionAsCommand [
 
@@ -380,5 +390,7 @@ RbsRobotTest >> testToOptimizeAPathWeNeedAtLeastTwoElements [
 	rb startLocation: 4@1.
 	rb optimizePath: 
 'dir #east'.
-	self assert: (rb path collect: #printString) equals: #('dir #east') asOrderedCollection
+	self 
+		assert: rb path first printString 
+		equals: 'dir #east'
 ]

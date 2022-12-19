@@ -6,5 +6,5 @@ Class {
 
 { #category : #'default encoding' }
 RbsGround class >> textualMapCharacter [
-	^ Character space
+	^ $_
 ]
