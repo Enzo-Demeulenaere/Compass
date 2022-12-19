@@ -14,6 +14,12 @@ RbsResetMonitorCommand class >> commandName [
 	^ 'resM'
 ]
 
+{ #category : #adding }
+RbsResetMonitorCommand >> addToPathOf: aRobot [
+
+	"does nothing"
+]
+
 { #category : #execution }
 RbsResetMonitorCommand >> executeOn: aRobot [
 

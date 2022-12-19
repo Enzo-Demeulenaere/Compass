@@ -10,6 +10,12 @@ RbsStartMonitorCommand class >> commandName [
 	^ 'startM'
 ]
 
+{ #category : #adding }
+RbsStartMonitorCommand >> addToPathOf: aRobot [
+
+	"does nothing"
+]
+
 { #category : #execution }
 RbsStartMonitorCommand >> executeOn: aRobot [
 

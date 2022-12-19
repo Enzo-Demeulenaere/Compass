@@ -44,6 +44,20 @@ _____'
 ]
 
 { #category : #tests }
+RbsBoardTest >> testPrintingCreatedBoardWithRobot [
+
+	| rb b |
+	rb := RbsRobot new.
+	b := RbsBoard extent: 5@2.
+	rb setBoard: b.
+	rb startLocation: 4@1.
+	self 
+		assert: b asciiString 
+		equals: '_____
+___X_'
+]
+
+{ #category : #tests }
 RbsBoardTest >> testTileKnowsItsBoard [
 
 	| b |

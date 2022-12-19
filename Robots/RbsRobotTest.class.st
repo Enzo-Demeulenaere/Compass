@@ -146,7 +146,7 @@ RbsRobotTest >> testMonitoringIsOnPerDefault [
 dir #east
 stopM
 mov 3'.
-	self assert: rb path size equals: 3
+	self assert: rb path size equals: 2
 	
 ]
 
@@ -301,7 +301,8 @@ mov 3
 dir #north
 mov 3'.
 	self assert: rb position equals: 9@4.
-rb executeCommandBased: 'base 5 1
+rb executeCommandBased: 'stopM
+base 5 1
 replay'.
 	self assert: rb position equals: 10@4
 	
@@ -319,7 +320,8 @@ RbsRobotTest >> testReset [
 dir #east
 resM
 mov 3'.
-	self assert: rb path size equals: 1
+	self assert: rb path size equals: 1.
+	self assert: rb path first printString equals: 'mov 3'
 	
 ]
 
@@ -456,7 +458,7 @@ RbsRobotTest >> testStartStop [
 dir #east
 stopM
 mov 3'.
-	self assert: rb path size equals: 3
+	self assert: rb path size equals: 2
 	
 ]
 

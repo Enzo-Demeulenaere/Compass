@@ -25,7 +25,7 @@ RbsCommand >> mergeWith: anotherCommand [
 RbsCommand >> mergeWithDirection: aDirectionCommand [
 	"any command is never merged with a direction command"
 	
-	^ CTLinkedList new  add: aDirectionCommand; add: self ; yourself
+	^ CTLinkedList new add: aDirectionCommand; add: self ; yourself
 ]
 
 { #category : #merging }

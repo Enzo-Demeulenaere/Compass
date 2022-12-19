@@ -116,7 +116,7 @@ RbsBoard >> lineNumber [
 { #category : #printing }
 RbsBoard >> printNicelyOn: aStream [
 	
-	(1 to: self height) 
+	(self height to: 1 by: -1) 
 		do: [ :yCoord |
 			1 to: self width do: [ :xCoord |
 				| el |
