@@ -4,6 +4,37 @@ Class {
 	#category : #'Robots-Test'
 }
 
+{ #category : #'tests - replay' }
+RbsRobotTest >> testAddToPathCommands [
+
+	| rb b |
+	rb := RbsRobot new.
+	b := RbsBoard new.
+	rb setBoard: b.	
+	rb executeCommandBased: 
+'base 5 1 
+dir #east
+mov 3'.
+	self assert: rb path size equals: 3
+	
+]
+
+{ #category : #'tests - replay' }
+RbsRobotTest >> testAddToPathCommandsDoesNotContainReplay [
+
+	| rb b |
+	rb := RbsRobot new.
+	b := RbsBoard new.
+	rb setBoard: b.	
+	rb executeCommandBased: 
+'base 5 1 
+dir #east
+mov 3
+replay'.
+	self assert: rb path size equals: 3
+	
+]
+
 { #category : #tests }
 RbsRobotTest >> testExecute [
 

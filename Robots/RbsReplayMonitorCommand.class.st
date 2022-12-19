@@ -15,6 +15,12 @@ RbsReplayMonitorCommand class >> commandName [
 ]
 
 { #category : #execution }
+RbsReplayMonitorCommand >> addToPathOf: aRobot [
+
+	"does nothing"
+]
+
+{ #category : #execution }
 RbsReplayMonitorCommand >> executeOn: aRobot [
 
 	aRobot replay

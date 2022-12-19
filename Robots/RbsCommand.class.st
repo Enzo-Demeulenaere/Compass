@@ -4,6 +4,12 @@ Class {
 	#category : #'Robots-Commands'
 }
 
+{ #category : #adding }
+RbsCommand >> addToPathOf: aRobot [
+
+	aRobot addToPath: self.
+]
+
 { #category : #execution }
 RbsCommand >> handleArguments: aCollection [
 	

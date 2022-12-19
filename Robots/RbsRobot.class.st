@@ -15,6 +15,11 @@ RbsRobot class >> textualMapCharacter [
 	^ $X
 ]
 
+{ #category : #replay }
+RbsRobot >> addToPath: aCommand [ 
+	path addLast: aCommand
+]
+
 { #category : #commands }
 RbsRobot >> commandClassFor: aString [
 
@@ -52,7 +57,7 @@ RbsRobot >> executeCommandBased: aString [
 			| cmd |
 			cmd := ((self commandClassFor: each first) new
 				handleArguments: each allButFirst; yourself).
-			path addLast: cmd.
+			cmd addToPathOf: self.
 			cmd executeOn: self ]
 ]
 
@@ -62,6 +67,17 @@ RbsRobot >> executeCommandBasedV1: aString [
 	(self identifyOrdersOf: aString) do: [ :each |
 		((self commandClassFor: each first) new
 			handleArguments: each allButFirst; yourself) executeOn: self ]
+]
+
+{ #category : #commands }
+RbsRobot >> executeCommandBasedV2: aString [
+
+	(self identifyOrdersOf: aString) do: [ :each |
+			| cmd |
+			cmd := ((self commandClassFor: each first) new
+				handleArguments: each allButFirst; yourself).
+			path addLast: cmd.
+			cmd executeOn: self ]
 ]
 
 { #category : #action }
