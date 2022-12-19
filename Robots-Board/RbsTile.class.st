@@ -11,7 +11,7 @@ Class {
 		'x',
 		'y'
 	],
-	#category : #'Robots-BoardCore'
+	#category : #'Robots-Board'
 }
 
 { #category : #'default encoding' }

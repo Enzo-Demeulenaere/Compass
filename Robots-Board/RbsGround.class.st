@@ -1,7 +1,7 @@
 Class {
 	#name : #RbsGround,
 	#superclass : #RbsTile,
-	#category : #'Robots-BoardCore'
+	#category : #'Robots-Board'
 }
 
 { #category : #'default encoding' }

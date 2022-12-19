@@ -1,7 +1,7 @@
 Class {
 	#name : #RbsBoardTest,
 	#superclass : #TestCase,
-	#category : #'Robots-Test'
+	#category : #'Robots-Board'
 }
 
 { #category : #tests }
@@ -47,10 +47,11 @@ _____'
 RbsBoardTest >> testPrintingCreatedBoardWithRobot [
 
 	| rb b |
-	rb := RbsRobot new.
-	b := RbsBoard extent: 5@2.
+	rb := RbsAbstractRobot new.
+	b := RbsBoard extent: 15@10.
 	rb setBoard: b.
 	rb startLocation: 4@1.
+	b
 	self 
 		assert: b asciiString 
 		equals: '_____

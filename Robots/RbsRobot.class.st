@@ -1,6 +1,6 @@
 Class {
 	#name : #RbsRobot,
-	#superclass : #RbsTile,
+	#superclass : #RbsAbstractRobot,
 	#instVars : [
 		'startLocation',
 		'direction',

@@ -8,7 +8,7 @@ Class {
 	#instVars : [
 		'map'
 	],
-	#category : #'Robots-BoardCore'
+	#category : #'Robots-Board'
 }
 
 { #category : #'instance creation' }
