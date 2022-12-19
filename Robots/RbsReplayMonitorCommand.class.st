@@ -22,7 +22,7 @@ RbsReplayMonitorCommand >> addToPathOf: aRobot [
 
 { #category : #execution }
 RbsReplayMonitorCommand >> executeOn: aRobot [
-
+	self halt.
 	aRobot replay
 ]
 

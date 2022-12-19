@@ -134,6 +134,22 @@ RbsRobotTest >> testMergeUnmergeableCommandsBecauseDifferent [
 	
 ]
 
+{ #category : #'tests - replay' }
+RbsRobotTest >> testMonitoringIsOnPerDefault [
+
+	| rb b |
+	rb := RbsRobot new.
+	b := RbsBoard new.
+	rb setBoard: b.	
+	rb executeCommandBased: 
+'base 5 1 
+dir #east
+stopM
+mov 3'.
+	self assert: rb path size equals: 3
+	
+]
+
 { #category : #'tests - optimize' }
 RbsRobotTest >> testOptimizeMergeThreeMoves [
 
@@ -291,6 +307,22 @@ replay'.
 	
 ]
 
+{ #category : #'tests - replay' }
+RbsRobotTest >> testReset [
+
+	| rb b |
+	rb := RbsRobot new.
+	b := RbsBoard new.
+	rb setBoard: b.	
+	rb executeCommandBased: 
+'base 5 1 
+dir #east
+resM
+mov 3'.
+	self assert: rb path size equals: 1
+	
+]
+
 { #category : #tests }
 RbsRobotTest >> testRobotAtLocation [
 
@@ -410,6 +442,39 @@ mov 3
 dir #north
 mov 3'.
 	self assert: rb position equals: 9@4
+]
+
+{ #category : #'tests - replay' }
+RbsRobotTest >> testStartStop [
+
+	| rb b |
+	rb := RbsRobot new.
+	b := RbsBoard new.
+	rb setBoard: b.	
+	rb executeCommandBased: 
+'base 5 1 
+dir #east
+stopM
+mov 3'.
+	self assert: rb path size equals: 3
+	
+]
+
+{ #category : #'tests - replay' }
+RbsRobotTest >> testStopAndReset [
+
+	| rb b |
+	rb := RbsRobot new.
+	b := RbsBoard new.
+	rb setBoard: b.	
+	rb executeCommandBased: 
+'base 5 1 
+dir #east
+stopM
+resM
+mov 3'.
+	self assert: rb path size equals: 0
+	
 ]
 
 { #category : #'tests - optimize' }

@@ -5,7 +5,8 @@ Class {
 		'startLocation',
 		'direction',
 		'cmdMap',
-		'path'
+		'path',
+		'monitoring'
 	],
 	#category : #'Robots-Bots'
 }
@@ -57,7 +58,7 @@ RbsRobot >> executeCommandBased: aString [
 			| cmd |
 			cmd := ((self commandClassFor: each first) new
 				handleArguments: each allButFirst; yourself).
-			cmd addToPathOf: self.
+			monitoring ifTrue: [ cmd addToPathOf: self ].
 			cmd executeOn: self ]
 ]
 
@@ -89,17 +90,18 @@ RbsRobot >> identifyOrdersOf: aString [
 	^ orders
 ]
 
-{ #category : #accessing }
+{ #category : #initialization }
 RbsRobot >> initialize [ 
 		
 	super initialize.
 	"like that it will quite ugly to move :) and we will introduce a nicer way."
 	direction := #east.
+	monitoring := true.
 	self initializePath.
 	self initializeCommandMapping.
 ]
 
-{ #category : #accessing }
+{ #category : #initialization }
 RbsRobot >> initializeCommandMapping [
 
 	cmdMap := Dictionary new.
@@ -108,7 +110,7 @@ RbsRobot >> initializeCommandMapping [
 		]
 ]
 
-{ #category : #accessing }
+{ #category : #initialization }
 RbsRobot >> initializePath [
 
 	path := OrderedCollection new.
@@ -191,4 +193,16 @@ RbsRobot >> startLocation: aPoint [
 	self x: aPoint x y: aPoint y.
 
 	
+]
+
+{ #category : #accessing }
+RbsRobot >> startMonitoring [ 
+	
+	monitoring := true 
+]
+
+{ #category : #accessing }
+RbsRobot >> stopMonitoring [ 
+	
+	monitoring := false 
 ]
