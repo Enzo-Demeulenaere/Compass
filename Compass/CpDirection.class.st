@@ -35,5 +35,5 @@ CpDirection class >> west [
 { #category : #arithmetic }
 CpDirection >> newPositionX: anIntegerForX y: anIntegerForY [
 
-	^ CpPositionable x: anIntegerForX y: anIntegerForY 
+	^ anIntegerForX @ anIntegerForY 
 ]

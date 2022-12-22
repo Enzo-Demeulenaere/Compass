@@ -7,5 +7,5 @@ Class {
 { #category : #arithmetic }
 CpNorthDirection >> * aPositionable [
 
-	^ self newPositionX: aPositionable x y: aPositionable y - 1 
+	^  aPositionable x @ (aPositionable y - 1) 
 ]

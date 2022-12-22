@@ -17,7 +17,7 @@ CpPositionableTest >> testEastReturnRightPosition [
 	>>	3@3
 	"
 	| newPos |
-	newPos := CpDirection east * (CpPositionable x: 3 y: 2).
+	newPos := CpDirection east * (3 @ 2).
 	self assert:  newPos x equals: 4. 
 	self assert:  newPos y equals: 2. 
 
@@ -36,7 +36,7 @@ CpPositionableTest >> testNorthReturnOneRowUpPosition [
 	>>	3@1
 	"
 	| newPos |
-	newPos := CpDirection north * (CpPositionable x: 3 y: 2).
+	newPos := CpDirection north * ( 3 @ 2).
 	self assert:  newPos x equals: 3. 
 	self assert:  newPos y equals: 1. 
 
@@ -55,7 +55,7 @@ CpPositionableTest >> testSouthReturnOneRowDownPosition [
 	>>	3@3
 	"
 	| newPos |
-	newPos := CpDirection south * (CpPositionable x: 3 y: 2).
+	newPos := CpDirection south * ( 3 @ 2).
 	self assert:  newPos x equals: 3. 
 	self assert:  newPos y equals: 3. 
 
@@ -74,7 +74,7 @@ CpPositionableTest >> testWestReturnLeftPosition [
 	>>	3@3
 	"
 	| newPos |
-	newPos := CpDirection west * (CpPositionable x: 3 y: 2).
+	newPos := CpDirection west * ( 3 @ 2).
 	self assert:  newPos x equals: 2. 
 	self assert:  newPos y equals: 2. 
 
