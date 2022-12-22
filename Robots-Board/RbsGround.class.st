@@ -1,3 +1,6 @@
+"
+I represent the ground of the board.
+"
 Class {
 	#name : #RbsGround,
 	#superclass : #RbsTile,

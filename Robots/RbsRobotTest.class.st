@@ -36,6 +36,19 @@ replay'.
 ]
 
 { #category : #tests }
+RbsRobotTest >> testComputeNewPosition [
+
+	| rb b |
+	rb := RbsRobot new.
+	b := RbsBoard new.
+	rb setBoard: b.
+	rb startLocation: 4@1.
+	self assert: (rb computeNewPosition: 10) equals: 14@1.
+
+
+]
+
+{ #category : #tests }
 RbsRobotTest >> testExecute [
 
 
@@ -352,7 +365,6 @@ RbsRobotTest >> testRobotMove [
 	b := RbsBoard new.
 	rb setBoard: b.
 	rb startLocation: 4@1.
-	"should make sure that previous tile is put back"
 	self assert: (rb board atX: 4 atY: 1) equals: rb.
 	rb move: 10.
 	self assert: (rb board atX: 14 atY: 1) equals: rb.
@@ -386,6 +398,23 @@ RbsRobotTest >> testRobotMoveNorth [
 	self assert: (rb board atX: 14 atY: 1) equals: rb.
 	rb move: 10.
 	self assert: (rb board atX: 14 atY: 11) equals: rb.
+	
+]
+
+{ #category : #tests }
+RbsRobotTest >> testRobotMovePreservesGround [
+
+	| rb b |
+	rb := RbsRobot new.
+	b := RbsBoard new.
+	rb setBoard: b.
+	rb startLocation: 4@1.
+	self assert: rb previousTile class equals: RbsGround.
+	self assert: rb previousTile x equals: 4.
+	rb move: 10.
+	self assert: (rb board atX: 4 atY: 1) class equals: RbsGround.
+	self assert: (rb board atX: 14 atY: 1) equals: rb.
+	self assert: rb previousTile position equals: 14@1
 	
 ]
 

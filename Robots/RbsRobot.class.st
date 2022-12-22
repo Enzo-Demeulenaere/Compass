@@ -6,7 +6,8 @@ Class {
 		'direction',
 		'cmdMap',
 		'path',
-		'monitoring'
+		'monitoring',
+		'previousTile'
 	],
 	#category : #'Robots-Bots'
 }
@@ -25,6 +26,20 @@ RbsRobot >> addToPath: aCommand [
 RbsRobot >> commandClassFor: aString [
 
 	^ cmdMap at: aString
+]
+
+{ #category : #action }
+RbsRobot >> computeNewPosition: anInteger [ 
+	"Returns a point representing the location of the next move."
+	^ direction = #east
+		ifTrue: [ self x + anInteger @ self y ]
+		ifFalse: [ direction = #west
+			ifTrue: [ self x - anInteger @self y ]
+			ifFalse: [ direction = #north
+					ifTrue: [ self x @ (self y + anInteger)]
+					ifFalse: [ self x @ (self y - anInteger) ].
+				]
+			]
 ]
 
 { #category : #accessing }
@@ -119,15 +134,13 @@ RbsRobot >> initializePath [
 { #category : #action }
 RbsRobot >> move: anInteger [ 
 	
-	direction = #east
-		ifTrue: [ self x: self x + anInteger ]
-		ifFalse: [ direction = #west
-			ifTrue: [ self x: self x - anInteger ]
-			ifFalse: [ direction = #north
-					ifTrue: [ self y: self y + anInteger ]
-					ifFalse: [ self y: self y - anInteger ]
-				]
-			]
+	| newPosition |
+	newPosition := self computeNewPosition: anInteger.
+	self previousTile position: self previousTile position.
+	"It looks strange but position will set the board."
+	 
+	previousTile := self board atPosition: newPosition.
+	self position: newPosition.
 ]
 
 { #category : #optimize }
@@ -174,6 +187,11 @@ RbsRobot >> path [
 	^ path
 ]
 
+{ #category : #accessing }
+RbsRobot >> previousTile [
+	^ previousTile
+]
+
 { #category : #action }
 RbsRobot >> replay [
 
@@ -188,7 +206,8 @@ RbsRobot >> startLocation [
 
 { #category : #accessing }
 RbsRobot >> startLocation: aPoint [
-
+	
+	previousTile := self board atX: aPoint x atY: aPoint y.
 	startLocation := aPoint.
 	self x: aPoint x y: aPoint y.
 
