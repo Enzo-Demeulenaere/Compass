@@ -18,6 +18,16 @@ RbsTileElementSimple class >> inASpace [
 		tile } inspect
 ]
 
+{ #category : #'instance creation' }
+RbsTileElementSimple class >> inASpace2 [
+	"self inASpace2"
+
+	|  tile |
+	tile := self new.
+	tile openInNewSpace
+	
+]
+
 { #category : #'visual properties' }
 RbsTileElementSimple >> backgroundPaint [
 	"Return a BlPaint that should be used as a background (fill)
@@ -75,5 +85,6 @@ RbsTileElementSimple >> initialize [
 		addEventHandler: (BlEventHandler on: BlTextInputEvent
 			do: [ :anEvent | self inform: 'Text input: ', anEvent text ]);
 		addEventHandler: (BlEventHandler on: BlKeyDownEvent
-			do: [ :anEvent | self inform: 'Key down: ', anEvent key asString ])
+			do: [ :anEvent | self inform: 'Key down: ', anEvent key asString ]).
+	self requestFocus.
 ]
