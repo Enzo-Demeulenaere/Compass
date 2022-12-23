@@ -21,58 +21,27 @@ RbsTileElementSimple class >> inASpace [
 { #category : #'instance creation' }
 RbsTileElementSimple class >> inASpace2 [
 	"self inASpace2"
-
+	<script>
 	|  tile |
 	tile := self new.
 	tile openInNewSpace
 	
 ]
 
-{ #category : #'visual properties' }
-RbsTileElementSimple >> backgroundPaint [
-	"Return a BlPaint that should be used as a background (fill)
-	of both back and face sides of the card. Color is polymorphic
-	with BlPaint and therefore can be used too."
-	
-	^ Color pink
+{ #category : #drawing }
+RbsTileElementSimple >> aeDrawOn: aCanvas [
+
+	aCanvas clear: Color blue.
+	aCanvas drawClosedPathWith: [ :cairoContext |
+		cairoContext rectangle: (10 asPoint extent: self size)].
+	aCanvas drawFigure
 ]
 
-{ #category : #drawing }
-RbsTileElementSimple >> cornerRadius [
-  ^ 12
-]
-
-{ #category : #drawing }
-RbsTileElementSimple >> drawBacksideOn: aCanvas [
-	aCanvas stroke
-		paint: Color paleBlue;
-		path: (aCanvas shape line: 0@0 to: self extent);
-		draw.
-	aCanvas stroke
-		paint: Color paleBlue;
-		path: (aCanvas shape line: self width @ 0 to: 0@self height);
-		draw
-]
-
-{ #category : #drawing }
-RbsTileElementSimple >> drawCommonOn: aCanvas [
-	aCanvas fill
-		paint: self backgroundPaint;
-		path: self boundsInLocal;
-		draw
-]
-
-{ #category : #drawing }
-RbsTileElementSimple >> drawOnSpartaCanvas: aCanvas [
-	| roundedRectangle |
-	roundedRectangle := aCanvas shape
-  		roundedRectangle: self boundsInLocal
-		radii: (BlCornerRadii radius: self cornerRadius) asArray.
-	aCanvas clip
-		by: roundedRectangle
-		during: [
-			self drawCommonOn: aCanvas.
-			]
+{ #category : #initialization }
+RbsTileElementSimple >> handleKey: aKey [
+	self halt.
+	aKey isArrowRight 
+		ifTrue: [ self relocate: (self position) + ((self size x) * 2 @0) ]
 ]
 
 { #category : #initialization }
@@ -81,10 +50,8 @@ RbsTileElementSimple >> initialize [
 	super initialize.
 	self size: 80 @ 80.
 	self addEventHandler: (BlEventHandler on: BlKeyDownEvent
-			do: [ :anEvent | self halt.self inform: 'Key up: ', anEvent key asString ]);
-		addEventHandler: (BlEventHandler on: BlTextInputEvent
-			do: [ :anEvent | self inform: 'Text input: ', anEvent text ]);
-		addEventHandler: (BlEventHandler on: BlKeyDownEvent
-			do: [ :anEvent | self inform: 'Key down: ', anEvent key asString ]).
+			do: [ :anEvent | self handleKey: anEvent key ]).
+	self addEventHandler: (BlEventHandler on: BlClickEvent
+			do: [ :anEvent | self inspect ]).
 	self requestFocus.
 ]
