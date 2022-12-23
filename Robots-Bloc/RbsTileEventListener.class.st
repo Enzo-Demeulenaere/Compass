@@ -10,8 +10,11 @@ Class {
 
 { #category : #'mouse handlers' }
 RbsTileEventListener >> clickEvent: anEvent [
-
-	memoryGame chooseCard: anEvent currentTarget card
+	
+	| tileElement |
+	self halt.
+	tileElement := anEvent currentTarget.
+	
 ]
 
 { #category : #accessing }

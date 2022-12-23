@@ -1,3 +1,6 @@
+"
+RbsTileElement new 
+"
 Class {
 	#name : #RbsTileElement,
 	#superclass : #BlElement,
@@ -17,14 +20,16 @@ RbsTileElement class >> cardbackForm [
 
 { #category : #'instance creation' }
 RbsTileElement class >> inASpace [
-	"waiting for Pharo 90 to extend the inspector"
-	
+	"self inASpace"
+
 	| space card |
 	space := BlSpace new.
-	card := MGCardElement new. 
-	space addChild: card. 
-	space show. 
-	{ space . card } inspect
+	card := self new.
+	space addChild: card.
+	space show.
+	{ 
+		space.
+		card } inspect
 ]
 
 { #category : #'visual properties' }
@@ -121,7 +126,13 @@ RbsTileElement >> initialize [
 
 	super initialize.
 	self size: 80 @ 80.
-	self card: RbsTileElement new
+	"self addEventHandler: RbsTileEventListener new"
+	self addEventHandler: (BlEventHandler on: BlKeyDownEvent
+			do: [ :anEvent | self halt.self inform: 'Key up: ', anEvent key asString ]);
+		addEventHandler: (BlEventHandler on: BlTextInputEvent
+			do: [ :anEvent | self inform: 'Text input: ', anEvent text ]);
+		addEventHandler: (BlEventHandler on: BlKeyDownEvent
+			do: [ :anEvent | self inform: 'Key down: ', anEvent key asString ])
 ]
 
 { #category : #'announcement - handling' }
