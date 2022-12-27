@@ -42,6 +42,22 @@ RbsRobot >> computeNewPosition: anInteger [
 			]
 ]
 
+{ #category : #action }
+RbsRobot >> computeOppositeDirection: aDirection [ 
+	"Returns the opposite direction. 
+	Note that this implementation should be rewritten taking into account Compass' way to represent direction and their computation'"
+
+	^ aDirection = #east
+		ifTrue: [ #west ]
+		ifFalse: [ aDirection = #west
+			ifTrue: [ #east ]
+			ifFalse: [ aDirection = #north
+					ifTrue: [ #south]
+					ifFalse: [ #north].
+				]
+			]
+]
+
 { #category : #accessing }
 RbsRobot >> direction [
 

@@ -10,6 +10,12 @@ RbsCommand >> addToPathOf: aRobot [
 	aRobot addToPath: self.
 ]
 
+{ #category : #wayback }
+RbsCommand >> asWayBack [
+
+	^ self
+]
+
 { #category : #execution }
 RbsCommand >> handleArguments: aCollection [
 	

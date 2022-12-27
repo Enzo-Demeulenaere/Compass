@@ -13,6 +13,27 @@ RbsDirectionCommand class >> commandName [
 	^ 'dir'
 ]
 
+{ #category : #wayback }
+RbsDirectionCommand >> asWayBack [
+	^ self class new direction: (self computeOppositeDirection: direction)
+]
+
+{ #category : #action }
+RbsDirectionCommand >> computeOppositeDirection: aDirection [ 
+	"Returns the opposite direction. 
+	Note that this implementation should be rewritten taking into account Compass' way to represent direction and their computation'"
+
+	^ aDirection = #east
+		ifTrue: [ #west ]
+		ifFalse: [ aDirection = #west
+			ifTrue: [ #east ]
+			ifFalse: [ aDirection = #north
+					ifTrue: [ #south]
+					ifFalse: [ #north].
+				]
+			]
+]
+
 { #category : #accessing }
 RbsDirectionCommand >> direction [
 	^ direction
@@ -77,4 +98,10 @@ RbsDirectionCommand >> printArguments: aStream [
 	aStream print: direction
 
 	
+]
+
+{ #category : #action }
+RbsDirectionCommand >> pushToStack: aStack [
+
+	aStack push: self
 ]

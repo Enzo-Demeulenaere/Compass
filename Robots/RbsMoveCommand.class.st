@@ -12,6 +12,11 @@ RbsMoveCommand class >> commandName [
 	^ 'mov'
 ]
 
+{ #category : #wayback }
+RbsMoveCommand >> asWayBack [
+	^ self 
+]
+
 { #category : #accessing }
 RbsMoveCommand >> distance [
 	^ distance
