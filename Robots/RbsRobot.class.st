@@ -143,6 +143,28 @@ RbsRobot >> move: anInteger [
 	self position: newPosition.
 ]
 
+{ #category : #'optimize 2' }
+RbsRobot >> optimize2: aList [
+	"Returns an optimized list"
+	
+	| first second mergedList |
+	aList size > 1 ifFalse: [ ^ aList ].
+	"we have at least two elements."
+	first := aList first.
+	second := aList second.
+	mergedList := first mergeWith2: second.
+	^ mergedList size = 1
+		ifTrue: [ 
+			aList size > 2
+			"here we got a merge so we optimise the merged and the rest because we can have three or more in a row"
+				ifTrue: [ self optimize2: (mergedList addAll: (aList allButFirst:2) ; yourself) ]
+				ifFalse: [ mergedList ]]
+		ifFalse: [
+			"here we got no merges so we keep the first and optimize the rest."
+			 (OrderedCollection new add: first; yourself) 
+				addAll: (self optimize2: aList allButFirst) ; yourself ]
+]
+
 { #category : #optimize }
 RbsRobot >> optimize: aList [
 	"Returns an optimized list"
@@ -165,11 +187,28 @@ RbsRobot >> optimize: aList [
 							(self optimize: (CTLinkedList new add: aList firstLink nextLink; yourself)) ]
 ]
 
+{ #category : #'optimize 2' }
+RbsRobot >> optimizePath2: aString [
+
+	self parseOrders2: aString.
+	path := self optimize2: path.
+]
+
 { #category : #optimize }
 RbsRobot >> optimizePath: aString [
 
 	self parseOrders: aString.
 	path := self optimize: path.
+]
+
+{ #category : #'optimize 2' }
+RbsRobot >> parseOrders2: aString [
+
+	path := OrderedCollection new.
+	(self identifyOrdersOf: aString) do: [ :each | 
+		path addLast: ((self commandClassFor: each first) new
+				 handleArguments: each allButFirst;
+				 yourself) ]
 ]
 
 { #category : #optimize }

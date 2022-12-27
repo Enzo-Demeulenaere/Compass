@@ -35,16 +35,34 @@ RbsDirectionCommand >> handleArguments: aCollection [
 	direction := Object readFrom: aCollection first 
 ]
 
+{ #category : #'merging 2' }
+RbsDirectionCommand >> mergeWith2: anotherCommand [
+
+	^ anotherCommand mergeWithDirection2: self
+]
+
 { #category : #merging }
 RbsDirectionCommand >> mergeWith: anotherCommand [
 
 	^ anotherCommand mergeWithDirection: self
 ]
 
+{ #category : #'merging 2' }
+RbsDirectionCommand >> mergeWithDirection2: aDirectionCommand [
+
+	^ OrderedCollection new addLast: self; yourself
+]
+
 { #category : #merging }
 RbsDirectionCommand >> mergeWithDirection: aDirectionCommand [
 
-	^ LinkedList new add: self; yourself
+	^ CTLinkedList new add: self; yourself
+]
+
+{ #category : #'merging 2' }
+RbsDirectionCommand >> mergeWithMove2: aMoveCommand [
+
+	^ OrderedCollection new addLast: aMoveCommand ; addLast: self;  yourself 
 ]
 
 { #category : #merging }
