@@ -61,6 +61,13 @@ RbsBoard >> basicPrintOnInspector [
 ]
 
 { #category : #building }
+RbsBoard >> bottomUpDo: aBlock [
+	"Execute the block on each element of the board"
+	
+	map leftToRightFromBottomToTopDo: aBlock
+]
+
+{ #category : #building }
 RbsBoard >> buildMapWidth: x height: y [
 
 	map := CTArray2D 
