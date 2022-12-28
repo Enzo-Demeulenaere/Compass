@@ -11,13 +11,11 @@ BaselineOfRobots >> baseline: spec [
 		spec 
     		baseline: 'ContainersArray2D' 
     		with: [ spec repository: 'github://pharo-containers/Containers-Array2D/src' ].
-		spec 
-		   baseline: 'ContainersLinkedList' 
-   			with: [ spec repository: 'github://Ducasse/Containers-LinkedList/src' ].
+		
 		spec 
 			package: #'Robots-Board';
 			package: #'Robots' with: [
-				spec requires:  #( #'Robots-Board' #'ContainersLinkedList') ];
+				spec requires:  #( #'Robots-Board') ];
 			package: #'Robots-Tests' with: [
 				spec requires:  #( #'Robots') ];
 			
