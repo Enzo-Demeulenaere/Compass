@@ -19,6 +19,18 @@ BaselineOfSokoBrain >> baseline: spec [
 			package: #'Robots-Board';
 			package: #'Robots' with: [
 				spec requires:  #( #'Robots-Board' #'ContainersLinkedList') ];
+			package: #'Robots-Tests' with: [
+				spec requires:  #( #'Robots') ];
+			
+			package: #'Robots-Optimize-Tests' with: [
+				spec requires:  #( #'Robots')];
+			package: #'Robots-BasicCommands-Tests' with: [
+				spec requires:  #( #'Robots')];
+			package: #'Robots-Replay-Tests' with: [
+				spec requires:  #( #'Robots')];
+			package: #'Robots-WayBack-Tests' with: [
+				spec requires:  #( #'Robots')];
+			
 			package: #'SokoBrain'  with: [
 				spec requires:  #( #'Compass' 'ContainersArray2D') ]
 			]
