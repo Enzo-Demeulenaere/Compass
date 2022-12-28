@@ -16,8 +16,9 @@ BaselineOfSokoBrain >> baseline: spec [
    			with: [ spec repository: 'github://Ducasse/Containers-LinkedList/src' ].
 		spec 
 			package: #'Compass';
+			package: #'Robots-Board';
 			package: #'Robots' with: [
-				spec requires:  #( #'ContainersLinkedList') ];
+				spec requires:  #( #'Robots-Board' #'ContainersLinkedList') ];
 			package: #'SokoBrain'  with: [
 				spec requires:  #( #'Compass' 'ContainersArray2D') ]
 			]
