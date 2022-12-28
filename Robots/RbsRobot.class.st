@@ -29,6 +29,7 @@ RbsRobot >> commandClassFor: aString [
 { #category : #action }
 RbsRobot >> computeNewPosition: anInteger [ 
 	"Returns a point representing the location of the next move."
+	
 	^ direction = #east
 		ifTrue: [ self x + anInteger @ self y ]
 		ifFalse: [ direction = #west
