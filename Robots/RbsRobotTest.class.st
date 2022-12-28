@@ -42,7 +42,7 @@ RbsRobotTest >> testComputeNewPosition [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb startLocation: 4@1.
+	rb x: 4 y: 1.
 	self assert: (rb computeNewPosition: 10) equals: 14@1.
 
 
@@ -93,7 +93,7 @@ RbsRobotTest >> testExecute [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb startLocation: 4@1.
+	rb x: 4 y: 1.
 	rb execute: 
 'dir #east
 mov 2
@@ -110,7 +110,7 @@ RbsRobotTest >> testExecuteCommandBased [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb startLocation: 4@1.
+	rb x: 4 y: 1.
 	rb executeCommandBased: 
 'dir #east
 mov 2
@@ -127,7 +127,7 @@ RbsRobotTest >> testExecuteDirection [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb startLocation: 4@1.
+	rb x: 4 y: 1.
 	rb executeCommandBased: 
 'dir #east'.
 	self assert: rb direction equals: #east
@@ -222,7 +222,7 @@ RbsRobotTest >> testOptimizeMergeThreeMoves [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb startLocation: 4@1.
+	rb x: 4 y: 1.
 	rb optimizePath: 
 'mov 2
 mov 3
@@ -239,7 +239,7 @@ RbsRobotTest >> testOptimizeMergeThreeMoves2 [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb startLocation: 4@1.
+	rb x: 4 y: 1.
 	rb optimizePath2: 
 'mov 2
 mov 3
@@ -256,7 +256,7 @@ RbsRobotTest >> testOptimizeMergeThreeMovesAndOthers [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb startLocation: 4@1.
+	rb x: 4 y: 1.
 	rb optimizePath: 
 'mov 2
 mov 3
@@ -274,7 +274,7 @@ RbsRobotTest >> testOptimizeMergeThreeMovesAndOthers2 [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb startLocation: 4@1.
+	rb x: 4 y: 1.
 	rb optimizePath2: 
 'mov 2
 mov 3
@@ -292,7 +292,7 @@ RbsRobotTest >> testOptimizeMergeTwoMoves [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb startLocation: 4@1.
+	rb x: 4 y: 1.
 	rb optimizePath: 
 'mov 2
 mov 3'.
@@ -308,7 +308,7 @@ RbsRobotTest >> testOptimizeMergeTwoMoves2 [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb startLocation: 4@1.
+	rb x: 4 y: 1.
 	rb optimizePath2: 
 'mov 2
 mov 3'.
@@ -324,7 +324,7 @@ RbsRobotTest >> testOptimizeMergeTwoMovesAndOthers [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb startLocation: 4@1.
+	rb x: 4 y: 1.
 	rb optimizePath: 
 'mov 2
 mov 3
@@ -341,7 +341,7 @@ RbsRobotTest >> testOptimizeMergeTwoMovesAndOthers2 [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb startLocation: 4@1.
+	rb x: 4 y: 1.
 	rb optimizePath2: 
 'mov 2
 mov 3
@@ -358,7 +358,7 @@ RbsRobotTest >> testOptimizeNoMergeThenMergeThreeMovesAndOthers [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb startLocation: 4@1.
+	rb x: 4 y: 1.
 	rb optimizePath: 
 'dir #north
 mov 2
@@ -377,7 +377,7 @@ RbsRobotTest >> testOptimizeNoMergeThenMergeThreeMovesAndOthers2 [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb startLocation: 4@1.
+	rb x: 4 y: 1.
 	rb optimizePath2: 
 'dir #north
 mov 2
@@ -396,7 +396,7 @@ RbsRobotTest >> testOptimizeTwoDirections [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb startLocation: 4@1.
+	rb x: 4 y: 1.
 	rb optimizePath: 
 'dir #north
 dir #east'.
@@ -412,7 +412,7 @@ RbsRobotTest >> testOptimizeTwoDirections2 [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb startLocation: 4@1.
+	rb x: 4 y: 1.
 	rb optimizePath2: 
 'dir #north
 dir #east'.
@@ -437,7 +437,7 @@ RbsRobotTest >> testReplay [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb startLocation: 4@1.
+	rb x: 4 y: 1.
 	
 	rb executeCommandBased: 
 'dir #east
@@ -446,7 +446,7 @@ mov 3
 dir #north
 mov 3'.
 	self assert: rb position equals: 9@4.
-	rb startLocation: 5@1.
+	rb x: 5 y: 1.
 	rb replay.
 	self assert: rb position equals: 10@4
 	
@@ -500,7 +500,7 @@ RbsRobotTest >> testRobotAtLocation [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb startLocation: 4@1.
+	rb x: 4 y: 1.
 	self assert: (rb board atX: 4 atY: 1) equals: rb
 ]
 
@@ -519,7 +519,7 @@ RbsRobotTest >> testRobotMove [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb startLocation: 4@1.
+	rb x: 4 y: 1.
 	self assert: (rb board atX: 4 atY: 1) equals: rb.
 	rb move: 10.
 	self assert: (rb board atX: 14 atY: 1) equals: rb.
@@ -533,7 +533,7 @@ RbsRobotTest >> testRobotMoveEast [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb startLocation: 4@1.
+	rb x: 4 y: 1.
 	"should make sure that previous tile is put back"
 	self assert: (rb board atX: 4 atY: 1) equals: rb.
 	rb move: 10.
@@ -548,7 +548,7 @@ RbsRobotTest >> testRobotMoveNorth [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb startLocation: 14@1.
+	rb x: 14 y:1.
 	rb direction: #north.
 	self assert: (rb board atX: 14 atY: 1) equals: rb.
 	rb move: 10.
@@ -563,7 +563,7 @@ RbsRobotTest >> testRobotMovePreservesGround [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb startLocation: 4@1.
+	rb x: 4 y:1.
 	self assert: rb previousTile class equals: RbsGround.
 	self assert: rb previousTile x equals: 4.
 	rb move: 10.
@@ -580,7 +580,7 @@ RbsRobotTest >> testRobotMoveSouth [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb startLocation: 14@11.
+	rb x: 14y: 11.
 	rb direction: #south.
 	self assert: (rb board atX: 14 atY: 11) equals: rb.
 	rb move: 10.
@@ -595,7 +595,7 @@ RbsRobotTest >> testRobotMoveWest [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb startLocation: 14@1.
+	rb x: 14 y: 1.
 	rb direction: #west.
 	self assert: (rb board atX: 14 atY: 1) equals: rb.
 	rb move: 10.
@@ -670,7 +670,7 @@ RbsRobotTest >> testToOptimizeAPathWeNeedAtLeastTwoElements [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb startLocation: 4@1.
+	rb x: 4 y: 1.
 	rb optimizePath: 
 'dir #east'.
 	self 
@@ -685,7 +685,7 @@ RbsRobotTest >> testToOptimizeAPathWeNeedAtLeastTwoElements2 [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb startLocation: 4@1.
+	rb x: 4 y: 1.
 	rb optimizePath2: 
 'dir #east'.
 	self 
@@ -700,7 +700,7 @@ RbsRobotTest >> testWayBack [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb startLocation: 4@1.
+	rb x: 4 y: 1.
 	rb executeCommandBased: 
 'dir #east
 mov 2
@@ -719,7 +719,7 @@ RbsRobotTest >> testWayBack2 [
 	rb := RbsRobot new.
 	b := RbsBoard new.
 	rb setBoard: b.
-	rb startLocation: 4@1.
+	rb x: 4 y: 1.
 	rb executeCommandBased: 
 'dir #east
 mov 5

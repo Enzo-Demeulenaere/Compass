@@ -17,7 +17,7 @@ RbsBasePositionCommand class >> commandName [
 { #category : #execution }
 RbsBasePositionCommand >> executeOn: aRobot [
 
-	aRobot startLocation: argX @ argY
+	aRobot x: argX y: argY
 ]
 
 { #category : #execution }
