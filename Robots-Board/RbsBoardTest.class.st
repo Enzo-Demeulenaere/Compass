@@ -48,10 +48,9 @@ RbsBoardTest >> testPrintingCreatedBoardWithRobot [
 
 	| rb b |
 	rb := RbsAbstractRobot new.
-	b := RbsBoard extent: 15@10.
+	b := RbsBoard extent: 5@2.
 	rb setBoard: b.
-	rb startLocation: 4@1.
-	b
+	rb x: 4 y: 1.
 	self 
 		assert: b asciiString 
 		equals: '_____

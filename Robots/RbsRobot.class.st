@@ -125,7 +125,7 @@ RbsRobot >> identifyOrdersOf: aString [
 RbsRobot >> initialize [ 
 		
 	super initialize.
-	"like that it will quite ugly to move :) and we will introduce a nicer way."
+	"like that it will have a quite ugly to move :) and we will introduce a nicer way."
 	direction := #east.
 	monitoring := true.
 	self initializePath.

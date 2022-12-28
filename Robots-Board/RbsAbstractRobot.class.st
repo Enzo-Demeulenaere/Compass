@@ -7,3 +7,8 @@ Class {
 	#superclass : #RbsTile,
 	#category : #'Robots-Board'
 }
+
+{ #category : #'default encoding' }
+RbsAbstractRobot class >> textualMapCharacter [
+	^ $X
+]
