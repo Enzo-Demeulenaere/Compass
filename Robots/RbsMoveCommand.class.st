@@ -12,6 +12,11 @@ RbsMoveCommand class >> commandName [
 	^ 'mov'
 ]
 
+{ #category : #wayback }
+RbsMoveCommand >> asWayBack [
+	^ self 
+]
+
 { #category : #accessing }
 RbsMoveCommand >> distance [
 	^ distance
@@ -34,10 +39,28 @@ RbsMoveCommand >> handleArguments: aCol [
 	distance := Object readFrom: aCol first
 ]
 
+{ #category : #'merging 2' }
+RbsMoveCommand >> mergeWith2: aCommand [
+
+	^ aCommand mergeWithMove2: self
+]
+
 { #category : #merging }
 RbsMoveCommand >> mergeWith: aCommand [
 
 	^ aCommand mergeWithMove: self
+]
+
+{ #category : #'merging 2' }
+RbsMoveCommand >> mergeWithMove2: aMoveCommand [
+	"We have two moves for now just add them not handling zero yet"
+
+	| merged |
+	merged := self class new 
+		distance: aMoveCommand distance + distance;
+		yourself.
+	^ OrderedCollection new addLast: merged ; yourself
+	
 ]
 
 { #category : #merging }

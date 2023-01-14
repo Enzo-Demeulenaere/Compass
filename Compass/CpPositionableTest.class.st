@@ -5,14 +5,19 @@ Class {
 }
 
 { #category : #tests }
+CpPositionableTest >> testEastInDistanceReturnRightPosition [
+
+	| newPos |
+	newPos := CpDirection east in: 3 from: (3 @ 2).
+	self assert:  newPos x equals: 6. 
+	self assert:  newPos y equals: 2. 
+
+]
+
+{ #category : #tests }
 CpPositionableTest >> testEastReturnRightPosition [
 
-	"  1 2  3  4  5  6
-	-----------------
-1	| 01 02 03 04 05 06
-2	| 07 08 09 10 11 12
-3	| 13 14 15 16 17 18
-
+	" 
 	position 3@2 * Direction east 
 	>>	3@3
 	"
@@ -26,12 +31,7 @@ CpPositionableTest >> testEastReturnRightPosition [
 { #category : #tests }
 CpPositionableTest >> testNorthReturnOneRowUpPosition [
 
-	"  1 2  3  4  5  6
-	-----------------
-1	| 01 02 03 04 05 06
-2	| 07 08 09 10 11 12
-3	| 13 14 15 16 17 18
-
+	"
 	position 3@2 * Direction north 
 	>>	3@1
 	"
@@ -45,12 +45,7 @@ CpPositionableTest >> testNorthReturnOneRowUpPosition [
 { #category : #tests }
 CpPositionableTest >> testSouthReturnOneRowDownPosition [
 
-	"  1 2  3  4  5  6
-	-----------------
-1	| 01 02 03 04 05 06
-2	| 07 08 09 10 11 12
-3	| 13 14 15 16 17 18
-
+	"
 	position 3@2 * Direction south 
 	>>	3@3
 	"

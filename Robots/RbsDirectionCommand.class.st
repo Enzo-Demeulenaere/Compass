@@ -13,6 +13,27 @@ RbsDirectionCommand class >> commandName [
 	^ 'dir'
 ]
 
+{ #category : #wayback }
+RbsDirectionCommand >> asWayBack [
+	^ self class new direction: (self computeOppositeDirection: direction)
+]
+
+{ #category : #action }
+RbsDirectionCommand >> computeOppositeDirection: aDirection [ 
+	"Returns the opposite direction. 
+	Note that this implementation should be rewritten taking into account Compass' way to represent direction and their computation'"
+
+	^ aDirection = #east
+		ifTrue: [ #west ]
+		ifFalse: [ aDirection = #west
+			ifTrue: [ #east ]
+			ifFalse: [ aDirection = #north
+					ifTrue: [ #south]
+					ifFalse: [ #north].
+				]
+			]
+]
+
 { #category : #accessing }
 RbsDirectionCommand >> direction [
 	^ direction
@@ -35,16 +56,34 @@ RbsDirectionCommand >> handleArguments: aCollection [
 	direction := Object readFrom: aCollection first 
 ]
 
+{ #category : #'merging 2' }
+RbsDirectionCommand >> mergeWith2: anotherCommand [
+
+	^ anotherCommand mergeWithDirection2: self
+]
+
 { #category : #merging }
 RbsDirectionCommand >> mergeWith: anotherCommand [
 
 	^ anotherCommand mergeWithDirection: self
 ]
 
+{ #category : #'merging 2' }
+RbsDirectionCommand >> mergeWithDirection2: aDirectionCommand [
+
+	^ OrderedCollection new addLast: self; yourself
+]
+
 { #category : #merging }
 RbsDirectionCommand >> mergeWithDirection: aDirectionCommand [
 
-	^ LinkedList new add: self; yourself
+	^ CTLinkedList new add: self; yourself
+]
+
+{ #category : #'merging 2' }
+RbsDirectionCommand >> mergeWithMove2: aMoveCommand [
+
+	^ OrderedCollection new addLast: aMoveCommand ; addLast: self;  yourself 
 ]
 
 { #category : #merging }
@@ -59,4 +98,10 @@ RbsDirectionCommand >> printArguments: aStream [
 	aStream print: direction
 
 	
+]
+
+{ #category : #action }
+RbsDirectionCommand >> pushToStack: aStack [
+
+	aStack push: self
 ]
