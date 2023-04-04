@@ -62,10 +62,10 @@ RbsDirectionCommand >> mergeWith2: anotherCommand [
 	^ anotherCommand mergeWithDirection2: self
 ]
 
-{ #category : #merging }
+{ #category : #'merging 2' }
 RbsDirectionCommand >> mergeWith: anotherCommand [
 
-	^ anotherCommand mergeWithDirection: self
+	^ anotherCommand mergeWithDirection2: self
 ]
 
 { #category : #'merging 2' }

@@ -42,7 +42,7 @@ RbsMoveCommand >> handleArguments: aCol [
 { #category : #'merging 2' }
 RbsMoveCommand >> mergeWith2: aCommand [
 
-	^ aCommand mergeWithMove2: self
+	^ aCommand mergeWithMove: self
 ]
 
 { #category : #merging }

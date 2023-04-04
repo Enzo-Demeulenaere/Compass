@@ -34,11 +34,11 @@ RbsCommand >> mergeWithDirection2: aDirectionCommand [
 	^ OrderedCollection new addLast: aDirectionCommand; addLast: self ; yourself
 ]
 
-{ #category : #merging }
+{ #category : #'merging 2' }
 RbsCommand >> mergeWithDirection: aDirectionCommand [
 	"any command is never merged with a direction command"
 	
-	^ CTLinkedList new add: aDirectionCommand; add: self ; yourself
+	^ OrderedCollection new addLast: aDirectionCommand; addLast: self ; yourself
 ]
 
 { #category : #'merging 2' }
@@ -48,11 +48,11 @@ RbsCommand >> mergeWithMove2: aMoveCommand [
 	^ OrderedCollection new addLast: self ; addLast: aMoveCommand ; yourself
 ]
 
-{ #category : #merging }
+{ #category : #'merging 2' }
 RbsCommand >> mergeWithMove: aMoveCommand [
 	"any command is never merged with a move command"
 	
-	^ CTLinkedList new add: self ; add: aMoveCommand ; yourself
+	^ OrderedCollection new addLast: self ; addLast: aMoveCommand ; yourself
 ]
 
 { #category : #printing }
