@@ -57,6 +57,12 @@ CpDirection class >> west [
 ]
 
 { #category : #arithmetic }
+CpDirection >> * aPositionable [
+
+	^ self in: 1 from: aPositionable
+]
+
+{ #category : #arithmetic }
 CpDirection >> in: distance from: aPositionable [
 	"Returns the positionable at a given distance from aPositionable"
 ]

@@ -5,12 +5,6 @@ Class {
 }
 
 { #category : #arithmetic }
-CpSouthDirection >> * aPositionable [
-
-	^ aPositionable x @ (aPositionable y - 1)
-]
-
-{ #category : #arithmetic }
 CpSouthDirection >> in: distance from: aPositionable [
 	"Returns the positionable at a given distance from aPositionable"
 	
