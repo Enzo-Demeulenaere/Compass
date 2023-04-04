@@ -2,12 +2,10 @@ Class {
 	#name : #RbsRobot,
 	#superclass : #RbsAbstractRobot,
 	#instVars : [
-		'startLocation',
 		'direction',
 		'cmdMap',
 		'path',
-		'monitoring',
-		'previousTile'
+		'monitoring'
 	],
 	#category : #'Robots-Bots'
 }
@@ -31,6 +29,7 @@ RbsRobot >> commandClassFor: aString [
 { #category : #action }
 RbsRobot >> computeNewPosition: anInteger [ 
 	"Returns a point representing the location of the next move."
+	
 	^ direction = #east
 		ifTrue: [ self x + anInteger @ self y ]
 		ifFalse: [ direction = #west
@@ -125,7 +124,7 @@ RbsRobot >> identifyOrdersOf: aString [
 RbsRobot >> initialize [ 
 		
 	super initialize.
-	"like that it will quite ugly to move :) and we will introduce a nicer way."
+	"like that it will have a quite ugly to move :) and we will introduce a nicer way."
 	direction := #east.
 	monitoring := true.
 	self initializePath.
@@ -159,8 +158,8 @@ RbsRobot >> move: anInteger [
 	self position: newPosition.
 ]
 
-{ #category : #'optimize 2' }
-RbsRobot >> optimize2: aList [
+{ #category : #optimize }
+RbsRobot >> optimize: aList [
 	"Returns an optimized list"
 	
 	| first second mergedList |
@@ -173,41 +172,12 @@ RbsRobot >> optimize2: aList [
 		ifTrue: [ 
 			aList size > 2
 			"here we got a merge so we optimise the merged and the rest because we can have three or more in a row"
-				ifTrue: [ self optimize2: (mergedList addAll: (aList allButFirst:2) ; yourself) ]
+				ifTrue: [ self optimize: (mergedList addAll: (aList allButFirst:2) ; yourself) ]
 				ifFalse: [ mergedList ]]
 		ifFalse: [
 			"here we got no merges so we keep the first and optimize the rest."
 			 (OrderedCollection new add: first; yourself) 
-				addAll: (self optimize2: aList allButFirst) ; yourself ]
-]
-
-{ #category : #optimize }
-RbsRobot >> optimize: aList [
-	"Returns an optimized list"
-	
-	| first second mergedList |
-	aList size > 1 ifFalse: [ ^ aList ].
-	"we have at least two elements."
-	first := aList first.
-	second := aList second.
-	mergedList := first mergeWith: second.
-	^ mergedList size = 1
-		ifTrue: [ 
-			aList size > 2
-			"here we got a merge so we optimise the merged and the rest because we can have three or more in a row"
-				ifTrue: [ self optimize: (mergedList addLast: aList firstLink nextLink nextLink; yourself) ]
-				ifFalse: [ mergedList ]]
-		ifFalse: [
-			"here we got no merges so we keep the first and optimize the rest."
-			 (CTLinkedList new add: first; yourself) append: 
-							(self optimize: (CTLinkedList new add: aList firstLink nextLink; yourself)) ]
-]
-
-{ #category : #'optimize 2' }
-RbsRobot >> optimizePath2: aString [
-
-	self parseOrders2: aString.
-	path := self optimize2: path.
+				addAll: (self optimize: aList allButFirst) ; yourself ]
 ]
 
 { #category : #optimize }
@@ -217,8 +187,8 @@ RbsRobot >> optimizePath: aString [
 	path := self optimize: path.
 ]
 
-{ #category : #'optimize 2' }
-RbsRobot >> parseOrders2: aString [
+{ #category : #optimize }
+RbsRobot >> parseOrders: aString [
 
 	path := OrderedCollection new.
 	(self identifyOrdersOf: aString) do: [ :each | 
@@ -227,17 +197,7 @@ RbsRobot >> parseOrders2: aString [
 				 yourself) ]
 ]
 
-{ #category : #optimize }
-RbsRobot >> parseOrders: aString [
-
-	path := CTLinkedList new.
-	(self identifyOrdersOf: aString) do: [ :each | 
-		path addLast: ((self commandClassFor: each first) new
-				 handleArguments: each allButFirst;
-				 yourself) ]
-]
-
-{ #category : #optimize }
+{ #category : #accessing }
 RbsRobot >> path [
 	^ path
 ]
@@ -251,22 +211,6 @@ RbsRobot >> previousTile [
 RbsRobot >> replay [
 
 	path do: [ :each | each executeOn: self ]
-]
-
-{ #category : #accessing }
-RbsRobot >> startLocation [
-
-	^ startLocation
-]
-
-{ #category : #accessing }
-RbsRobot >> startLocation: aPoint [
-	
-	previousTile := self board atX: aPoint x atY: aPoint y.
-	startLocation := aPoint.
-	self x: aPoint x y: aPoint y.
-
-	
 ]
 
 { #category : #accessing }

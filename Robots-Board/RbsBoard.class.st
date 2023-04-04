@@ -37,18 +37,18 @@ RbsBoard >> at: anInteger at: anInteger2 put: anElement [
 
 { #category : #accessing }
 RbsBoard >> atPosition: aCpPositionable [ 
-	^ (map at: aCpPositionable y at: aCpPositionable x)
+	^ (map atX: aCpPositionable x atY: aCpPositionable y)
 ]
 
 { #category : #'low level access' }
 RbsBoard >> atX: xCoord atY: yCoord [
 
-	^ map at: yCoord at: xCoord
+	^ map atX: xCoord atY: yCoord
 ]
 
 { #category : #'low level access' }
 RbsBoard >> atX: anInteger atY: anInteger2 put: anElement [
-	map at: anInteger2 at: anInteger put: anElement 
+	map atX: anInteger atY: anInteger2 put: anElement 
 ]
 
 { #category : #inspector }
@@ -61,12 +61,18 @@ RbsBoard >> basicPrintOnInspector [
 ]
 
 { #category : #building }
+RbsBoard >> bottomUpDo: aBlock [
+	"Execute the block on each element of the board"
+	
+	map leftToRightFromBottomToTopDo: aBlock
+]
+
+{ #category : #building }
 RbsBoard >> buildMapWidth: x height: y [
 
-	map := Array2D 
-				rows: y 
-				columns: x.
-	map rowsColumnsDo: [ :row :column |
+	map := CTArray2D 
+				width: x height: y.
+	map rowsAndColumnsDo: [ :row :column |
 			self initializeElement: self groundClass new atX: column Y: row ]
 ]
 
@@ -96,7 +102,7 @@ RbsBoard >> groundClass [
 
 { #category : #accessing }
 RbsBoard >> height [
-	^ map numberOfRows
+	^ map height
 ]
 
 { #category : #building }
@@ -127,5 +133,5 @@ RbsBoard >> printNicelyOn: aStream [
 
 { #category : #accessing }
 RbsBoard >> width [
-	^ map numberOfColumns
+	^ map width
 ]
