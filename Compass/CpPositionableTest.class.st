@@ -23,8 +23,18 @@ CpPositionableTest >> testEastReturnRightPosition [
 	"
 	| newPos |
 	newPos := CpDirection east * (3 @ 2).
-	self assert:  newPos x equals: 4. 
-	self assert:  newPos y equals: 2. 
+	self assert: newPos x equals: 4. 
+	self assert: newPos y equals: 2. 
+
+]
+
+{ #category : #tests }
+CpPositionableTest >> testNorthInDistanceReturnRightPosition [
+
+	| newPos |
+	newPos := CpDirection north in: 3 from: (3 @ 5).
+	self assert:  newPos x equals: 3. 
+	self assert:  newPos y equals: 8. 
 
 ]
 
@@ -36,9 +46,19 @@ CpPositionableTest >> testNorthReturnOneRowUpPosition [
 	>>	3@1
 	"
 	| newPos |
-	newPos := CpDirection north * ( 3 @ 2).
+	newPos := CpDirection north * (4 @ 2).
+	self assert: newPos x equals: 4. 
+	self assert: newPos y equals: 3. 
+
+]
+
+{ #category : #tests }
+CpPositionableTest >> testSouthInDistanceReturnRightPosition [
+
+	| newPos |
+	newPos := CpDirection south in: 3 from: (3 @ 5).
 	self assert:  newPos x equals: 3. 
-	self assert:  newPos y equals: 1. 
+	self assert:  newPos y equals: 2. 
 
 ]
 
@@ -50,9 +70,19 @@ CpPositionableTest >> testSouthReturnOneRowDownPosition [
 	>>	3@3
 	"
 	| newPos |
-	newPos := CpDirection south * ( 3 @ 2).
-	self assert:  newPos x equals: 3. 
-	self assert:  newPos y equals: 3. 
+	newPos := CpDirection south * (3 @ 2).
+	self assert: newPos x equals: 3. 
+	self assert: newPos y equals: 1. 
+
+]
+
+{ #category : #tests }
+CpPositionableTest >> testWestInDistanceReturnRightPosition [
+
+	| newPos |
+	newPos := CpDirection west in: 3 from: (3 @ 2).
+	self assert:  newPos x equals: 0. 
+	self assert:  newPos y equals: 2. 
 
 ]
 
@@ -69,8 +99,8 @@ CpPositionableTest >> testWestReturnLeftPosition [
 	>>	3@3
 	"
 	| newPos |
-	newPos := CpDirection west * ( 3 @ 2).
-	self assert:  newPos x equals: 2. 
-	self assert:  newPos y equals: 2. 
+	newPos := CpDirection west * (3 @ 2).
+	self assert: newPos x equals: 2. 
+	self assert: newPos y equals: 2. 
 
 ]
