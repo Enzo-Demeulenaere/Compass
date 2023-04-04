@@ -214,6 +214,22 @@ RbsRobot >> replay [
 ]
 
 { #category : #accessing }
+RbsRobot >> startLocation [
+
+	^ startLocation
+]
+
+{ #category : #accessing }
+RbsRobot >> startLocation: aPoint [
+	
+	previousTile := self board atX: aPoint x atY: aPoint y.
+	startLocation := aPoint.
+	self x: aPoint x y: aPoint y.
+
+	
+]
+
+{ #category : #accessing }
 RbsRobot >> startMonitoring [ 
 	
 	monitoring := true 
