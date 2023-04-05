@@ -39,12 +39,6 @@ RbsMoveCommand >> handleArguments: aCol [
 	distance := Object readFrom: aCol first
 ]
 
-{ #category : #'merging 2' }
-RbsMoveCommand >> mergeWith2: aCommand [
-
-	^ aCommand mergeWithMove: self
-]
-
 { #category : #merging }
 RbsMoveCommand >> mergeWith: aCommand [
 
@@ -52,18 +46,6 @@ RbsMoveCommand >> mergeWith: aCommand [
 ]
 
 { #category : #'merging 2' }
-RbsMoveCommand >> mergeWithMove2: aMoveCommand [
-	"We have two moves for now just add them not handling zero yet"
-
-	| merged |
-	merged := self class new 
-		distance: aMoveCommand distance + distance;
-		yourself.
-	^ OrderedCollection new addLast: merged ; yourself
-	
-]
-
-{ #category : #merging }
 RbsMoveCommand >> mergeWithMove: aMoveCommand [
 	"We have two moves for now just add them not handling zero yet"
 
@@ -71,7 +53,7 @@ RbsMoveCommand >> mergeWithMove: aMoveCommand [
 	merged := self class new 
 		distance: aMoveCommand distance + distance;
 		yourself.
-	^ CTLinkedList new add: merged ; yourself
+	^ OrderedCollection new addLast: merged ; yourself
 	
 ]
 

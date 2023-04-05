@@ -29,5 +29,5 @@ RbsReplayMonitorCommand >> executeOn: aRobot [
 { #category : #merging }
 RbsReplayMonitorCommand >> mergeWith: aCommand [
 
-	^ CTLinkedList new add: aCommand ;add: self;  yourself 
+	^ OrderedCollection new addLast: aCommand; addLast: self;  yourself 
 ]

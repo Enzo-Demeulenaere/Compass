@@ -167,7 +167,7 @@ RbsRobot >> optimize: aList [
 	"we have at least two elements."
 	first := aList first.
 	second := aList second.
-	mergedList := first mergeWith2: second.
+	mergedList := first mergeWith: second.
 	^ mergedList size = 1
 		ifTrue: [ 
 			aList size > 2

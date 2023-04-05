@@ -29,5 +29,5 @@ RbsResetMonitorCommand >> executeOn: aRobot [
 { #category : #merging }
 RbsResetMonitorCommand >> mergeWith: aCommand [
 
-	^ CTLinkedList new add: aCommand ;add: self;  yourself 
+	^ OrderedCollection new addLast: aCommand ; addLast: self;  yourself 
 ]

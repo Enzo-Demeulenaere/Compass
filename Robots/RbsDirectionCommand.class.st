@@ -57,39 +57,21 @@ RbsDirectionCommand >> handleArguments: aCollection [
 ]
 
 { #category : #'merging 2' }
-RbsDirectionCommand >> mergeWith2: anotherCommand [
-
-	^ anotherCommand mergeWithDirection2: self
-]
-
-{ #category : #'merging 2' }
 RbsDirectionCommand >> mergeWith: anotherCommand [
 
-	^ anotherCommand mergeWithDirection2: self
+	^ anotherCommand mergeWithDirection: self
 ]
 
 { #category : #'merging 2' }
-RbsDirectionCommand >> mergeWithDirection2: aDirectionCommand [
+RbsDirectionCommand >> mergeWithDirection: aDirectionCommand [
 
 	^ OrderedCollection new addLast: self; yourself
 ]
 
-{ #category : #merging }
-RbsDirectionCommand >> mergeWithDirection: aDirectionCommand [
-
-	^ CTLinkedList new add: self; yourself
-]
-
 { #category : #'merging 2' }
-RbsDirectionCommand >> mergeWithMove2: aMoveCommand [
-
-	^ OrderedCollection new addLast: aMoveCommand ; addLast: self;  yourself 
-]
-
-{ #category : #merging }
 RbsDirectionCommand >> mergeWithMove: aMoveCommand [
 
-	^ CTLinkedList new add: aMoveCommand ;add: self;  yourself 
+	^ OrderedCollection new addLast: aMoveCommand ; addLast: self;  yourself 
 ]
 
 { #category : #printing }
