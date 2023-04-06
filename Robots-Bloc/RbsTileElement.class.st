@@ -21,3 +21,9 @@ RbsTileElement >> initialize [
 	super initialize.
 	self background: Color purple
 ]
+
+{ #category : #initialization }
+RbsTileElement >> manageYourselfFor: aGameModel In: aBoard [
+
+	self position: aGameModel position * 10.
+]
