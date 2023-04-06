@@ -27,10 +27,9 @@ RbsBoardElement2 class >> open [
 	space	 := BlSpace new.
 	space show.
 	board := self new.
-	board inspect.
 	models := self boardAndRobotModel.
 	board boardGame: models first.
-	board robot: models second.
+	"board robot: models second."
 	space addChild: board.
 
 ]
@@ -49,15 +48,6 @@ RbsBoardElement2 >> boardGame: aGame [
 ]
 
 { #category : #initialization }
-RbsBoardElement2 >> handleKeyEvent: anEvent [
-
-	anEvent key isArrowRight
-		ifTrue: [ robot move: 1. 
-					self halt.
-					] 
-]
-
-{ #category : #initialization }
 RbsBoardElement2 >> initialize [
 
 	super initialize.
@@ -70,13 +60,13 @@ RbsBoardElement2 >> initialize [
 		aLayoutConstraints horizontal matchParent.
 		aLayoutConstraints vertical matchParent ].
 	self initializeMapping.
-	self initializeHandlers.
+	
 ]
 
 { #category : #initialization }
 RbsBoardElement2 >> initializeHandlers [
 
-	| e leftSC rightSC container |
+	|  leftSC rightSC container |
 	self when: BlMouseDownEvent do: [ :event | event target inspect ].
 	"self requestFocus.
 	self addEventHandler: (BlEventHandler on: BlKeyDownEvent
@@ -85,15 +75,15 @@ RbsBoardElement2 >> initializeHandlers [
 			 	combination: BlKeyCombination arrowLeft;
 			  	action: [ :aShortcutEvent :aShortcut |
 					aShortcutEvent traceCr.
-					e relocate: (e position x - 20 @ e position y) ].
-rightSC := BlShortcutWithAction new
+					robot position: (robot position x - 20 @ robot position y) ].
+	rightSC := BlShortcutWithAction new
 			 	combination: BlKeyCombination arrowRight;
 			  	action: [ :aShortcutEvent :aShortcut |
 					aShortcutEvent traceCr.
-					e relocate: (e position x + 20 @ e position y) ].
-container addShortcut: leftSC.
-container addShortcut: rightSC.
-container requestFocus.
+					robot position: (robot position x + 20 @ robot position y) ].
+	self addShortcut: leftSC.
+	self addShortcut: rightSC.
+	self requestFocus.
 ]
 
 { #category : #initialization }
@@ -114,5 +104,6 @@ RbsBoardElement2 >> newBrickElementFor: aTile [
 { #category : #'accessing model' }
 RbsBoardElement2 >> robot: aRobot [ 
 	
-	robot := aRobot
+	robot := aRobot.
+	self initializeHandlers.
 ]
