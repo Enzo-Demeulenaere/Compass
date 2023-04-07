@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'game',
 		'mapping',
-		'robot'
+		'robotElement'
 	],
 	#category : #'Robots-Bloc'
 }
@@ -29,9 +29,16 @@ RbsBoardElement2 class >> open [
 	board := self new.
 	models := self boardAndRobotModel.
 	board boardGame: models first.
-	"board robot: models second."
 	space addChild: board.
 
+
+	"Sometimes I do 
+BlOSWindowHost universe tryToRunDeferredActions 
+
+or inspect the
+BlOSWindowHost universe
+and manually touch objects
+"
 ]
 
 { #category : #'accessing model' }
@@ -66,7 +73,7 @@ RbsBoardElement2 >> initialize [
 { #category : #initialization }
 RbsBoardElement2 >> initializeHandlers [
 
-	|  leftSC rightSC container |
+	| leftSC rightSC |
 	self when: BlMouseDownEvent do: [ :event | event target inspect ].
 	"self requestFocus.
 	self addEventHandler: (BlEventHandler on: BlKeyDownEvent
@@ -74,13 +81,11 @@ RbsBoardElement2 >> initializeHandlers [
 	leftSC := BlShortcutWithAction new
 			 	combination: BlKeyCombination arrowLeft;
 			  	action: [ :aShortcutEvent :aShortcut |
-					aShortcutEvent traceCr.
-					robot position: (robot position x - 20 @ robot position y) ].
+					robotElement position:  (robotElement position x - robotElement gameElementWidth  @ robotElement position y) ].
 	rightSC := BlShortcutWithAction new
 			 	combination: BlKeyCombination arrowRight;
 			  	action: [ :aShortcutEvent :aShortcut |
-					aShortcutEvent traceCr.
-					robot position: (robot position x + 20 @ robot position y) ].
+					robotElement position: ( robotElement position x + robotElement gameElementWidth @ robotElement position y) ].
 	self addShortcut: leftSC.
 	self addShortcut: rightSC.
 	self requestFocus.
@@ -102,8 +107,8 @@ RbsBoardElement2 >> newBrickElementFor: aTile [
 ]
 
 { #category : #'accessing model' }
-RbsBoardElement2 >> robot: aRobot [ 
+RbsBoardElement2 >> robotElement: aRobotElement [
 	
-	robot := aRobot.
+	robotElement := aRobotElement.
 	self initializeHandlers.
 ]

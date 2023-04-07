@@ -16,6 +16,11 @@ RbsTileElement class >> open [
 ]
 
 { #category : #initialization }
+RbsTileElement >> gameElementWidth [
+	^ 50 
+]
+
+{ #category : #initialization }
 RbsTileElement >> initialize [
 
 	super initialize.
@@ -25,5 +30,6 @@ RbsTileElement >> initialize [
 { #category : #initialization }
 RbsTileElement >> manageYourselfFor: aGameModel In: aBoard [
 
-	self position: aGameModel position * 10.
+	self size: self gameElementWidth @ self gameElementWidth.
+	self position: aGameModel position * self gameElementWidth.
 ]
