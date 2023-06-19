@@ -14,6 +14,7 @@ SkBox class >> textualMapCharacter [
 SkBox >> bringIn: aPlayer going: aDirection [
 
 	| boxPreviousPosition neighbor didMove  |
+	aPlayer class = self class ifTrue: [ ^ false ].
 	boxPreviousPosition := self position.
 	"we store the current position because if I can move, I will have to move the player to my old position."
 	neighbor := board atPosition: aDirection * self position.

@@ -20,6 +20,19 @@ SkMoveInSituationTest >> testBasicMoveInformation [
 
 ]
 
+{ #category : #tests }
+SkMoveInSituationTest >> testBoxBumpingInBox [ 
+
+	| importer game box |
+	importer := SkBoardImporter new. 
+	game := importer buildMapFor: '#@$$ ..#'.
+	box := game atRow: 1 atColumn: 3.
+	self assert: (box isKindOf: SkBox).
+	self deny: box moveEast.
+
+	self assert: game asciiString equals: '#@$$ ..#'
+]
+
 { #category : #'tests - simple move' }
 SkMoveInSituationTest >> testBoxBumpingInWall [
 

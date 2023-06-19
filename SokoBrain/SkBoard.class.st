@@ -23,11 +23,28 @@ Class {
 	#category : #'SokoBrain-Model'
 }
 
+{ #category : #initialization }
+SkBoard class >> board: aCTNewArray2D [
+
+	^ self new
+		  map: aCTNewArray2D;
+		  yourself
+]
+
+{ #category : #'as yet unclassified' }
+SkBoard class >> boardTest [
+
+	| string |
+	string := self mazesMicroban1 at: 3.
+	^ self board:
+		  (LevelImporter fromString: string fromPackage: self package)
+]
+
 { #category : #example }
 SkBoard class >> example [ 
 	<sampleInstance>
 	
-	^ SkBoardImporter new buildMapFor: '    #####
+	^ LevelImporter fromString: '    #####
     #   #
     #$  #
   ###  $##
@@ -37,7 +54,7 @@ SkBoard class >> example [
 # $  $          ..#
 ##### ### #@##  ..#
     #     #########
-    #######'
+    #######' fromPackage: self package
 ]
 
 { #category : #mazes }
@@ -137,46 +154,46 @@ SkBoard class >> mazesMicroban1 [
 	"sasquatch/sokoban/microban.html"
 
 	^ IdentityDictionary new
-		at: 1 put: '####
+		  at: 1 put: '####
 # .#
 #  ###
 #*@  #
 #  $ #
 #  ###
 ####';
-		at: 2 put: '######
+		  at: 2 put: '######
 #    #
 # #@ #
 # $* #
 # .* #
 #    #
 ######';
-		at: 3 put: '  ####
+		  at: 3 put: '  ####
 ###  ####
 #     $ #
 # #  #$ #
 # . .#@ #
 #########';
-		at: 4 put: '########
+		  at: 4 put: '########
 #      #
 # .**$@#
 #      #
 #####  #
     ####';
-		at: 5 put: ' #######
+		  at: 5 put: ' #######
  #     #
  # .$. #
 ## $@$ #
 #  .$. #
 #      #
 ########';
-		at: 6 put: '###### #####
+		  at: 6 put: '###### #####
 #    ###   #
 # $$     #@#
 # $ #...   #
 #   ########
 #####';
-		at: 7 put: '#######
+		  at: 7 put: '#######
 #     #
 # .$. #
 # $.$ #
@@ -184,7 +201,7 @@ SkBoard class >> mazesMicroban1 [
 # $.$ #
 #  @  #
 #######';
-		at: 8 put: '  ######
+		  at: 8 put: '  ######
   # ..@#
   # $$ #
   ## ###
@@ -196,14 +213,14 @@ SkBoard class >> mazesMicroban1 [
 #   # #
 ###   #
   #####';
-		at: 9 put: '#####
+		  at: 9 put: '#####
 #.  ##
 #@$$ #
 ##   #
  ##  #
   ##.#
    ###';
-		at: 10 put: '      #####
+		  at: 10 put: '      #####
       #.  #
       #.# #
 #######.# #
@@ -211,7 +228,7 @@ SkBoard class >> mazesMicroban1 [
 # # # # ###
 #       #
 #########';
-		at: 11 put: '  ######
+		  at: 11 put: '  ######
   #    #
   # ##@##
 ### # $ #
@@ -219,7 +236,7 @@ SkBoard class >> mazesMicroban1 [
 #       #
 #  ######
 ####';
-		at: 12 put: '#####
+		  at: 12 put: '#####
 #   ##
 # $  #
 ## $ ####
@@ -227,7 +244,7 @@ SkBoard class >> mazesMicroban1 [
   #  .# #
   #     #
   #######';
-		at: 13 put: '####
+		  at: 13 put: '####
 #. ##
 #.@ #
 #. $#
@@ -236,20 +253,20 @@ SkBoard class >> mazesMicroban1 [
  #    #
  #  ###
  ####';
-		at: 14 put: '#######
+		  at: 14 put: '#######
 #     #
 # # # #
 #. $*@#
 #   ###
 #####';
-		at: 15 put: '     ###
+		  at: 15 put: '     ###
 ######@##
 #    .* #
 #   #   #
 #####$# #
     #   #
     #####';
-		at: 16 put: ' ####
+		  at: 16 put: ' ####
  #  ####
  #     ##
 ## ##   #
@@ -257,14 +274,14 @@ SkBoard class >> mazesMicroban1 [
 #   # $$ #
 #  .#    #
 ##########';
-		at: 17 put: '#####
+		  at: 17 put: '#####
 # @ #
 #...#
 #$$$##
 #    #
 #    #
 ######';
-		at: 18 put: '#######
+		  at: 18 put: '#######
 #     #
 #. .  #
 # ## ##
@@ -273,7 +290,7 @@ SkBoard class >> mazesMicroban1 [
   #@ #
   #  #
   ####';
-		at: 19 put: '########
+		  at: 19 put: '########
 #   .. #
 #  @$$ #
 ##### ##
@@ -281,7 +298,7 @@ SkBoard class >> mazesMicroban1 [
    #  #
    #  #
    ####';
-		at: 20 put: '#######
+		  at: 20 put: '#######
 #     ###
 #  @$$..#
 #### ## #
@@ -289,13 +306,13 @@ SkBoard class >> mazesMicroban1 [
   #  ####
   #  #
   ####';
-		at: 21 put: '####
+		  at: 21 put: '####
 #  ####
 # . . #
 # $$#@#
 ##    #
  ######';
-		at: 22 put: '#####
+		  at: 22 put: '#####
 #   ###
 #. .  #
 #   # #
@@ -304,28 +321,28 @@ SkBoard class >> mazesMicroban1 [
  #    #
  #  ###
  ####';
-		at: 23 put: '#######
+		  at: 23 put: '#######
 #  *  #
 #     #
 ## # ##
  #$@.#
  #   #
  #####';
-		at: 24 put: '# #####
+		  at: 24 put: '# #####
   #   #
 ###$$@#
 #   ###
 #     #
 # . . #
 #######';
-		at: 25 put: ' ####
+		  at: 25 put: ' ####
  #  ###
  # $$ #
 ##... #
 #  @$ #
 #   ###
 #####';
-		at: 26 put: ' #####
+		  at: 26 put: ' #####
  # @ #
  #   #
 ###$ #
@@ -333,21 +350,21 @@ SkBoard class >> mazesMicroban1 [
 # $$ #
 ###  #
   ####';
-		at: 27 put: '######
+		  at: 27 put: '######
 #   .#
 # ## ##
 #  $$@#
 # #   #
 #.  ###
 #####';
-		at: 28 put: '#####
+		  at: 28 put: '#####
 #   #
 # @ #
 # $$###
 ##. . #
  #    #
  ######';
-		at: 29 put: '     #####
+		  at: 29 put: '     #####
      #   ##
      #    #
  ######   #
@@ -356,41 +373,41 @@ SkBoard class >> mazesMicroban1 [
 # ######.#
 #        #
 ##########';
-		at: 30 put: '####
+		  at: 30 put: '####
 #  ###
 # $$ #
 #... #
 # @$ #
 #   ##
 #####';
-		at: 31 put: '  ####
+		  at: 31 put: '  ####
  ##  #
 ##@$.##
 # $$  #
 # . . #
 ###   #
   #####';
-		at: 32 put: ' ####
+		  at: 32 put: ' ####
 ##  ###
 #     #
 #.**$@#
 #   ###
 ##  #
  ####';
-		at: 33 put: '#######
+		  at: 33 put: '#######
 #. #  #
 #  $  #
 #. $#@#
 #  $  #
 #. #  #
 #######';
-		at: 34 put: '  ####
+		  at: 34 put: '  ####
 ###  ####
 #       #
 #@$***. #
 #       #
 #########';
-		at: 35 put: '  ####
+		  at: 35 put: '  ####
  ##  #
  #. $#
  #.$ #
@@ -400,12 +417,12 @@ SkBoard class >> mazesMicroban1 [
  #   @#
  ##   #
   #####';
-		at: 36 put: '####
+		  at: 36 put: '####
 #  ############
 # $ $ $ $ $ @ #
 # .....       #
 ###############';
-		at: 37 put: '      ###
+		  at: 37 put: '      ###
 ##### #.#
 #   ###.#
 #   $ #.#
@@ -413,14 +430,14 @@ SkBoard class >> mazesMicroban1 [
 #####@# #
     #   #
     #####';
-		at: 38 put: '##########
+		  at: 38 put: '##########
 #        #
 # ##.### #
 # # $$ . #
 # . @$## #
 #####    #
     ######';
-		at: 39 put: '#####
+		  at: 39 put: '#####
 #   ####
 # # # .#
 #    $ ###
@@ -429,19 +446,19 @@ SkBoard class >> mazesMicroban1 [
 # # ######
 #   #
 #####';
-		at: 40 put: ' #####
+		  at: 40 put: ' #####
  #   #
 ##   ##
 # $$$ #
 # .+. #
 #######';
-		at: 41 put: '#######
+		  at: 41 put: '#######
 #     #
 #@$$$ ##
 #  #...#
 ##    ##
  ######';
-		at: 42 put: '   ####
+		  at: 42 put: '   ####
    #  #
    #@ #
 ####$.#
@@ -449,7 +466,7 @@ SkBoard class >> mazesMicroban1 [
 # # $.#
 #    ##
 ######';
-		at: 43 put: '     ####
+		  at: 43 put: '     ####
      # @#
      #  #
 ###### .#
@@ -458,17 +475,17 @@ SkBoard class >> mazesMicroban1 [
 #    ####
 ###  #
   ####';
-		at: 44 put: '#####
+		  at: 44 put: '#####
 #@$.#
 #####';
-		at: 45 put: '######
+		  at: 45 put: '######
 #... #
 #  $ #
 # #$##
 #  $ #
 #  @ #
 ######';
-		at: 46 put: ' ######
+		  at: 46 put: ' ######
 ##    #
 #  ## #
 # # $ #
@@ -476,14 +493,14 @@ SkBoard class >> mazesMicroban1 [
 ## #@##
  #   #
  #####';
-		at: 47 put: '  #######
+		  at: 47 put: '  #######
 ###     #
 # $ $   #
 # ### #####
 # @ . .   #
 #   ###   #
 ##### #####';
-		at: 48 put: '######
+		  at: 48 put: '######
 #  @ #
 #  # ##
 # .#  ##
@@ -491,7 +508,7 @@ SkBoard class >> mazesMicroban1 [
 # .#   #
 ####   #
    #####';
-		at: 49 put: '######
+		  at: 49 put: '######
 # @  #
 # $# #
 # $  #
@@ -501,21 +518,21 @@ SkBoard class >> mazesMicroban1 [
  #...  #
  #     #
  #######';
-		at: 50 put: '  ####
+		  at: 50 put: '  ####
 ###  #####
 #  $  @..#
 # $    # #
 ### #### #
   #      #
   ########';
-		at: 51 put: '####
+		  at: 51 put: '####
 #  ###
 #    ###
 #  $*@ #
 ### .# #
   #    #
   ######';
-		at: 52 put: '  ####
+		  at: 52 put: '  ####
 ### @#
 #  $ #
 #  *.#
@@ -523,14 +540,14 @@ SkBoard class >> mazesMicroban1 [
 #  $ #
 ###  #
   ####';
-		at: 53 put: ' #####
+		  at: 53 put: ' #####
 ##. .##
 # * * #
 #  #  #
 # $ $ #
 ## @ ##
  #####';
-		at: 54 put: '      ######
+		  at: 54 put: '      ######
       #    #
   ##### .  #
 ###  ###.  #
@@ -538,7 +555,7 @@ SkBoard class >> mazesMicroban1 [
 # @$$ # . #
 ##    #####
  ######';
-		at: 55 put: '########
+		  at: 55 put: '########
 # @ #  #
 #      #
 #####$ #
@@ -546,13 +563,13 @@ SkBoard class >> mazesMicroban1 [
  ## #$ ..#
  ## #  ###
     ####';
-		at: 56 put: '#####
+		  at: 56 put: '#####
 #   ###
 #  $  #
 ##* . #
  #   @#
  ######';
-		at: 57 put: '  ####
+		  at: 57 put: '  ####
   #  #
   #@ #
   #  #
@@ -561,14 +578,14 @@ SkBoard class >> mazesMicroban1 [
 #  $   #
 #####. #
     ####';
-		at: 58 put: '####
+		  at: 58 put: '####
 #  ####
 #.*$  #
 # .$# #
 ## @  #
  #   ##
  #####';
-		at: 59 put: '############
+		  at: 59 put: '############
 #          #
 # ####### @##
 # #         #
@@ -577,7 +594,7 @@ SkBoard class >> mazesMicroban1 [
 ###  # # ...#
   #### #    #
        ######';
-		at: 60 put: ' #########
+		  at: 60 put: ' #########
  #       #
 ##@##### #
 #  #   # #
@@ -587,7 +604,7 @@ SkBoard class >> mazesMicroban1 [
 #   $  #.#
 #   #  ###
 ########';
-		at: 61 put: '########
+		  at: 61 put: '########
 #      #
 # #### #
 # #...@#
@@ -597,19 +614,19 @@ SkBoard class >> mazesMicroban1 [
 ####   ##
    #.###
    ###';
-		at: 62 put: '   ##########
+		  at: 62 put: '   ##########
 ####    ##  #
 #  $$$....$@#
 #      ###  #
 #   #### ####
 #####';
-		at: 63 put: '#####   ####
+		  at: 63 put: '#####   ####
 #   ##### .#
 #       $  ########
 ###  #### .$    @ #
   #  #  #  ####   #
   ####  ####  #####';
-		at: 64 put: ' ######
+		  at: 64 put: ' ######
 ##    #
 #   $ #
 #  $$ #
@@ -618,7 +635,7 @@ SkBoard class >> mazesMicroban1 [
    #.  $ #
    #. ####
    ####';
-		at: 65 put: '  ######
+		  at: 65 put: '  ######
   #    #
   #  $ #
  ####$ #
@@ -627,7 +644,7 @@ SkBoard class >> mazesMicroban1 [
 #     @ #
 ##  #   #
  ########';
-		at: 66 put: '   ###
+		  at: 66 put: '   ###
    #@#
  ###$###
 ##  .  ##
@@ -641,7 +658,7 @@ SkBoard class >> mazesMicroban1 [
   #   #
   #   #
   #####';
-		at: 67 put: '#####
+		  at: 67 put: '#####
 #   ##
 # #  #
 #@$*.##
@@ -649,14 +666,14 @@ SkBoard class >> mazesMicroban1 [
  # $# #
  ##   #
   #####';
-		at: 68 put: ' ####
+		  at: 68 put: ' ####
  #  ######
 ##    $  #
 # .# $   #
 # .#$#####
 # .@ #
 ######';
-		at: 69 put: '####  ####
+		  at: 69 put: '####  ####
 #  ####  #
 #  #  #  #
 #  #    $##
@@ -664,7 +681,7 @@ SkBoard class >> mazesMicroban1 [
 #@ ## # $ #
 #   . #   #
 ###########';
-		at: 70 put: '#####
+		  at: 70 put: '#####
 # @ ####
 #      #
 # $ $$ #
@@ -674,7 +691,7 @@ SkBoard class >> mazesMicroban1 [
 ##..  #
  ###  #
    ####';
-		at: 71 put: '###########
+		  at: 71 put: '###########
 #     #   ###
 # $@$ # .  .#
 # ## ### ## #
@@ -683,7 +700,7 @@ SkBoard class >> mazesMicroban1 [
 # ######### #
 #           #
 #############';
-		at: 72 put: '  ####
+		  at: 72 put: '  ####
  ##  #####
  #  $  @ #
  #  $#   #
@@ -694,7 +711,7 @@ SkBoard class >> mazesMicroban1 [
 #  .####
 #  ##
 ####';
-		at: 73 put: '####
+		  at: 73 put: '####
 #  #####
 # $$ $ #
 #      #
@@ -704,7 +721,7 @@ SkBoard class >> mazesMicroban1 [
 #      #
 #  #   #
 ########';
-		at: 74 put: ' ####
+		  at: 74 put: ' ####
  #  #######
  #$ @#   .#
 ## #$$   .#
@@ -712,14 +729,14 @@ SkBoard class >> mazesMicroban1 [
 #   # #####
 ###   #
   #####';
-		at: 75 put: ' #######
+		  at: 75 put: ' #######
 ## ....##
 #   ######
 #   $ $ @#
 ###  $ $ #
   ###    #
     ######';
-		at: 76 put: ' #####
+		  at: 76 put: ' #####
 ##   #
 #    #####
 #  #.#   #
@@ -730,14 +747,14 @@ SkBoard class >> mazesMicroban1 [
  ##     #
   #  ####
   ####';
-		at: 77 put: '##########
+		  at: 77 put: '##########
 # @ .... #
 #   ####$##
 ## #  $ $ #
  # $      #
  #   ######
  #####';
-		at: 78 put: ' #######
+		  at: 78 put: ' #######
 ##     ##
 #  $ $  #
 # $ $ $ #
@@ -745,13 +762,13 @@ SkBoard class >> mazesMicroban1 [
  #@  .....#
  ##     ###
   #######';
-		at: 79 put: ' #########
+		  at: 79 put: ' #########
  #    #  #
 ## $#$#  #
 #  .$.@  #
 #  .#    #
 ##########';
-		at: 80 put: '####
+		  at: 80 put: '####
 #  #######
 #  . ## .#
 # $#    .#
@@ -762,7 +779,7 @@ SkBoard class >> mazesMicroban1 [
   # $$ #
   #    #
   ######';
-		yourself
+		  yourself
 ]
 
 { #category : #mazes }
@@ -8188,6 +8205,12 @@ SkBoard >> lineNumber [
 	^ map numberOfRows
 ]
 
+{ #category : #accessing }
+SkBoard >> map: aCTNewArray2D [ 
+	
+	map := aCTNewArray2D
+]
+
 { #category : #move }
 SkBoard >> moveSteps: aCollectionOfDirection [
 
@@ -8229,5 +8252,5 @@ SkBoard >> updatePositionOf: aSkMovable from: previousPosition [
 
 { #category : #accessing }
 SkBoard >> width [
-	^ map numberOfColumns
+	^ map width
 ]
