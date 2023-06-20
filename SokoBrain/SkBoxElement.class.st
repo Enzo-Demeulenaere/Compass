@@ -25,8 +25,14 @@ SkBoxElement >> board [
 ]
 
 { #category : #accessing }
-SkBoxElement >> board: aSkBoard [ 
-	board := aSkBoard 
+SkBoxElement >> board: aSkBoard [
+
+	board := aSkBoard.
+
+	self constraintsDo: [ :c |
+		self board width > self board height
+			ifTrue: [ c horizontal matchParent ]
+			ifFalse: [ c vertical matchParent ] ]
 ]
 
 { #category : #accessing }
@@ -48,10 +54,8 @@ SkBoxElement >> initialize [
 	self
 		background: self backgroundPaint;
 		geometry: BlSquareGeometry new;
-		constraintsDo: [
-			:aLayoutConstraints |
-			aLayoutConstraints horizontal matchParent.
-			aLayoutConstraints vertical matchParent ]
+		layout: BlSquaredLayout new
+		
 ]
 
 { #category : #accessing }
@@ -63,7 +67,8 @@ SkBoxElement >> updateBackgroundColor [
 		              ('SkTarget' -> Color lightBlue).
 		              ('SkPlayer' -> Color yellow).
 		              ('SkBox' -> Color red).
-		              ('SkWall' -> Color brown) } asDictionary.
-	self box className traceCr.
+		              ('SkWall' -> Color brown).
+							('SkBoxOnTarget' -> Color lightGreen).
+							('SkPlayerOnTarget' -> Color lightYellow)  } asDictionary.
 	self background: (dictionary at: self box className)
 ]

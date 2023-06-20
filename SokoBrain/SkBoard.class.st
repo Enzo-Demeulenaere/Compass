@@ -34,10 +34,11 @@ SkBoard class >> board: aCTNewArray2D [
 { #category : #'as yet unclassified' }
 SkBoard class >> boardTest [
 
-	| string |
-	string := self mazesMicroban1 at: 3.
-	^ self board:
-		  (LevelImporter fromString: string fromPackage: self package)
+	| string tmp |
+	string := self mazesMicroban1 at: 8.
+	tmp := LevelImporter fromString: string fromPackage: self package.
+	tmp width < tmp height ifTrue: [ tmp := tmp rotateLeft ].
+	^ self board: tmp
 ]
 
 { #category : #example }
@@ -8176,7 +8177,7 @@ SkBoard >> do: aBlock [
 
 { #category : #accessing }
 SkBoard >> height [
-	^ map numberOfRows
+	^ map height
 ]
 
 { #category : #initialization }

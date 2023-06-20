@@ -23,9 +23,11 @@ SkBoardElement class >> openWithModel: aSkBoard [
 	aSkBoardElement := self new
 		                   board: aSkBoard;
 		                   yourself.
-	space addChild: aSkBoardElement.
+	space root addChild: aSkBoardElement.
+	space root background: Color red muchLighter.
+	space root layout: BlFrameLayout new.
 	space pulse
-		extent: aSkBoardElement extent;
+		extent: 1000 @ 1000;
 		resizable: false;
 		show
 ]
@@ -51,15 +53,16 @@ SkBoardElement >> board [
 SkBoardElement >> board: aSkBoard [
 
 	board := aSkBoard.
-
-	board do: [ :aBox |
-		| boxElement |
-		boxElement := (SkBoxElement box: aBox) board: aSkBoard.
-		self addChild: boxElement ].
-
+	self constraintsDo: [ :c |
+		c frame vertical alignCenter.
+		c horizontal matchParent.
+		c vertical fitContent ].
 	self
 		initializeBackgroundLayer;
-		initializeForegroundLayer;addChildren: { backgroundLayer.foregroundLayer  }
+		initializeForegroundLayer;
+		addChildren: {
+				backgroundLayer.
+				foregroundLayer }
 ]
 
 { #category : #accessing }
@@ -80,10 +83,7 @@ SkBoardElement >> initialize [
 	super initialize.
 	self
 		background: (BlBackground paint: Color veryLightGray);
-		"layout: BlSquaredLayout new;"
-		constraintsDo: [ :c |
-			c horizontal matchParent.
-			c vertical matchParent ]
+		layout: BlFrameLayout new
 ]
 
 { #category : #accessing }
@@ -96,14 +96,20 @@ SkBoardElement >> initializeBackgroundLayer [
 				          columnCount: board width;
 				          cellSpacing: 2);
 		         constraintsDo: [ :c |
-			         c horizontal matchParent.
-			         c vertical matchParent ].
+			         self board width > self board height
+				         ifTrue: [
+					         c horizontal matchParent.
+					         c vertical fitContent ]
+				         ifFalse: [
+					         c horizontal fitContent.
+					         c vertical matchParent ] ].
 
-	board do: [ :aBox |
+	self board do: [ :aBox |
 		| boxElement tmpBox |
 		tmpBox := aBox.
 		(aBox class inheritsFrom: SkMovable) ifTrue: [
-			tmpBox := SkGround new ].
+			(aBox className endsWith: 'OnTarget') ifTrue: [ tmpBox := SkTarget new ] ifFalse:
+			[tmpBox := SkGround new] ].
 		boxElement := (SkBoxElement box: tmpBox)
 			              board: board;
 			              updateBackgroundColor.
@@ -118,14 +124,19 @@ SkBoardElement >> initializeForegroundLayer [
 	| layer |
 	layer := BlElement new
 		         background: Color transparent;
-		         layout: (BlGridLayout horizontal
+		        layout: (BlGridLayout horizontal
 				          columnCount: board width;
 				          cellSpacing: 2);
 		         constraintsDo: [ :c |
-			         c horizontal matchParent.
-			         c vertical matchParent ].
+			         self board width > self board height
+				         ifTrue: [
+					         c horizontal matchParent.
+					         c vertical fitContent ]
+				         ifFalse: [
+					         c horizontal fitContent.
+					         c vertical matchParent ] ].
 
-	board do: [ :aBox |
+	self board do: [ :aBox |
 		| boxElement tmpBox |
 		tmpBox := aBox.
 		(aBox class inheritsFrom: SkMovable) ifFalse: [
