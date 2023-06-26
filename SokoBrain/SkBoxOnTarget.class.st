@@ -10,7 +10,12 @@ SkBoxOnTarget class >> textualMapCharacter [
 ]
 
 { #category : #initialization }
-SkBoxOnTarget >> initialize [ 
-	super initialize.
-	self background: SkTarget new 
+SkBoxOnTarget >> configured [
+	^ SkBox new background: self defaultBackground
+]
+
+{ #category : #initialization }
+SkBoxOnTarget >> defaultBackground [
+
+	^ SkTarget new basicPosition: self position; yourself
 ]

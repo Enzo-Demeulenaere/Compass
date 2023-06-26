@@ -7,36 +7,45 @@ Class {
 { #category : #tests }
 SkGameLogic >> testIsFinished [
 
-	| importer game |
-	importer := SkBoardImporter new. 
-	game := importer buildMapFor: '#@$ .#'.
-	self deny: game isFinished. 
-	game player moveEast.
-	game player moveEast.
-	self assert: game isFinished
+	| board |
+	board := SkBoard board:
+		         (LevelImporter
+			          fromString: '#@$ .#'
+			          fromPackage: SkBoard package).
+
+	self deny: board isFinished.
+	board player moveEast.
+	board player moveEast.
+	self assert: board isFinished
 ]
 
 { #category : #tests }
 SkGameLogic >> testIsFinishedThenUnfinish [
 
-	| importer game |
-	importer := SkBoardImporter new. 
-	game := importer buildMapFor: '#@$ . #'.
-	self deny: game isFinished. 
-	game player moveEast.
-	game player moveEast.
-	self assert: game isFinished.
-	game player moveEast.
-	self deny: game isFinished
+	| board |
+	board := SkBoard board:
+		         (LevelImporter
+			          fromString: '#@$ . #'
+			          fromPackage: SkBoard package).
+	self deny: board isFinished.
+	board player moveEast.
+	board player moveEast.
+	self assert: board isFinished.
+	board player moveEast.
+	self deny: board isFinished
 ]
 
 { #category : #tests }
 SkGameLogic >> testMoveSteps [
 
-	| importer game |
-	importer := SkBoardImporter new. 
-	game := importer buildMapFor: '#@$ . #'.
-	self deny: game isFinished. 
-	game moveSteps: { CpDirection east . CpDirection east}.
-	self assert: game isFinished. 
+	| board |
+	board := SkBoard board:
+		         (LevelImporter
+			          fromString: '#@$ . #'
+			          fromPackage: SkBoard package).
+	self deny: board isFinished.
+	board moveSteps: {
+			CpDirection east.
+			CpDirection east }.
+	self assert: board isFinished
 ]

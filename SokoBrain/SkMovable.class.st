@@ -19,6 +19,21 @@ SkMovable >> background: anObject [
 	background := anObject
 ]
 
+{ #category : #initialization }
+SkMovable >> configured [
+
+	self background: self defaultBackground.
+	^ self
+]
+
+{ #category : #initialization }
+SkMovable >> defaultBackground [
+
+	^ SkGround new
+		  basicPosition: self position;
+		  yourself
+]
+
 { #category : #move }
 SkMovable >> move: aCpDirection [
 
@@ -50,4 +65,12 @@ SkMovable >> moveSouth [
 SkMovable >> moveWest [
 
 	^ self move: CpDirection west
+]
+
+{ #category : #accessing }
+SkMovable >> position: aPoint [
+
+	position := aPoint.
+	self background position = (3 @ 1) ifTrue: [ self halt ].
+	self background position: aPoint
 ]

@@ -8,6 +8,12 @@ Class {
 	#category : #'SokoBrain-Model'
 }
 
+{ #category : #initialization }
+SkElement class >> configured [ 
+
+	^ self new configured
+]
+
 { #category : #'default encoding' }
 SkElement class >> textualMapCharacter [
 	^ $Z
@@ -31,6 +37,12 @@ SkElement >> bringIn: aSkMovable going: aDirection [
 	^ true
 ]
 
+{ #category : #initialization }
+SkElement >> configured [ 
+
+	^self
+]
+
 { #category : #move }
 SkElement >> isPlayer [
 	^ false
@@ -52,6 +64,13 @@ SkElement >> moveIn: aNeighbor going: aDirection [
 { #category : #accessing }
 SkElement >> position [
 	^ position
+]
+
+{ #category : #accessing }
+SkElement >> position: aPoint [
+
+	position := aPoint.
+	"self position = (3@1) ifTrue: [ self halt ]"
 ]
 
 { #category : #action }

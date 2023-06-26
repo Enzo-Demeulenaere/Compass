@@ -10,8 +10,15 @@ SkPlayerOnTarget class >> textualMapCharacter [
 ]
 
 { #category : #initialization }
-SkPlayerOnTarget >> initialize [
+SkPlayerOnTarget >> configured [
 
-	super initialize.
-	self background: SkTarget new
+	^ SkPlayer new background: self defaultBackground
+]
+
+{ #category : #initialization }
+SkPlayerOnTarget >> defaultBackground [
+
+	^ SkTarget new
+		  basicPosition: self position;
+		  yourself
 ]

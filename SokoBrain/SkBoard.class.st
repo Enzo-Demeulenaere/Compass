@@ -35,7 +35,7 @@ SkBoard class >> board: aCTNewArray2D [
 SkBoard class >> boardTest [
 
 	| string tmp |
-	string := self mazesMicroban1 at: 8.
+	string := self mazesMicroban1 at: 1.
 	tmp := LevelImporter fromString: string fromPackage: self package.
 	tmp width < tmp height ifTrue: [ tmp := tmp rotateLeft ].
 	^ self board: tmp
@@ -8133,17 +8133,17 @@ SkBoard >> at: anInteger at: anInteger2 put: anElement [
 
 { #category : #accessing }
 SkBoard >> atPosition: aCpPositionable [ 
-	^ (map at: aCpPositionable y at: aCpPositionable x)
+	^ (map at: aCpPositionable x @ aCpPositionable y)
 ]
 
 { #category : #'low level access' }
 SkBoard >> atRow: anInteger atColumn: anInteger2 [
-	^ map at: anInteger at: anInteger2
+	^ map at: anInteger2 @ anInteger
 ]
 
 { #category : #'low level access' }
 SkBoard >> atRow: anInteger atColumn: anInteger2 put: anElement [
-	map at: anInteger at: anInteger2 put: anElement 
+	map at: anInteger2 @ anInteger put: anElement 
 ]
 
 { #category : #inspector }
@@ -8207,9 +8207,16 @@ SkBoard >> lineNumber [
 ]
 
 { #category : #accessing }
-SkBoard >> map: aCTNewArray2D [ 
-	
-	map := aCTNewArray2D
+SkBoard >> map: aCTNewArray2D [
+
+	map := aCTNewArray2D.
+	map withIndexes: [ :column :row |
+		(map at: column @ row)
+			position: column @ row;
+			setBoard: self ].
+	self
+		setBoxes;
+		setPlayer
 ]
 
 { #category : #move }
@@ -8225,14 +8232,28 @@ SkBoard >> player [
 
 { #category : #printing }
 SkBoard >> printOn: aStream [
-	
-	(1 to: map numberOfRows)
+
+	(1 to: map height)
 		do: [ :rowNumber |
-			1 to: map numberOfColumns do: [ :columnNumber |
-				| el |
+			1 to: map width do: [ :columnNumber |
+				| el elClass |
 				el := (self atRow: rowNumber atColumn: columnNumber).
-				aStream nextPut: el class textualMapCharacter]]
-		separatedBy: [aStream cr ]
+				elClass := (el class inheritsFrom: SkMovable) ifFalse: [ el class ] ifTrue: [ el background class = SkGround ifTrue: [ el class ] ifFalse: [ (el class asString, 'OnTarget') asClass ] ].
+				aStream nextPut: elClass textualMapCharacter ] ]
+		separatedBy: [ aStream cr ]
+]
+
+{ #category : #initialization }
+SkBoard >> setBoxes [
+
+	map do: [ :each |
+		each className = 'SkBox' ifTrue: [ self addBox: each ] ]
+]
+
+{ #category : #initialization }
+SkBoard >> setPlayer [
+
+	player := map contents detect: #isPlayer
 ]
 
 { #category : #initialization }
