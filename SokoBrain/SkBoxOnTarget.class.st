@@ -17,5 +17,8 @@ SkBoxOnTarget >> configured [
 { #category : #initialization }
 SkBoxOnTarget >> defaultBackground [
 
-	^ SkTarget new basicPosition: self position; yourself
+	^ SkTarget new
+		  basicPosition: self position;
+		  board: board;
+		  yourself
 ]

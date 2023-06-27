@@ -29,8 +29,10 @@ SkMovable >> configured [
 { #category : #initialization }
 SkMovable >> defaultBackground [
 
+	"self class = SkPlayer ifTrue: [ self halt ]."
 	^ SkGround new
 		  basicPosition: self position;
+		  board: board;
 		  yourself
 ]
 
@@ -71,6 +73,5 @@ SkMovable >> moveWest [
 SkMovable >> position: aPoint [
 
 	position := aPoint.
-	self background position = (3 @ 1) ifTrue: [ self halt ].
 	self background position: aPoint
 ]

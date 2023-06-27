@@ -3,7 +3,8 @@ Class {
 	#superclass : #BlElement,
 	#instVars : [
 		'box',
-		'board'
+		'board',
+		'positionInField'
 	],
 	#category : #'SokoBrain-UI'
 }
@@ -46,6 +47,16 @@ SkBoxElement >> box: aSkElement [
 	box := aSkElement.
 ]
 
+{ #category : #accessing }
+SkBoxElement >> boxForForeground [
+
+	self box:
+		(((self board atPosition: self positionInField) class inheritsFrom:
+			  SkMovable)
+			 ifFalse: [ SkGround new ]
+			 ifTrue: [ (self board atPosition: self positionInField) ])
+]
+
 { #category : #initialization }
 SkBoxElement >> initialize [
 
@@ -58,17 +69,20 @@ SkBoxElement >> initialize [
 		
 ]
 
+{ #category : #'geometry position' }
+SkBoxElement >> positionInField [
+
+	^ positionInField
+]
+
+{ #category : #'geometry position' }
+SkBoxElement >> positionInField: aPoint [
+
+	positionInField := aPoint
+]
+
 { #category : #accessing }
 SkBoxElement >> updateBackgroundColor [
 
-	| dictionary |
-	dictionary := {
-		              ('SkGround' -> Color transparent).
-		              ('SkTarget' -> Color lightBlue).
-		              ('SkPlayer' -> Color yellow).
-		              ('SkBox' -> Color red).
-		              ('SkWall' -> Color brown).
-							('SkBoxOnTarget' -> Color lightGreen).
-							('SkPlayerOnTarget' -> Color lightYellow)  } asDictionary.
-	self background: (dictionary at: self box className)
+	self background: self box backgroundRepresentation
 ]

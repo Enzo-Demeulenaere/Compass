@@ -10,10 +10,19 @@ SkBox class >> textualMapCharacter [
 	^ $$
 ]
 
+{ #category : #accessing }
+SkBox >> backgroundRepresentation [
+
+	^ self background className = 'SkTarget'
+		  ifTrue: [
+			  Color lightGreen]
+		  ifFalse: [ Color red ]
+]
+
 { #category : #move }
 SkBox >> bringIn: aPlayer going: aDirection [
 
-	| boxPreviousPosition neighbor didMove  |
+	| boxPreviousPosition neighbor didMove |
 	aPlayer class = self class ifTrue: [ ^ false ].
 	boxPreviousPosition := self position.
 	"we store the current position because if I can move, I will have to move the player to my old position."
@@ -21,7 +30,7 @@ SkBox >> bringIn: aPlayer going: aDirection [
 	"First I tried to move in by asking my neighbor"
 	didMove := self moveIn: neighbor going: aDirection.
 	"If I moved them moved the player to move into my previous position"
-	didMove ifTrue: [ 
+	didMove ifTrue: [
 		| playerPreviousPosition |
 		playerPreviousPosition := aPlayer position.
 		aPlayer basicPosition: boxPreviousPosition.

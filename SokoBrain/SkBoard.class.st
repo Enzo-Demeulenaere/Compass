@@ -8190,7 +8190,7 @@ SkBoard >> initialize [
 { #category : #initialization }
 SkBoard >> initializeElement: anElement atLine: lineNumber column: columnNumber [
 
-	anElement setBoard: self.
+	anElement board: self.
 	anElement basicPosition: columnNumber @ lineNumber.
 	self atRow: lineNumber atColumn: columnNumber put: anElement.
 	anElement postCreationAction.
@@ -8213,7 +8213,7 @@ SkBoard >> map: aCTNewArray2D [
 	map withIndexes: [ :column :row |
 		(map at: column @ row)
 			position: column @ row;
-			setBoard: self ].
+			board: self ].
 	self
 		setBoxes;
 		setPlayer

@@ -23,6 +23,7 @@ SkBoardElement class >> openWithModel: aSkBoard [
 	aSkBoardElement := self new
 		                   board: aSkBoard;
 		                   yourself.
+
 	space root addChild: aSkBoardElement.
 	space root background: Color red muchLighter.
 	space root layout: BlFrameLayout new.
@@ -83,7 +84,10 @@ SkBoardElement >> initialize [
 	super initialize.
 	self
 		background: (BlBackground paint: Color veryLightGray);
-		layout: BlFrameLayout new
+		layout: BlFrameLayout new;
+		addEventHandlerOn: BlKeyDownEvent
+		do: [ :anEvent | self manageEvent: anEvent ];
+		requestFocus 
 ]
 
 { #category : #accessing }
@@ -108,9 +112,9 @@ SkBoardElement >> initializeBackgroundLayer [
 		| boxElement tmpBox |
 		tmpBox := aBox.
 		(aBox class inheritsFrom: SkMovable) ifTrue: [
-			(aBox className endsWith: 'OnTarget') ifTrue: [ tmpBox := SkTarget new ] ifFalse:
-			[tmpBox := SkGround new] ].
+			tmpBox := aBox background ].
 		boxElement := (SkBoxElement box: tmpBox)
+			              positionInField: aBox position;
 			              board: board;
 			              updateBackgroundColor.
 		layer addChild: boxElement ].
@@ -124,7 +128,7 @@ SkBoardElement >> initializeForegroundLayer [
 	| layer |
 	layer := BlElement new
 		         background: Color transparent;
-		        layout: (BlGridLayout horizontal
+		         layout: (BlGridLayout horizontal
 				          columnCount: board width;
 				          cellSpacing: 2);
 		         constraintsDo: [ :c |
@@ -142,9 +146,32 @@ SkBoardElement >> initializeForegroundLayer [
 		(aBox class inheritsFrom: SkMovable) ifFalse: [
 			tmpBox := SkGround new ].
 		boxElement := (SkBoxElement box: tmpBox)
+			              positionInField: aBox position;
 			              board: board;
 			              updateBackgroundColor.
-		layer addChild: boxElement ].
+
+		layer addChild: boxElement as: aBox position asString ].
 
 	self foregroundLayer: layer
+]
+
+{ #category : #initialization }
+SkBoardElement >> manageEvent: anEvent [
+
+	| dict player position |
+	player := self board player.
+	position := player position.
+	dict := {
+		        (#DOWN -> CpDirection south).
+		        (#UP -> CpDirection north).
+		        (#LEFT -> CpDirection west).
+		        (#RIGHT -> CpDirection east) } asDictionary.
+	player move: (dict at: anEvent key name ifAbsent: [ 1 @ 1 ]).
+	(self foregroundLayer childNamed: position asString) boxForForeground
+		updateBackgroundColor.
+	(self foregroundLayer childNamed: player position asString)
+		boxForForeground updateBackgroundColor.
+	(self foregroundLayer childNamed:
+		 ((dict at: anEvent key name) * player position) asString) boxForForeground 
+		updateBackgroundColor
 ]

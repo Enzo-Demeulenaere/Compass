@@ -8,3 +8,9 @@ Class {
 SkGround class >> textualMapCharacter [
 	^ Character space
 ]
+
+{ #category : #accessing }
+SkGround >> backgroundRepresentation [
+
+	^ Color transparent
+]

@@ -9,6 +9,14 @@ SkPlayer class >> textualMapCharacter [
 	^ $@
 ]
 
+{ #category : #accessing }
+SkPlayer >> backgroundRepresentation [
+
+	^ self background className = 'SkTarget'
+		  ifTrue: [ Color lightYellow ]
+		  ifFalse: [ Color yellow ]
+]
+
 { #category : #move }
 SkPlayer >> isPlayer [ 
 	^ true

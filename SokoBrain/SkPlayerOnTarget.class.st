@@ -20,5 +20,6 @@ SkPlayerOnTarget >> defaultBackground [
 
 	^ SkTarget new
 		  basicPosition: self position;
+		  board: board;
 		  yourself
 ]

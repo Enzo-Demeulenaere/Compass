@@ -10,6 +10,12 @@ SkTarget class >> textualMapCharacter [
 	^ $.
 ]
 
+{ #category : #accessing }
+SkTarget >> backgroundRepresentation [
+
+	^ Color lightBlue
+]
+
 { #category : #move }
 SkTarget >> isTarget [ 
 	^ true
