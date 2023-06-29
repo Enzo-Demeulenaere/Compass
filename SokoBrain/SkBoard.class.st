@@ -44,7 +44,7 @@ SkBoard class >> board: aCTNewArray2D managedBy: aSkGameManager [
 SkBoard class >> boardTest [
 
 	| string tmp |
-	string := self mazesMicroban1 at: 1.
+	string := self mazesMicroban1 at: 19.
 	tmp := LevelImporter fromString: string fromPackage: self package.
 	tmp width < tmp height ifTrue: [ tmp := tmp rotateLeft ].
 	^ self board: tmp

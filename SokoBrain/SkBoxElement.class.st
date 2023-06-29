@@ -30,10 +30,8 @@ SkBoxElement >> board: aSkBoard [
 
 	board := aSkBoard.
 
-	self constraintsDo: [ :c |
-		self board width > self board height
-			ifTrue: [ c horizontal matchParent ]
-			ifFalse: [ c vertical matchParent ] ]
+	self constraintsDo: [ :c | c horizontal matchParent ]
+			
 ]
 
 { #category : #accessing }

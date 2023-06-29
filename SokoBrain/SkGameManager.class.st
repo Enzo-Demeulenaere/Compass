@@ -2,7 +2,8 @@ Class {
 	#name : #SkGameManager,
 	#superclass : #Object,
 	#instVars : [
-		'currentLevelString'
+		'currentLevelString',
+		'currentBoardElement'
 	],
 	#category : #'SokoBrain-Model'
 }
@@ -8048,15 +8049,28 @@ SkGameManager class >> mazesUAlberta [
 ]
 
 { #category : #accessing }
+SkGameManager >> currentBoardElement [
+
+	^ currentBoardElement 
+]
+
+{ #category : #accessing }
+SkGameManager >> currentBoardElement: aSkBoardElement [
+
+	currentBoardElement:= aSkBoardElement 
+]
+
+{ #category : #accessing }
 SkGameManager >> currentLevelString [
 
 	^ currentLevelString
 ]
 
 { #category : #accessing }
-SkGameManager >> currentLevelString: aSkBoard [
+SkGameManager >> currentLevelString: aString [
 
-	currentLevelString := aSkBoard
+	currentLevelString := aString
+	
 ]
 
 { #category : #'as yet unclassified' }
@@ -8070,9 +8084,9 @@ SkGameManager >> launchFromString: aString [
 
 	| board |
 	self currentLevelString: aString.
+	self currentBoardElement: SkBoardElement new.
 	board := SkBoard
 		         board: (self class importFromString: aString)
 		         managedBy: self.
-	SkBoardElement openWithModel: board.
-	
+	self currentBoardElement openWithModel: board
 ]

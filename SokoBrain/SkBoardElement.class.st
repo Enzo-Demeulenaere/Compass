@@ -18,19 +18,7 @@ SkBoardElement class >> openBoardTest [
 { #category : #'as yet unclassified' }
 SkBoardElement class >> openWithModel: aSkBoard [
 
-	| aSkBoardElement space |
-	space := BlSpace new.
-	aSkBoardElement := self new
-		                   board: aSkBoard;
-		                   yourself.
-
-	space root addChild: aSkBoardElement.
-	space root background: Color red muchLighter.
-	space root layout: BlFrameLayout new.
-	space pulse
-		extent: 1000 @ 1000;
-		resizable: false;
-		show
+	self new openWithModel: aSkBoard.
 ]
 
 { #category : #accessing }
@@ -87,7 +75,7 @@ SkBoardElement >> initialize [
 		layout: BlFrameLayout new;
 		addEventHandlerOn: BlKeyDownEvent
 		do: [ :anEvent | self manageEvent: anEvent ];
-		requestFocus 
+		requestFocus
 ]
 
 { #category : #accessing }
@@ -100,13 +88,9 @@ SkBoardElement >> initializeBackgroundLayer [
 				          columnCount: board width;
 				          cellSpacing: 2);
 		         constraintsDo: [ :c |
-			         self board width > self board height
-				         ifTrue: [
 					         c horizontal matchParent.
 					         c vertical fitContent ]
-				         ifFalse: [
-					         c horizontal fitContent.
-					         c vertical matchParent ] ].
+				  .
 
 	self board do: [ :aBox |
 		| boxElement tmpBox |
@@ -132,13 +116,8 @@ SkBoardElement >> initializeForegroundLayer [
 				          columnCount: board width;
 				          cellSpacing: 2);
 		         constraintsDo: [ :c |
-			         self board width > self board height
-				         ifTrue: [
 					         c horizontal matchParent.
-					         c vertical fitContent ]
-				         ifFalse: [
-					         c horizontal fitContent.
-					         c vertical matchParent ] ].
+					         c vertical fitContent ].
 	self board do: [ :aBox |
 		| boxElement tmpBox |
 		tmpBox := aBox.
@@ -179,6 +158,23 @@ SkBoardElement >> manageEvent: anEvent [
 	(self foregroundLayer childNamed:
 		 ((dict at: anEvent key name) * player position) asString)
 		boxForForeground updateBackgroundColor
+]
+
+{ #category : #'as yet unclassified' }
+SkBoardElement >> openWithModel: aSkBoard [
+
+	| space |
+	space := BlSpace new.
+
+	self board: aSkBoard.
+
+	space root addChild: self.
+	space root background: Color red muchLighter.
+	space root layout: BlFrameLayout new.
+	space pulse
+		extent: 1000 @ 1000;
+		resizable: false;
+		show
 ]
 
 { #category : #initialization }
