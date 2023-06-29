@@ -13,7 +13,7 @@ SkWall class >> textualMapCharacter [
 { #category : #accessing }
 SkWall >> backgroundRepresentation [
 
-	^ Color brown
+	^ MyIcons wallIcon 
 ]
 
 { #category : #move }

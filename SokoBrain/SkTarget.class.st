@@ -13,7 +13,7 @@ SkTarget class >> textualMapCharacter [
 { #category : #accessing }
 SkTarget >> backgroundRepresentation [
 
-	^ Color lightBlue
+	^ MyIcons targetIcon 
 ]
 
 { #category : #move }

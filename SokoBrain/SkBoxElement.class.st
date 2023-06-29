@@ -81,8 +81,26 @@ SkBoxElement >> positionInField: aPoint [
 	positionInField := aPoint
 ]
 
+{ #category : #'as yet unclassified' }
+SkBoxElement >> textChild [
+
+	| text |
+	text := BlTextElement new.
+	self childNamed: 'text' ifFound: [ self removeChildNamed: 'text' ].
+	self addChild: text as: 'text'.
+	text text: self positionInField asString asRopedText.
+
+	text text fontSize: 50.
+	text text fontName: 'Source Sans Pro'.
+]
+
 { #category : #accessing }
 SkBoxElement >> updateBackgroundColor [
 
-	self background: self box backgroundRepresentation
+	| bg |
+	bg := self box backgroundRepresentation.
+	"bg class = Form ifTrue: [ bg := bg scaledIntoFormOfSize: self extent ]."
+	"self box class = SkPlayer ifTrue: [ self parent extent inspect ]."
+	self background: bg.
+	"self textChild"
 ]

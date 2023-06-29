@@ -139,7 +139,6 @@ SkBoardElement >> initializeForegroundLayer [
 				         ifFalse: [
 					         c horizontal fitContent.
 					         c vertical matchParent ] ].
-
 	self board do: [ :aBox |
 		| boxElement tmpBox |
 		tmpBox := aBox.

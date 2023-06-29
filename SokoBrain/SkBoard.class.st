@@ -18,7 +18,10 @@ Class {
 	#instVars : [
 		'map',
 		'player',
-		'boxes'
+		'boxes',
+		'ended',
+		'initialMap',
+		'gameManager'
 	],
 	#category : #'SokoBrain-Model'
 }
@@ -8175,6 +8178,30 @@ SkBoard >> do: aBlock [
 	map do: aBlock
 ]
 
+{ #category : #'as yet unclassified' }
+SkBoard >> endGame [
+	
+	ended ifFalse: [ ended := true. player inspect ]
+]
+
+{ #category : #accessing }
+SkBoard >> ended [ 
+
+	^ ended 
+]
+
+{ #category : #accessing }
+SkBoard >> gameManager [ 
+	
+	^ gameManager 
+]
+
+{ #category : #accessing }
+SkBoard >> gameManager: aSkGameManager [
+
+	gameManager:= aSkGameManager 
+]
+
 { #category : #accessing }
 SkBoard >> height [
 	^ map height
@@ -8184,7 +8211,8 @@ SkBoard >> height [
 SkBoard >> initialize [
 
 	super initialize.
-	boxes := OrderedCollection new. 
+	ended := false.
+	boxes := OrderedCollection new
 ]
 
 { #category : #initialization }
@@ -8207,8 +8235,14 @@ SkBoard >> lineNumber [
 ]
 
 { #category : #accessing }
+SkBoard >> map [ 
+	^ map
+]
+
+{ #category : #accessing }
 SkBoard >> map: aCTNewArray2D [
 
+	"self initialMap: aCTNewArray2D copy."
 	map := aCTNewArray2D.
 	map withIndexes: [ :column :row |
 		(map at: column @ row)
@@ -8262,14 +8296,22 @@ SkBoard >> setPlayer: aPlayer [
 ]
 
 { #category : #move }
-SkBoard >> updatePositionOf: aSkMovable from: previousPosition [ 
- 	
+SkBoard >> updatePositionOf: aSkMovable from: previousPosition [
 	"Put back the previous position element."
-	self atRow: previousPosition y atColumn: previousPosition x put: aSkMovable background.
+
+	self
+		atRow: previousPosition y
+		atColumn: previousPosition x
+		put: aSkMovable background.
 	"put the current position element as previous background of the moving element."
-	aSkMovable background: (self atRow: aSkMovable position y atColumn: aSkMovable position x).
+	aSkMovable background:
+		(self atRow: aSkMovable position y atColumn: aSkMovable position x).
 	"finally place the moving element to its new location"
-	self atRow: aSkMovable position y atColumn: aSkMovable position x put: aSkMovable.
+	self
+		atRow: aSkMovable position y
+		atColumn: aSkMovable position x
+		put: aSkMovable.
+			self isFinished ifTrue: [ self endGame ]
 ]
 
 { #category : #accessing }
