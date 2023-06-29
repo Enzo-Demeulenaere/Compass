@@ -158,6 +158,12 @@ SkBoardElement >> initializeForegroundLayer [
 SkBoardElement >> manageEvent: anEvent [
 
 	| dict player position |
+	anEvent key name = #SPACE ifTrue: [
+		self resetBoard.
+		^ self ].
+	board isFinished ifTrue: [
+		self loseFocus.
+		^ self ].
 	player := self board player.
 	position := player position.
 	dict := {
@@ -171,6 +177,13 @@ SkBoardElement >> manageEvent: anEvent [
 	(self foregroundLayer childNamed: player position asString)
 		boxForForeground updateBackgroundColor.
 	(self foregroundLayer childNamed:
-		 ((dict at: anEvent key name) * player position) asString) boxForForeground 
-		updateBackgroundColor
+		 ((dict at: anEvent key name) * player position) asString)
+		boxForForeground updateBackgroundColor
+]
+
+{ #category : #initialization }
+SkBoardElement >> resetBoard [
+
+	self space close.
+	self board reset
 ]

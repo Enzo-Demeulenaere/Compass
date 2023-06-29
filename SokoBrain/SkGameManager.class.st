@@ -1,86 +1,27 @@
-"
-I represent a 2 dimensional space of elements. In fact, internally I maintain a list of elements so that I can simply push and pop elements when the movable elements are moving. An alternate strategy would be to always keep the currently occupied one to restore after. 
-It looks like a space tradeoff and we do not have space problem. 
-
-Todo:
-- revisit position (rename position into basic + position with update)
-- game logic
--- all on target
-
-Extensions
-- Make sure that we cannot push multiple boxes.
-- Count the number of move.
-- Support game replay or revert.
-"
 Class {
-	#name : #SkBoard,
+	#name : #SkGameManager,
 	#superclass : #Object,
 	#instVars : [
-		'map',
-		'player',
-		'boxes',
-		'ended',
-		'initialMap',
-		'gameManager'
+		'currentLevelString'
 	],
 	#category : #'SokoBrain-Model'
 }
 
-{ #category : #initialization }
-SkBoard class >> board: aCTNewArray2D [
-
-	^ self new
-		  map: aCTNewArray2D;
-		  yourself
-]
-
-{ #category : #initialization }
-SkBoard class >> board: aCTNewArray2D managedBy: aSkGameManager [
-
-	^ (self board: aCTNewArray2D) gameManager: aSkGameManager; yourself 
-]
-
 { #category : #'as yet unclassified' }
-SkBoard class >> boardTest [
+SkGameManager class >> importFromString: aString [
 
-	| string tmp |
-	string := self mazesMicroban1 at: 1.
-	tmp := LevelImporter fromString: string fromPackage: self package.
-	tmp width < tmp height ifTrue: [ tmp := tmp rotateLeft ].
-	^ self board: tmp
-]
-
-{ #category : #example }
-SkBoard class >> example [ 
-	<sampleInstance>
-	
-	^ LevelImporter fromString: '    #####
-    #   #
-    #$  #
-  ###  $##
-  #  $ $ #
-### # ## #   ######
-#   # ## #####  ..#
-# $  $          ..#
-##### ### #@##  ..#
-    #     #########
-    #######' fromPackage: self package
-]
-
-{ #category : #'as yet unclassified' }
-SkBoard class >> importFromString: aString [
-	|tmp|
-	tmp := LevelImporter fromString: aString fromPackage: self package.
+	| tmp |
+	tmp := LevelImporter fromString: aString fromPackage: SkBoard package.
 	tmp width < tmp height ifTrue: [ tmp := tmp rotateLeft ].
 	^ tmp
 ]
 
 { #category : #mazes }
-SkBoard class >> mazesLoma [
+SkGameManager class >> mazesLoma [
 	"hsasquatch/sokoban/loma.html"
 
 	^ IdentityDictionary new
-		at: 1 put: '  ##### 
+		  at: 1 put: '  ##### 
  ##   ## 
 ### #  # 
 ###$.# # 
@@ -90,7 +31,7 @@ SkBoard class >> mazesLoma [
 #  # ### 
 ##   ## 
  ##### ';
-		at: 2 put: '##### 
+		  at: 2 put: '##### 
 #   #### 
 # #$.  # 
 #  .$#@# 
@@ -98,7 +39,7 @@ SkBoard class >> mazesLoma [
   #  ### 
   #  # 
   #### ';
-		at: 3 put: '  #### 
+		  at: 3 put: '  #### 
  ##  # 
  # . # 
  # * # 
@@ -107,7 +48,7 @@ SkBoard class >> mazesLoma [
 #  @ # 
 #  ### 
 #### ';
-		at: 4 put: '###### # 
+		  at: 4 put: '###### # 
 #   ## # 
 #  . # 
 #  $ ### 
@@ -116,7 +57,7 @@ SkBoard class >> mazesLoma [
   #.#  # 
 # #   ## 
 # ###### ';
-		at: 5 put: ' #### 
+		  at: 5 put: ' #### 
  #  # 
  #  # 
  #  #### 
@@ -126,7 +67,7 @@ SkBoard class >> mazesLoma [
 # @# # 
 ##   # 
 ###### ';
-		at: 6 put: '  ##### 
+		  at: 6 put: '  ##### 
   ##  # 
 ###   # 
 #  $  # 
@@ -134,7 +75,7 @@ SkBoard class >> mazesLoma [
 ## $ # 
 ###@ # 
   #### ';
-		at: 7 put: '##### 
+		  at: 7 put: '##### 
 #   ## 
 #  $ ## 
 ##$*. ## 
@@ -142,7 +83,7 @@ SkBoard class >> mazesLoma [
  #  #  # 
 #####  # 
 ##  #### ';
-		at: 8 put: '  ##### 
+		  at: 8 put: '  ##### 
  ##   # 
 ###   # 
 #  * ## 
@@ -150,7 +91,7 @@ SkBoard class >> mazesLoma [
 #  * ## 
 ##  ## 
 ##### ';
-		at: 9 put: '  #### 
+		  at: 9 put: '  #### 
   #  # 
 ###  ### 
 ## $*  # 
@@ -158,17 +99,17 @@ SkBoard class >> mazesLoma [
 #   #### 
 #  ## 
 ##### ';
-		at: 10 put: '#### ### 
+		  at: 10 put: '#### ### 
 #@ ### # 
 # $$ ### 
 # $ .  # 
 ## ..  # 
  ####### ';
-		yourself
+		  yourself
 ]
 
 { #category : #mazes }
-SkBoard class >> mazesMicroban1 [
+SkGameManager class >> mazesMicroban [
 	"sasquatch/sokoban/microban.html"
 
 	^ IdentityDictionary new
@@ -797,15 +738,7 @@ SkBoard class >> mazesMicroban1 [
   # $$ #
   #    #
   ######';
-		  yourself
-]
-
-{ #category : #mazes }
-SkBoard class >> mazesMicroban2 [
-	"sasquatch/sokoban/microban.html"
-
-	^ IdentityDictionary new
-		at: 81 put: ' #####
+		  at: 81 put: ' #####
  #   #
  # . #
 ## * #
@@ -814,7 +747,7 @@ SkBoard class >> mazesMicroban2 [
 ## $ #
  #   #
  #####';
-		at: 82 put: '#####
+		  at: 82 put: '#####
 #   ###
 # .   ##
 ##*#$  #
@@ -822,7 +755,7 @@ SkBoard class >> mazesMicroban2 [
 # @## ##
 #     #
 #######';
-		at: 83 put: '######
+		  at: 83 put: '######
 #    ##
 # $ $ ##
 ## $$  #
@@ -832,7 +765,7 @@ SkBoard class >> mazesMicroban2 [
  # @. .#
  #  ####
  ####';
-		at: 84 put: '########
+		  at: 84 put: '########
 #  ... #
 #  ### ##
 #  # $  #
@@ -842,7 +775,7 @@ SkBoard class >> mazesMicroban2 [
  #         #
  #   ###   #
  ##### #####';
-		at: 85 put: '       ####
+		  at: 85 put: '       ####
  #######  #
  # $      #
  #   $ $  #
@@ -853,7 +786,7 @@ SkBoard class >> mazesMicroban2 [
 ## # # #
  #   . #
  #######';
-		at: 86 put: '    ####
+		  at: 86 put: '    ####
   ###  ##
  ## $   #
 ## $  # #
@@ -861,7 +794,7 @@ SkBoard class >> mazesMicroban2 [
 # ..  ###
 # ..###
 #####';
-		at: 87 put: '     ####
+		  at: 87 put: '     ####
 ######  #
 #       #
 #  ... .#
@@ -871,7 +804,7 @@ SkBoard class >> mazesMicroban2 [
 ##  $  #
  ## @  #
   ######';
-		at: 88 put: '     ####
+		  at: 88 put: '     ####
  # ###  #
  # #    #
  # #  # #
@@ -883,7 +816,7 @@ SkBoard class >> mazesMicroban2 [
 # @     # #
 #   #  ## #
 ########';
-		at: 89 put: '##########
+		  at: 89 put: '##########
 #   ##   #
 # $  $@# #
 #### # $ #
@@ -892,19 +825,19 @@ SkBoard class >> mazesMicroban2 [
  # #.   #
  # #.   #
    ######';
-		at: 90 put: ' ########
+		  at: 90 put: ' ########
  #  @   #
  # $  $ #
 ### ## ###
 #  $..$  #
 #   ..   #
 ##########';
-		at: 91 put: '###########
+		  at: 91 put: '###########
 #    .##  #
 # $$@..$$ #
 #   ##.   #
 ###########';
-		at: 92 put: '  ####
+		  at: 92 put: '  ####
   #  #    #####
   #  #    #   #
   #  ######.# #
@@ -914,7 +847,7 @@ SkBoard class >> mazesMicroban2 [
 ######### #@ ##
           #  #
           ####';
-		at: 93 put: ' #########
+		  at: 93 put: ' #########
 ##   #   ##
 #    #    #
 #  $ # $  #
@@ -925,7 +858,7 @@ SkBoard class >> mazesMicroban2 [
 #    #    #
 ##   #   ##
  #########';
-		at: 94 put: '#########
+		  at: 94 put: '#########
 # @ #   #
 # $ $   #
 ##$### ##
@@ -933,7 +866,7 @@ SkBoard class >> mazesMicroban2 [
 #   #   #
 ######  #
      ####';
-		at: 95 put: '########
+		  at: 95 put: '########
 #@     #
 # .$$. #
 # $..$ #
@@ -941,7 +874,7 @@ SkBoard class >> mazesMicroban2 [
 # .$$. #
 #      #
 ########';
-		at: 96 put: '  ######
+		  at: 96 put: '  ######
   #    #
   #    #
 #####  #
@@ -952,7 +885,7 @@ SkBoard class >> mazesMicroban2 [
    #   $.#
    #   ###
    #####';
-		at: 97 put: '   ####
+		  at: 97 put: '   ####
    #  ########
 #### $ $.....#
 #   $   ######
@@ -962,7 +895,7 @@ SkBoard class >> mazesMicroban2 [
 ## #  #
  #    #
  ######';
-		at: 98 put: '#####
+		  at: 98 put: '#####
 #   ## ####
 #  $ ### .#
 # $   $  .#
@@ -972,7 +905,7 @@ SkBoard class >> mazesMicroban2 [
 ###  # #       #
   #### ##     ##
         #######';
-		at: 99 put: '               #####
+		  at: 99 put: '               #####
                #   #
 #######  ####### # #
 #     #  #  #      #
@@ -982,7 +915,7 @@ SkBoard class >> mazesMicroban2 [
 ######   #           #
          #  ##########
          ####';
-		at: 100 put: '#######
+		  at: 100 put: '#######
 # @#  #
 #.$   #
 #. # $##
@@ -990,7 +923,7 @@ SkBoard class >> mazesMicroban2 [
 #. # $ #
 #  #   #
 ########';
-		at: 101 put: '  #####
+		  at: 101 put: '  #####
   #   #
   # # #######
   #  *  #   #
@@ -1003,7 +936,7 @@ SkBoard class >> mazesMicroban2 [
 ####### # #
       #   #
       #####';
-		at: 102 put: '###########
+		  at: 102 put: '###########
 #....#    #
 #  #   $$ #
 #  @  ##  #
@@ -1011,7 +944,7 @@ SkBoard class >> mazesMicroban2 [
 ######  $ #
      #    #
      ######';
-		at: 103 put: '  #####
+		  at: 103 put: '  #####
   # . ##
 ### $  #
 # . $#@#
@@ -1019,7 +952,7 @@ SkBoard class >> mazesMicroban2 [
 #  $ ###
 ## . #
  #####';
-		at: 104 put: '    #####
+		  at: 104 put: '    #####
 #####   #
 #    $  #
 #  $#$#@#
@@ -1028,7 +961,7 @@ SkBoard class >> mazesMicroban2 [
   ###  ##
     #  #
     ####';
-		at: 105 put: ' #### ####
+		  at: 105 put: ' #### ####
 ##  ###  ##
 #   # #   #
 #  *. .*  #
@@ -1039,7 +972,7 @@ SkBoard class >> mazesMicroban2 [
 #   # #   #
 ##  ###  ##
  #### ####';
-		at: 106 put: ' ########
+		  at: 106 put: ' ########
  #      #
  #@   $ #
 ## ###$ #
@@ -1048,7 +981,7 @@ SkBoard class >> mazesMicroban2 [
 ###### # #
      #   #
      #####';
-		at: 107 put: '########
+		  at: 107 put: '########
 #      #
 # $*** #
 # *  * #
@@ -1056,7 +989,7 @@ SkBoard class >> mazesMicroban2 [
 # ***. #
 #     @#
 ########';
-		at: 108 put: '####     #####
+		  at: 108 put: '####     #####
 #  ###   #   ##
 #    #   #$ $ #
 #..# ##### #  #
@@ -1064,7 +997,7 @@ SkBoard class >> mazesMicroban2 [
 #..#         ##
 ##   #########
  #####';
-		at: 109 put: '  #######
+		  at: 109 put: '  #######
 # #     #
 # # # # #
   # @ $ #
@@ -1077,7 +1010,7 @@ SkBoard class >> mazesMicroban2 [
 ## ## #.#
 ### #   #
 ### #####';
-		at: 110 put: '  ####
+		  at: 110 put: '  ####
   #  #
   # $####
 ###. .  #
@@ -1086,7 +1019,7 @@ SkBoard class >> mazesMicroban2 [
 ####$ #
    # @#
    ####';
-		at: 111 put: '######
+		  at: 111 put: '######
 #    ####
 #    ...#
 #    ...#
@@ -1098,7 +1031,7 @@ SkBoard class >> mazesMicroban2 [
   ## $# #
    #    #
    ######';
-		at: 112 put: ' #####
+		  at: 112 put: ' #####
 ##   ####
 #  $$$  #
 # #   $ #
@@ -1111,7 +1044,7 @@ SkBoard class >> mazesMicroban2 [
  #      #
  #   #  #
  ########';
-		at: 113 put: '   #####
+		  at: 113 put: '   #####
   ##   #
 ###  # #
 #    . #
@@ -1124,7 +1057,7 @@ SkBoard class >> mazesMicroban2 [
         #  ##
         #  #
         ####';
-		at: 114 put: '######
+		  at: 114 put: '######
 #    ###
 #  # $ #
 #  $ @ #
@@ -1133,7 +1066,7 @@ SkBoard class >> mazesMicroban2 [
 # $ $ $ $ #
 ##   ######
  #####';
-		at: 115 put: '    #####
+		  at: 115 put: '    #####
 #####   ####
 #     #    #
 #  #.....  #
@@ -1141,14 +1074,14 @@ SkBoard class >> mazesMicroban2 [
  #$$@$$$ #
  #     ###
  #######';
-		at: 116 put: '     #####
+		  at: 116 put: '     #####
    ###   #
 ####.....#
 # @$$$$$ #
 #     # ##
 #####   #
     #####';
-		at: 117 put: ' #### ####
+		  at: 117 put: ' #### ####
  #  ###  ##
  #      @ #
 ##..###   #
@@ -1158,7 +1091,7 @@ SkBoard class >> mazesMicroban2 [
 #  $    ###
 ####  ###
    ####';
-		at: 118 put: ' #####
+		  at: 118 put: ' #####
 ##   ##
 #  $  ##
 # $ $  ##
@@ -1168,7 +1101,7 @@ SkBoard class >> mazesMicroban2 [
  # @  . ##
  #   #  #
  ########';
-		at: 119 put: '  ######
+		  at: 119 put: '  ######
   #    ##
  ## ##  #
  # $$ # #
@@ -1178,7 +1111,7 @@ SkBoard class >> mazesMicroban2 [
 #  ... ##
 #     ##
 #######';
-		at: 120 put: '      ####
+		  at: 120 put: '      ####
 #######  #
 # $      ##
 # $#####  #
@@ -1189,7 +1122,7 @@ SkBoard class >> mazesMicroban2 [
 # $###
 #  #
 ####';
-		at: 121 put: ' ######
+		  at: 121 put: ' ######
  # .  #
 ##$.# #
 #  *  #
@@ -1200,7 +1133,7 @@ SkBoard class >> mazesMicroban2 [
 #   @ $ $ #
 ##  #     #
  ##########';
-		at: 122 put: '#####
+		  at: 122 put: '#####
 #   ###
 # #$  #
 # $   #
@@ -1212,7 +1145,7 @@ SkBoard class >> mazesMicroban2 [
 #         #
 ########..#
        ####';
-		at: 123 put: '########
+		  at: 123 put: '########
 #      #
 # $ $$ ########
 ##### @##. .  #
@@ -1223,7 +1156,7 @@ SkBoard class >> mazesMicroban2 [
     #  ###  ##
     #  # ####
     ####';
-		at: 124 put: '##############
+		  at: 124 put: '##############
 #      #     #
 # $@$$ # . ..#
 ## ## ### ## #
@@ -1232,7 +1165,7 @@ SkBoard class >> mazesMicroban2 [
  # ######### #
  #           #
  #############';
-		at: 125 put: '      #####
+		  at: 125 put: '      #####
       #   ##
       # $  #
 ######## #@##
@@ -1240,14 +1173,14 @@ SkBoard class >> mazesMicroban2 [
 #        $# #
 #...#####   #
 #####   #####';
-		at: 126 put: ' ###########
+		  at: 126 put: ' ###########
 ##.......  #
 # $$$$$$$@ #
 #   # # # ##
 # # #     #
 #   #######
 #####';
-		at: 127 put: '## ####
+		  at: 127 put: '## ####
 ####  ####
  # $ $.  #
 ## #  .$ #
@@ -1256,7 +1189,7 @@ SkBoard class >> mazesMicroban2 [
 # @ #   #
 #  ######
 ####';
-		at: 128 put: '  #########
+		  at: 128 put: '  #########
 ###   #   #
 # * $ . . #
 #   $ ## ##
@@ -1264,7 +1197,7 @@ SkBoard class >> mazesMicroban2 [
  #  @  ###
  #   ###
  #####';
-		at: 129 put: '  #########
+		  at: 129 put: '  #########
 ### @ #   #
 # * $ *.. #
 #   $ #   #
@@ -1272,14 +1205,14 @@ SkBoard class >> mazesMicroban2 [
  #     ##
  #   ###
  #####';
-		at: 130 put: '#####  #####
+		  at: 130 put: '#####  #####
 #   ####.. #
 # $$$      #
 #   $#  .. #
 ### @#  ## #
   #  ##    #
   ##########';
-		at: 131 put: '#####
+		  at: 131 put: '#####
 #   #
 # . #
 #.@.###
@@ -1290,7 +1223,7 @@ SkBoard class >> mazesMicroban2 [
  #  ###
  #  #
  ####';
-		at: 132 put: '####
+		  at: 132 put: '####
 # @###
 #.*  #####
 #..#$$ $ #
@@ -1298,7 +1231,7 @@ SkBoard class >> mazesMicroban2 [
  # # ##  #
  #   #####
  #####';
-		at: 133 put: ' #######
+		  at: 133 put: ' #######
  #  . .###
  # . . . #
 ### #### #
@@ -1306,7 +1239,7 @@ SkBoard class >> mazesMicroban2 [
 #  $$  $ #
 ####   ###
    #####';
-		at: 134 put: '        ####
+		  at: 134 put: '        ####
 #########  #
 #   ## $   #
 #  $   ##  #
@@ -1316,14 +1249,14 @@ SkBoard class >> mazesMicroban2 [
   # @ $    #
   #  #######
   ####';
-		at: 135 put: '#######
+		  at: 135 put: '#######
 #     #####
 # $$#@##..#
 # #       #
 #  $ # #  #
 #### $  ..#
    ########';
-		at: 136 put: ' #######
+		  at: 136 put: ' #######
  #     #
 ## ###$##
 #.$   @ #
@@ -1331,7 +1264,7 @@ SkBoard class >> mazesMicroban2 [
 #.##  $ #
 #    ####
 ######';
-		at: 137 put: '       ####
+		  at: 137 put: '       ####
       ##  ###
 ####  #  $  #
 #  #### $ $ #
@@ -1341,7 +1274,7 @@ SkBoard class >> mazesMicroban2 [
  # ## # #
  #      #
  ########';
-		at: 138 put: '  ####
+		  at: 138 put: '  ####
 ###  #
 #    ###
 # # . .#
@@ -1352,7 +1285,7 @@ SkBoard class >> mazesMicroban2 [
     ##$ # ##
      #    #
      ######';
-		at: 139 put: ' ####
+		  at: 139 put: ' ####
 ##  ####
 #   ...#
 #   ...#
@@ -1364,7 +1297,7 @@ SkBoard class >> mazesMicroban2 [
    # $  ##   ###
    #    ######
    ######';
-		at: 140 put: '######## #####
+		  at: 140 put: '######## #####
 #  #   ###   #
 #      ## $  #
 #.# @ ## $  ##
@@ -1373,7 +1306,7 @@ SkBoard class >> mazesMicroban2 [
 #. ## #####
 ##    #
  ######';
-		at: 141 put: '  ########
+		  at: 141 put: '  ########
   #  # . #
   #   .*.#
   #  # * #
@@ -1382,7 +1315,7 @@ SkBoard class >> mazesMicroban2 [
 # $ ## $ #
 #   @#   #
 ##########';
-		at: 142 put: '  ####
+		  at: 142 put: '  ####
   #  #
   #  ####
 ###$.$  #
@@ -1391,7 +1324,7 @@ SkBoard class >> mazesMicroban2 [
 ####  #
    #  #
    ####';
-		at: 143 put: '####
+		  at: 143 put: '####
 #  ####
 # $   #
 # .#  #
@@ -1406,7 +1339,7 @@ SkBoard class >> mazesMicroban2 [
 # ..#.. #
 ###   ###
   #####';
-		at: 144 put: '   ####
+		  at: 144 put: '   ####
  ###  #####
  # $$ #   #
  # $ . .$$##
@@ -1418,7 +1351,7 @@ SkBoard class >> mazesMicroban2 [
  #   # $$ #
  #####  ###
      ####';
-		at: 145 put: '   #####
+		  at: 145 put: '   #####
    # @ #
   ##   ##
 ###.$$$.###
@@ -1429,7 +1362,7 @@ SkBoard class >> mazesMicroban2 [
   ##   ##
    #   #
    #####';
-		at: 146 put: ' #######
+		  at: 146 put: ' #######
 ##  .  ##
 # .$$$. #
 # $. .$ #
@@ -1438,7 +1371,7 @@ SkBoard class >> mazesMicroban2 [
 # .$$$. #
 ##  .  ##
  #######';
-		at: 147 put: '       #####
+		  at: 147 put: '       #####
 ########   #
 #.   .  @#.#
 #  ###     #
@@ -1448,14 +1381,14 @@ SkBoard class >> mazesMicroban2 [
  ## #  #
   #   ##
   #####';
-		at: 148 put: '###########
+		  at: 148 put: '###########
 #  .  #   #
 # #.  @   #
 #  #..# #######
 ##  ## $$ $ $ #
  ##           #
   #############';
-		at: 149 put: ' ####
+		  at: 149 put: ' ####
 ##  ###
 #@$   #
 ### $ #
@@ -1467,7 +1400,7 @@ SkBoard class >> mazesMicroban2 [
  #    #
  #  ###
  ####';
-		at: 150 put: '     ####
+		  at: 150 put: '     ####
  #####  #
  #     $#######
 ## ## ..#  ...#
@@ -1475,7 +1408,7 @@ SkBoard class >> mazesMicroban2 [
 #        ###  #
 #######  # ####
       ####';
-		at: 151 put: '   ####
+		  at: 151 put: '   ####
    #  #
  ###  #
 ##  $ #
@@ -1485,7 +1418,7 @@ SkBoard class >> mazesMicroban2 [
 #  $  @   .#
 ###  ####..#
   ####  ####';
-		at: 152 put: '###### ####
+		  at: 152 put: '###### ####
 #     #    #
 #.##  #$##  #
 #   #     #  #
@@ -1494,7 +1427,7 @@ SkBoard class >> mazesMicroban2 [
 # # ####  # # #
 #. @    $ * . #
 ###############';
-		at: 153 put: '#############
+		  at: 153 put: '#############
 #.# @#  #   #
 #.#$$   # $ #
 #.#  # $#   #
@@ -1504,7 +1437,7 @@ SkBoard class >> mazesMicroban2 [
 #..  # $   #
 #..  #  #  #
 ############';
-		at: 154 put: ' ############################
+		  at: 154 put: ' ############################
  #                          #
  # ######################## #
  # #                      # #
@@ -1521,7 +1454,7 @@ SkBoard class >> mazesMicroban2 [
 ##$# # #################### #
 #. @ #                      #
 #############################';
-		at: 155 put: '    ######               ####
+		  at: 155 put: '    ######               ####
 #####*#  #################  ##
 #   ###                      #
 #        ########  ####  ##  #
@@ -1538,15 +1471,15 @@ SkBoard class >> mazesMicroban2 [
 # #             # $        #*#
 #   #########  ### @#####  #*#
 #####       #### ####   ###### ';
-		yourself
+		  yourself
 ]
 
-{ #category : #mazes }
-SkBoard class >> mazesPack1 [
+{ #category : #'as yet unclassified' }
+SkGameManager class >> mazesPack [
 	"sasquatch/sokoban/masmicroban.html"
 
 	^ IdentityDictionary new
-		at: 1 put: '####
+		  at: 1 put: '####
 #  #
 #  #
 #  ###
@@ -1554,7 +1487,7 @@ SkBoard class >> mazesPack1 [
 #  . #
 #  ###
 ####';
-		at: 2 put: ' #####
+		  at: 2 put: ' #####
  #   #
 ##.# #
 #  @ #
@@ -1562,7 +1495,7 @@ SkBoard class >> mazesPack1 [
 # #*##
 #   #
 #####';
-		at: 3 put: '   ####
+		  at: 3 put: '   ####
 ####  #
 #  #  #
 # . . #
@@ -1570,7 +1503,7 @@ SkBoard class >> mazesPack1 [
 # # ###
 #   #
 #####';
-		at: 4 put: ' #####
+		  at: 4 put: ' #####
 ## @ ####
 #  #  . ##
 # #      #
@@ -1578,14 +1511,14 @@ SkBoard class >> mazesPack1 [
 ##    ####
  ##   #
   #####';
-		at: 5 put: '######
+		  at: 5 put: '######
 #    #
 # $$ ###
 ### @  #
   #  . #
   ## .##
    ####';
-		at: 6 put: '   ####
+		  at: 6 put: '   ####
 ####  #
 #@.*  #
 #  #  ###
@@ -1593,40 +1526,40 @@ SkBoard class >> mazesPack1 [
    #  # #
    ##   #
     #####';
-		at: 7 put: '  #####
+		  at: 7 put: '  #####
 ###   #
 #  $# #
 #  .$ #
 ## ##.#
  #   @#
  ######';
-		at: 8 put: '########
+		  at: 8 put: '########
 #   @  #
 #   *  #
 ###.$###
   # * #
   #   #
   #####';
-		at: 9 put: '######
+		  at: 9 put: '######
 #    #
 # #$@#
 # .*.#
 # #$ #
 #    #
 ######';
-		at: 10 put: '#####
+		  at: 10 put: '#####
 #   #
 #   ###
 #$$$@ #
 #...  #
 #######';
-		at: 11 put: '######
+		  at: 11 put: '######
 #.#  #
 #@$$ #
 #..$ #
 ##   #
  #####';
-		at: 12 put: ' #######
+		  at: 12 put: ' #######
  #  #  #
  #  #$ #
 ##  .*+#
@@ -1635,7 +1568,7 @@ SkBoard class >> mazesPack1 [
 ##  ####
  #  #
  ####';
-		at: 13 put: '#####
+		  at: 13 put: '#####
 #   ###
 #     #
 #     #
@@ -1643,21 +1576,21 @@ SkBoard class >> mazesPack1 [
 # $*$ #
 #  +  #
 #######';
-		at: 14 put: ' ####
+		  at: 14 put: ' ####
 ##  ###
 # .$  #
 #@.$  #
 # .$ ##
 ##  ##
  ####';
-		at: 15 put: '####
+		  at: 15 put: '####
 #  ####
 #  #  #
 #.$**@#
 ##    #
  #   ##
  #####';
-		at: 16 put: '    ####
+		  at: 16 put: '    ####
   ###  #
   # $$ #
  ## #  #
@@ -1665,7 +1598,7 @@ SkBoard class >> mazesPack1 [
 #      #
 # ..####
 #####';
-		at: 17 put: ' #####
+		  at: 17 put: ' #####
  #   #
  #$#@#
 ## $ #
@@ -1673,7 +1606,7 @@ SkBoard class >> mazesPack1 [
 #.*. #
 #    #
 ######';
-		at: 18 put: ' #####
+		  at: 18 put: ' #####
  #   ##
  #$#@ #
  # $  #
@@ -1681,7 +1614,7 @@ SkBoard class >> mazesPack1 [
 # $.  #
 #. .  #
 #######';
-		at: 19 put: '#######
+		  at: 19 put: '#######
 #     #
 # $$$.#
 ## #@.#
@@ -1689,7 +1622,7 @@ SkBoard class >> mazesPack1 [
  #  # #
  ##   #
   #####';
-		at: 20 put: ' ####
+		  at: 20 put: ' ####
  #  ###
  #$   #
  # .# #
@@ -1697,7 +1630,7 @@ SkBoard class >> mazesPack1 [
 # $ ###
 # @ #
 #####';
-		at: 21 put: '    ####
+		  at: 21 put: '    ####
  ####  #
  #. .  ##
  #  # @ #
@@ -1708,7 +1641,7 @@ SkBoard class >> mazesPack1 [
  # # ##
  #   #
  #####';
-		at: 22 put: ' #########
+		  at: 22 put: ' #########
  #    #  #
  # $ $   #
  ## ###  #
@@ -1717,7 +1650,7 @@ SkBoard class >> mazesPack1 [
 # # . .   #
 #   #######
 #####';
-		at: 23 put: ' ##### #####
+		  at: 23 put: ' ##### #####
  #   ###   #
  #@$  ##.. #
 ###$#      #
@@ -1725,7 +1658,7 @@ SkBoard class >> mazesPack1 [
 #       ####
 #   #   #
 #########';
-		at: 24 put: '     #####
+		  at: 24 put: '     #####
 ######   #
 #   ## # #
 # $@$    #
@@ -1737,7 +1670,7 @@ SkBoard class >> mazesPack1 [
     #  ##  #
     ##    ##
      ######';
-		at: 25 put: ' #####
+		  at: 25 put: ' #####
 ##   ##
 # .$. #
 # $#$ #
@@ -1745,7 +1678,7 @@ SkBoard class >> mazesPack1 [
 #    ##
 ## @##
  ####';
-		at: 26 put: '########
+		  at: 26 put: '########
 #      #
 # ###$ #
 # #  $ #
@@ -1753,7 +1686,7 @@ SkBoard class >> mazesPack1 [
 # #.#  #
 #  .#  #
 ########';
-		at: 27 put: '#######
+		  at: 27 put: '#######
 #  +  #
 # *$* #
 #. # .#
@@ -1763,7 +1696,7 @@ SkBoard class >> mazesPack1 [
 # $#$ #
 #  #  #
 #######';
-		at: 28 put: '  #######
+		  at: 28 put: '  #######
   #     #
 ### ### #
 # ..*   #
@@ -1771,7 +1704,7 @@ SkBoard class >> mazesPack1 [
 ####  ##
    #  #
    ####';
-		at: 29 put: '######
+		  at: 29 put: '######
 #    #
 # ##$###
 # # $  #
@@ -1779,7 +1712,7 @@ SkBoard class >> mazesPack1 [
 ##     #
  #  ####
  ####';
-		at: 30 put: '         #####
+		  at: 30 put: '         #####
          #   #
 ########## # #
 #.     #  $  #
@@ -1788,7 +1721,7 @@ SkBoard class >> mazesPack1 [
 #         $$ #
 ##  #####    #
  ####   ######';
-		at: 31 put: '  ########
+		  at: 31 put: '  ########
   #  #   #
   #  $   #
   #  ##$##
@@ -1797,7 +1730,7 @@ SkBoard class >> mazesPack1 [
 #        #
 ######  ##
      ####';
-		at: 32 put: '########
+		  at: 32 put: '########
 #      #
 #    # #
 ###..$.#
@@ -1807,14 +1740,14 @@ SkBoard class >> mazesPack1 [
    # # #
    #   #
    #####';
-		at: 33 put: '### #######
+		  at: 33 put: '### #######
 ## ####   #
 # ## ...# #
  ###$   # #
 ##  $$### #
 ## @      #
 ###########';
-		at: 34 put: '#####
+		  at: 34 put: '#####
 #   ####
 #  .#  #
 ## ..  ##
@@ -1825,7 +1758,7 @@ SkBoard class >> mazesPack1 [
  # $ #
  #   #
  #####';
-		at: 35 put: ' ##########
+		  at: 35 put: ' ##########
  #  ##    ##
  #     ##  #
  # # $#  # #
@@ -1836,7 +1769,7 @@ SkBoard class >> mazesPack1 [
 #  .####
 #  .#
 #####';
-		at: 36 put: '    ######
+		  at: 36 put: '    ######
     #    ##
  #### ##  #
 ##      # #
@@ -1844,7 +1777,7 @@ SkBoard class >> mazesPack1 [
 #   # ##  #
 #####    ##
     ######';
-		at: 37 put: ' #####
+		  at: 37 put: ' #####
  #   #
 ## # ##
 # $   ##
@@ -1854,7 +1787,7 @@ SkBoard class >> mazesPack1 [
  #### @#
     #  #
     ####';
-		at: 38 put: '  ######
+		  at: 38 put: '  ######
   #    #
 ### ## #
 # ...  #
@@ -1863,7 +1796,7 @@ SkBoard class >> mazesPack1 [
 #  $ #
 #  @ #
 ######';
-		at: 39 put: ' ######
+		  at: 39 put: ' ######
 ##    #
 #  ## #
 #@# $ #
@@ -1872,7 +1805,7 @@ SkBoard class >> mazesPack1 [
  #     #
  ###   #
    #####';
-		at: 40 put: ' #####
+		  at: 40 put: ' #####
  #   #
 ## . #
 #  * #
@@ -1881,14 +1814,14 @@ SkBoard class >> mazesPack1 [
 ## * #
  # @ #
  #####';
-		at: 41 put: '#####
+		  at: 41 put: '#####
 #   ####
 # # .  #
 # #$.  #
 # @$*# #
 ####   #
    #####';
-		at: 42 put: ' #######
+		  at: 42 put: ' #######
  #     ###
 ## ###$  #
 #  .. $  #
@@ -1896,7 +1829,7 @@ SkBoard class >> mazesPack1 [
 ### # @##
   #   ##
   #####';
-		at: 43 put: '     ####
+		  at: 43 put: '     ####
      # @##
 ###### $ ##
 #  . # $  #
@@ -1904,7 +1837,7 @@ SkBoard class >> mazesPack1 [
 ## ..#    #
  ##  ######
   ####';
-		at: 44 put: '    ####
+		  at: 44 put: '    ####
  ####  ###
  #     $ #
  #  $$ # #
@@ -1914,14 +1847,14 @@ SkBoard class >> mazesPack1 [
 # ### #   #
 #     #####
 #######';
-		at: 45 put: '   ###  #####
+		  at: 45 put: '   ###  #####
 #### ####   #
 #  ###      #
 # ..  $$$$  #
 # ..  # @#  #
 #############
       #  #';
-		at: 46 put: '########
+		  at: 46 put: '########
 #  #   #
 #      #
 #  ## ###
@@ -1931,7 +1864,7 @@ SkBoard class >> mazesPack1 [
 # . . . ####
 #   #####
 #####';
-		at: 47 put: '######
+		  at: 47 put: '######
 #    ###
 # $ @  #
 #  ### #
@@ -1942,14 +1875,14 @@ SkBoard class >> mazesPack1 [
 #       #
 #  ######
 ####';
-		at: 48 put: '     #####
+		  at: 48 put: '     #####
  #####   #
 ##  +  # #
 # $$.$$  #
 #  #.# ###
 ##  .  #
  #######';
-		at: 49 put: ' #####
+		  at: 49 put: ' #####
 ##   #
 #    #
 # .$.##
@@ -1958,21 +1891,21 @@ SkBoard class >> mazesPack1 [
  #    #
  # @ ##
  #####';
-		at: 50 put: ' ########
+		  at: 50 put: ' ########
  #  #   #
 ##  #$  #
 # .*@*. #
 #  $#  ##
 #   #  #
 ########';
-		at: 51 put: '########
+		  at: 51 put: '########
 #  $.  #
 #  $.  #
 ###  ###
 #  $.  #
 #@ $.  #
 ########';
-		at: 52 put: '   ####
+		  at: 52 put: '   ####
    #  #
    #$ #
    #  #
@@ -1981,14 +1914,14 @@ SkBoard class >> mazesPack1 [
 #  ..* #
 #   #  #
 ########';
-		at: 53 put: ' ######
+		  at: 53 put: ' ######
  #    #
  #. ..##
 ###$ @ #
 # $  $ #
 #   ####
 #####';
-		at: 54 put: '     #####
+		  at: 54 put: '     #####
     ##   #
     #  # #
     #  @ #
@@ -2000,7 +1933,7 @@ SkBoard class >> mazesPack1 [
 # #    #
 #   ####
 #####';
-		at: 55 put: '   ####
+		  at: 55 put: '   ####
  ###  ##
  # $ $ #
  #   # #
@@ -2013,7 +1946,7 @@ SkBoard class >> mazesPack1 [
 #       #
 #   @   #
 #########';
-		at: 56 put: '   #####
+		  at: 56 put: '   #####
   ##   #
 ### .# #
 #  $*$@#
@@ -2021,7 +1954,7 @@ SkBoard class >> mazesPack1 [
 ### #  #
   #   ##
   #####';
-		at: 57 put: '   #####
+		  at: 57 put: '   #####
  ###   #
 ##     #
 # **$ ##
@@ -2029,7 +1962,7 @@ SkBoard class >> mazesPack1 [
 ### #@#
   #   #
   #####';
-		at: 58 put: '    ####
+		  at: 58 put: '    ####
  ####  ##
  #    $ #
  # #  # #
@@ -2038,7 +1971,7 @@ SkBoard class >> mazesPack1 [
 # .. ##
 ###  #
   ####';
-		at: 59 put: ' ######
+		  at: 59 put: ' ######
  #    ###
  # $  $ #
  ##$# # #
@@ -2046,20 +1979,20 @@ SkBoard class >> mazesPack1 [
 # . . .  #
 #   ##   #
 ##########';
-		at: 60 put: ' #######    #####
+		  at: 60 put: ' #######    #####
  #     ######   #
 ##      @ ...   #
 #  ########## ###
 # $  $   $     #
 #  #   #   #   #
 ################';
-		at: 61 put: '#####
+		  at: 61 put: '#####
 #   #
 #   ######
 #$$$$ $ @#
 #.....   #
 ##########';
-		at: 62 put: '   ####
+		  at: 62 put: '   ####
    #  ###
    # .  #
    #$.@ #
@@ -2067,7 +2000,7 @@ SkBoard class >> mazesPack1 [
 #  $$.###
 #     #
 #######';
-		at: 63 put: '#####
+		  at: 63 put: '#####
 #   #####
 #   $ $ ###
 ## $    $ ##
@@ -2076,14 +2009,14 @@ SkBoard class >> mazesPack1 [
      #     #
      ###  ##
        ####';
-		at: 64 put: '#########
+		  at: 64 put: '#########
 #  ##   ##
 # $ $$*@ #
 #  # . # #
 ## #. .  #
  #   #####
  #####';
-		at: 65 put: '######
+		  at: 65 put: '######
 #    #
 # ## ##
 # # * ##
@@ -2093,7 +2026,7 @@ SkBoard class >> mazesPack1 [
 # ## #.##
 #    ###
 ######';
-		at: 66 put: '     #####
+		  at: 66 put: '     #####
      #   #
      # # #
      #   #
@@ -2107,7 +2040,7 @@ SkBoard class >> mazesPack1 [
     # # #
     # @ #
     #####';
-		at: 67 put: '   ####
+		  at: 67 put: '   ####
   ##  ##
  ## *  ##
 ## $ .$ ##
@@ -2117,7 +2050,7 @@ SkBoard class >> mazesPack1 [
  ##  * ##
   ##  ##
    ####';
-		at: 68 put: '     #
+		  at: 68 put: '     #
     #.#
    # $ #
   #     #
@@ -2128,14 +2061,14 @@ SkBoard class >> mazesPack1 [
    # $ #
     #.#
      #';
-		at: 69 put: '#######
+		  at: 69 put: '#######
 # . . #
 #.$$$.#
 # $@$ #
 #.$$$.#
 # . . #
 #######';
-		at: 70 put: '########
+		  at: 70 put: '########
 #  #   #
 #  #.. #
 # $$$$$#
@@ -2143,15 +2076,7 @@ SkBoard class >> mazesPack1 [
 #  #   #
 #  @   #
 ########';
-		yourself
-]
-
-{ #category : #mazes }
-SkBoard class >> mazesPack2 [
-	"sasquatch/sokoban/masmicroban.html"
-
-	^ IdentityDictionary new
-		at: 71 put: '########
+		  at: 71 put: '########
 #   #  #
 # $.$. #
 ##.  $ #
@@ -2159,7 +2084,7 @@ SkBoard class >> mazesPack2 [
 # .$.$ #
 #  #  @#
 ########';
-		at: 72 put: '#########
+		  at: 72 put: '#########
 #       #
 # *$*$* #
 # $...$ #
@@ -2168,7 +2093,7 @@ SkBoard class >> mazesPack2 [
 # *$*$* #
 #      @#
 #########';
-		at: 73 put: '#########
+		  at: 73 put: '#########
 #       #
 # .$.$. #
 # $.$.$ #
@@ -2177,7 +2102,7 @@ SkBoard class >> mazesPack2 [
 # .$.$. #
 #       #
 #########';
-		at: 74 put: '#########
+		  at: 74 put: '#########
 #       #
 # $.$.$ #
 # .$.$. #
@@ -2186,7 +2111,7 @@ SkBoard class >> mazesPack2 [
 # $.$.$ #
 #       #
 #########';
-		at: 75 put: '#########
+		  at: 75 put: '#########
 #   #   #
 # .$.$. #
 # $.$.$ #
@@ -2195,7 +2120,7 @@ SkBoard class >> mazesPack2 [
 # .$.$. #
 #   #   #
 #########';
-		at: 76 put: ' ######
+		  at: 76 put: ' ######
  #  . ###
 ## $.   #
 #  $*$$ #
@@ -2204,7 +2129,7 @@ SkBoard class >> mazesPack2 [
 #   .$ ##
 ### .  #
   ######';
-		at: 77 put: '  #####
+		  at: 77 put: '  #####
   #   ###
  ## #   ###
  #  .$#   #
@@ -2215,7 +2140,7 @@ SkBoard class >> mazesPack2 [
 ###   # ##
   ###   #
     #####';
-		at: 78 put: ' #######
+		  at: 78 put: ' #######
 ##     ##
 #  $.$  #
 # $#.#$ #
@@ -2224,7 +2149,7 @@ SkBoard class >> mazesPack2 [
 #  $.$  #
 #   #  ##
 ########';
-		at: 79 put: '    ####
+		  at: 79 put: '    ####
  ####  #
  #     #
 ##.# # ##
@@ -2233,7 +2158,7 @@ SkBoard class >> mazesPack2 [
 ##.$##  #
  #. #####
  ####';
-		at: 80 put: ' #### #####
+		  at: 80 put: ' #### #####
 ##  ###   #
 #  . #  $ #
 # . .$ $ ##
@@ -2242,7 +2167,7 @@ SkBoard class >> mazesPack2 [
   #  #####
   #  #
   ####';
-		at: 81 put: ' #######
+		  at: 81 put: ' #######
  #  #  ###
  #  #  . ###
  #   $ # @ #
@@ -2253,7 +2178,7 @@ SkBoard class >> mazesPack2 [
 #     $   #
 #   ###.  #
 ##### #####';
-		at: 82 put: ' ##########
+		  at: 82 put: ' ##########
  #        #
  #.####   #
 ##.$ @ $$ #
@@ -2261,7 +2186,7 @@ SkBoard class >> mazesPack2 [
 # ### ## ##
 #        #
 ##########';
-		at: 83 put: '###### ####
+		  at: 83 put: '###### ####
 # .  ###  #
 #      @  ##
 #....# $#  #
@@ -2271,7 +2196,7 @@ SkBoard class >> mazesPack2 [
       # $##
       #  #
       ####';
-		at: 84 put: '########
+		  at: 84 put: '########
 #  ##  #
 #  ..  #
 # .  . #
@@ -2283,7 +2208,7 @@ SkBoard class >> mazesPack2 [
 #    $ #
 #    ###
 ######';
-		at: 85 put: '        ####
+		  at: 85 put: '        ####
         #  #
       ###  #
      ##    #
@@ -2296,7 +2221,7 @@ SkBoard class >> mazesPack2 [
 #  #  ....#
 #    ######
 ######';
-		at: 86 put: '  #####
+		  at: 86 put: '  #####
  ##   #
  #  # #
 ##    #
@@ -2309,7 +2234,7 @@ SkBoard class >> mazesPack2 [
    #  .  #
    #     #
    #######';
-		at: 87 put: '     ####
+		  at: 87 put: '     ####
      #  ###
     ## .  ##
     #. .   #
@@ -2322,14 +2247,14 @@ SkBoard class >> mazesPack2 [
 # $  ##
 #   ##
 #####';
-		at: 88 put: ' ######
+		  at: 88 put: ' ######
  #. . #
  #  *.##
 ###$ @ #
 # $  $ #
 #   ####
 #####';
-		at: 89 put: '########
+		  at: 89 put: '########
 #      #
 # #.#  #
 #  *   #
@@ -2338,7 +2263,7 @@ SkBoard class >> mazesPack2 [
 # #.##
 #   #
 #####';
-		at: 90 put: ' #####
+		  at: 90 put: ' #####
  #   #
  #   ##
  #$*$ #
@@ -2348,7 +2273,7 @@ SkBoard class >> mazesPack2 [
 ##   #
  #   #
  #####';
-		at: 91 put: '  ####
+		  at: 91 put: '  ####
   #  #
   #  #
   #  ###
@@ -2361,7 +2286,7 @@ SkBoard class >> mazesPack2 [
   #     #
   #  ####
   ####';
-		at: 92 put: ' ######    ####
+		  at: 92 put: ' ######    ####
  # @  ######  #
  #  #   $     #
 ## ....# $ #  #
@@ -2369,7 +2294,7 @@ SkBoard class >> mazesPack2 [
 #      ### $ #
 ######## ##  #
           ####';
-		at: 93 put: '    ####
+		  at: 93 put: '    ####
   ###  #
  ## .  #
 ##     #
@@ -2382,7 +2307,7 @@ SkBoard class >> mazesPack2 [
  #  @ ##
  ###  #
    ####';
-		at: 94 put: '       ######
+		  at: 94 put: '       ######
     ####    ###
     #    ##   #
  #### ###..## ####
@@ -2392,7 +2317,7 @@ SkBoard class >> mazesPack2 [
 #    ####  #    ##
 ##   #     #   ##
  #####     #####';
-		at: 95 put: '#############
+		  at: 95 put: '#############
 #       #   #
 #    ## #   #
 ## ### $ $ ##
@@ -2400,7 +2325,7 @@ SkBoard class >> mazesPack2 [
 #          #
 ##..########
  ####';
-		at: 96 put: '     ####
+		  at: 96 put: '     ####
      #  #
  #####  #
  #  $ $ #
@@ -2411,7 +2336,7 @@ SkBoard class >> mazesPack2 [
 #        ##
 ## .######
  ####';
-		at: 97 put: '#####    #####
+		  at: 97 put: '#####    #####
 #   ######   #
 #          # #
 ## ####### # #
@@ -2423,7 +2348,7 @@ SkBoard class >> mazesPack2 [
 #  #  ##
 ####  #
    ####';
-		at: 98 put: '#####
+		  at: 98 put: '#####
 #   ###
 # # $ ###
 # # $   #
@@ -2433,7 +2358,7 @@ SkBoard class >> mazesPack2 [
 ## .  #
  #    #
  ######';
-		at: 99 put: '  #####
+		  at: 99 put: '  #####
   #   #
   #   #
   #  ###
@@ -2444,7 +2369,7 @@ SkBoard class >> mazesPack2 [
 #  . @  $$##
 ##  ###   #
  #### #####';
-		at: 100 put: ' #######
+		  at: 100 put: ' #######
  #     ##
  # ###  ####
  #   ##    #
@@ -2457,7 +2382,7 @@ SkBoard class >> mazesPack2 [
  # #### #
  #      #
  ########';
-		at: 101 put: '  #####
+		  at: 101 put: '  #####
 ### . #
 #  . $##
 #  $$. ###
@@ -2465,7 +2390,7 @@ SkBoard class >> mazesPack2 [
   ##$ .  #
    # . ###
    #####';
-		at: 102 put: '   ####
+		  at: 102 put: '   ####
   ##  #
   #   #####
   #       #
@@ -2479,7 +2404,7 @@ SkBoard class >> mazesPack2 [
 #   $ @ #
 ###  ####
   ####';
-		at: 103 put: '  ##########
+		  at: 103 put: '  ##########
   #   #    #
 ### ... .# #
 #    ## ## #
@@ -2491,7 +2416,7 @@ SkBoard class >> mazesPack2 [
     ### $##  #
      ##  #####
       ####';
-		at: 104 put: '   ######
+		  at: 104 put: '   ######
 ####    #
 #    ## ##
 # ##     #
@@ -2505,7 +2430,7 @@ SkBoard class >> mazesPack2 [
  # .##   #
  #####   #
      #####';
-		at: 105 put: ' ####
+		  at: 105 put: ' ####
  #  ###
 ##    ##
 #  * . #
@@ -2513,7 +2438,7 @@ SkBoard class >> mazesPack2 [
 ## .$. #
  #@  ###
  #####';
-		at: 106 put: '  ####
+		  at: 106 put: '  ####
 ###  #
 #  . ##
 # #*  #
@@ -2523,7 +2448,7 @@ SkBoard class >> mazesPack2 [
 #   ###
 #  ##
 ####';
-		at: 107 put: '  ####
+		  at: 107 put: '  ####
  ##  ####
  #  $$  #
  # #  # #
@@ -2534,7 +2459,7 @@ SkBoard class >> mazesPack2 [
 # .....##
 #   ####
 #####';
-		at: 108 put: '   ####
+		  at: 108 put: '   ####
    #  #
   ## $###
   #  .  ###
@@ -2545,7 +2470,7 @@ SkBoard class >> mazesPack2 [
   ###$ ##
     #  #
     ####';
-		at: 109 put: ' #####
+		  at: 109 put: ' #####
  # . #####
  #$ $$ $ #
  # .. . .#
@@ -2555,7 +2480,7 @@ SkBoard class >> mazesPack2 [
 #@$ $$ $#
 ##### . #
     #####';
-		at: 110 put: '  ########
+		  at: 110 put: '  ########
   #  #   #
 ###... . #
 #    # ###
@@ -2571,7 +2496,7 @@ SkBoard class >> mazesPack2 [
 ##  #  ##
  ####  #
     ####';
-		at: 111 put: '  ####
+		  at: 111 put: '  ####
   #  #
 ###  ##
 #  $ .# ####
@@ -2583,21 +2508,21 @@ SkBoard class >> mazesPack2 [
   #   ###  #
   ##  # ####
    ####';
-		at: 112 put: '#########
+		  at: 112 put: '#########
 #   #   #
 # $...$ #
 # $*@*$ #
 # $...$ #
 #   #   #
 #########';
-		at: 113 put: '###########
+		  at: 113 put: '###########
 #         #
 #  * . *  #
 ##*$*@*$*##
 #  * . *  #
 #    #    #
 ###########';
-		at: 114 put: '      #####
+		  at: 114 put: '      #####
     ###   #
     #   # #
     # #   #
@@ -2612,7 +2537,7 @@ SkBoard class >> mazesPack2 [
     # #   #
     #   ###
     #####';
-		at: 115 put: '      #
+		  at: 115 put: '      #
      # #
     #   #
    # .$. #
@@ -2625,7 +2550,7 @@ SkBoard class >> mazesPack2 [
     #   #
      # #
       #';
-		at: 116 put: '########
+		  at: 116 put: '########
 #  #   #
 #      #
 #  ## ##########
@@ -2636,7 +2561,7 @@ SkBoard class >> mazesPack2 [
 #    . . . .   #
 #   ############
 #####';
-		at: 117 put: '       ####
+		  at: 117 put: '       ####
  #######  #
 ##   ##   #
 #    #  $ #
@@ -2647,7 +2572,7 @@ SkBoard class >> mazesPack2 [
 ###. ###
   #  #
   ####';
-		at: 118 put: '     #####
+		  at: 118 put: '     #####
      #   ##
 ######  $ ##
 #    ##  $ ##
@@ -2659,7 +2584,7 @@ SkBoard class >> mazesPack2 [
     #     ##
     #  ####
     ####';
-		at: 119 put: ' #######
+		  at: 119 put: ' #######
  #     ###
  # ###.  #
  # # . # #
@@ -2673,7 +2598,7 @@ SkBoard class >> mazesPack2 [
   #     #
   ##   ##
    #####';
-		at: 120 put: '#### ####
+		  at: 120 put: '#### ####
 #  ###  ######
 #  #         #
 ####$  $## # #
@@ -2685,7 +2610,7 @@ SkBoard class >> mazesPack2 [
 #......# ######
 #      ###    #
 ######## ######';
-		at: 121 put: '   #######
+		  at: 121 put: '   #######
   ## .   #
  ##  .   #
  # $*.# ##
@@ -2699,14 +2624,14 @@ SkBoard class >> mazesPack2 [
   #$##  #
   #    ##
   ######';
-		at: 122 put: '   ####
+		  at: 122 put: '   ####
  ###  ##
  #     #
 ##*  # #
 # *$*. #
 #  @  ##
 #######';
-		at: 123 put: '  #####
+		  at: 123 put: '  #####
 ###   ####
 #   $  $ #
 # $##  $ #
@@ -2717,7 +2642,7 @@ SkBoard class >> mazesPack2 [
       ## @##
        #  #
        ####';
-		at: 124 put: '#########
+		  at: 124 put: '#########
 #   #   #
 # $ * $ #
 #..# #..#
@@ -2728,7 +2653,7 @@ SkBoard class >> mazesPack2 [
 # $ * $ #
 #   #   #
 #########';
-		at: 125 put: '     ##########
+		  at: 125 put: '     ##########
      #        ##
  ##### #### $  #
  #.. #     #   #
@@ -2742,7 +2667,7 @@ SkBoard class >> mazesPack2 [
 #  #  #
 ####  #
    ####';
-		at: 126 put: ' #######
+		  at: 126 put: ' #######
  #     #
  # $$  #
  #  $###
@@ -2757,14 +2682,14 @@ SkBoard class >> mazesPack2 [
   #  .    #  #
   #########  #
           ####';
-		at: 127 put: '#####
+		  at: 127 put: '#####
 #@  ######
 #  $ #   #
 #.*.*. $ #
 #  $ #####
 ##   #
  #####';
-		at: 128 put: '   #######
+		  at: 128 put: '   #######
   ##     ##
 ###  ###  #
 #   #   # #
@@ -2773,7 +2698,7 @@ SkBoard class >> mazesPack2 [
  #### ##  #
     #    ##
     ######';
-		at: 129 put: '       ####
+		  at: 129 put: '       ####
 ########  #
 #     $   #
 #  ##.##  #
@@ -2784,7 +2709,7 @@ SkBoard class >> mazesPack2 [
  #   $ ####
  #  ####
  ####';
-		at: 130 put: '            ####
+		  at: 130 put: '            ####
            ##  ###
           ##  @  #
          ##  *$ .#
@@ -2801,7 +2726,7 @@ SkBoard class >> mazesPack2 [
 # **  ##
 #  ####
 ####';
-		at: 131 put: '            ####
+		  at: 131 put: '            ####
           ###  ###
          ##.$.   #
         ##.$.$$. #
@@ -2818,7 +2743,7 @@ SkBoard class >> mazesPack2 [
  #@  $.##
  ####.##
     ###';
-		at: 132 put: '                  #####
+		  at: 132 put: '                  #####
             ##### #   #
             #   ### # #
       ##### # #       #
@@ -2845,7 +2770,7 @@ SkBoard class >> mazesPack2 [
     # # ###   #
     #   # #####
     #####';
-		at: 133 put: '     ##### ##################
+		  at: 133 put: '     ##### ##################
     #     #                  #
    #  #  #  ################  #
   #  #  #  #                #  #
@@ -2879,7 +2804,7 @@ SkBoard class >> mazesPack2 [
    #  ################  #  #  #
     #                  #     #
      ################## #####';
-		at: 134 put: '            ##### # #####
+		  at: 134 put: '            ##### # #####
            ##   ######  ##
           # #           # #
          ##### #######  ####
@@ -2916,7 +2841,7 @@ SkBoard class >> mazesPack2 [
           # #   $ # .   # #
            ##  ######   ##
             ##### # #####';
-		at: 135 put: '          ####
+		  at: 135 put: '          ####
           #  #          ####
       #####  #          #  #         ####
       #   #  #      #####  #         #  #
@@ -2957,15 +2882,15 @@ SkBoard class >> mazesPack2 [
       ####         # @#          #  #####
                    ####          #  #
                                  #### ';
-		yourself
+		  yourself
 ]
 
-{ #category : #mazes }
-SkBoard class >> mazesSasquatch [
+{ #category : #'as yet unclassified' }
+SkGameManager class >> mazesSasquatch [
 	"sasquatch/sokoban/massasquatch.html"
 
 	^ IdentityDictionary new
-		at: 1 put: '#####
+		  at: 1 put: '#####
 #   #####
 # $ $ $ #
 ### # # #
@@ -2976,7 +2901,7 @@ SkBoard class >> mazesSasquatch [
  # ### ###
  #     #
  #######';
-		at: 2 put: '     ####
+		  at: 2 put: '     ####
 ######..#
 #     . #
 #  #  ..#
@@ -2987,7 +2912,7 @@ SkBoard class >> mazesSasquatch [
 #  ## $ ##
 #####   #
     #####';
-		at: 3 put: '          #####
+		  at: 3 put: '          #####
          ##   ##
          #     ##
          #    @ #
@@ -2998,7 +2923,7 @@ SkBoard class >> mazesSasquatch [
 ##$#$#$#$#$#$#.#
  #            .#
  ###############';
-		at: 4 put: '       #####
+		  at: 4 put: '       #####
      ###   #
 #### #  $$ ####
 #  ###  $  #  #
@@ -3011,7 +2936,7 @@ SkBoard class >> mazesSasquatch [
  # ##    #  #
   # ####   ##
    #   #####';
-		at: 5 put: '     #####
+		  at: 5 put: '     #####
   ####   #
   #  . # ###
   # $. $ $ #
@@ -3023,7 +2948,7 @@ SkBoard class >> mazesSasquatch [
  #        #
  #####  ###
      ####';
-		at: 6 put: '    #####
+		  at: 6 put: '    #####
    ##   ######
    #  @   #  #
    #  #  $ * #
@@ -3040,7 +2965,7 @@ SkBoard class >> mazesSasquatch [
     # $    #
     #    ###
     ######';
-		at: 7 put: '         #####
+		  at: 7 put: '         #####
 ##########   #
 #. ........ .##
 #  ####    #  ##
@@ -3053,7 +2978,7 @@ SkBoard class >> mazesSasquatch [
  #  #  #
  #    ##
  ######';
-		at: 8 put: '     #########
+		  at: 8 put: '     #########
  #####       #
 ##      #### #
 # $ #  @ *..*###
@@ -3066,7 +2991,7 @@ SkBoard class >> mazesSasquatch [
   ### $$ #   #
     #    # ###
     ######';
-		at: 9 put: '              ####
+		  at: 9 put: '              ####
            ####  ## ###
         ####  $   # #*# ####
  ########  $   $  # ### #  #
@@ -3083,7 +3008,7 @@ SkBoard class >> mazesSasquatch [
 #  .########### ## #    ####
 #####         #    #
               ######';
-		at: 10 put: '             ####
+		  at: 10 put: '             ####
    ##### #####  ##
   ##   ###       ##
  ##   * * . $ # @ ##
@@ -3101,7 +3026,7 @@ SkBoard class >> mazesSasquatch [
     #  #$##  #
     ##      ##
      ########';
-		at: 11 put: '    ####
+		  at: 11 put: '    ####
     #  ####
     # $   #########
     # .#    $ ##  #
@@ -3115,7 +3040,7 @@ SkBoard class >> mazesSasquatch [
   #####  ####  # #
       ##      ##
        ########';
-		at: 12 put: '#  ###
+		  at: 12 put: '#  ###
  ##   ##
  #*.$  #
 # .$.$ .##
@@ -3126,7 +3051,7 @@ SkBoard class >> mazesSasquatch [
    #  $.*#
    ##   ##
      ###  #';
-		at: 13 put: '    #####
+		  at: 13 put: '    #####
     #   #####
     # # #   #
     #     # #
@@ -3143,7 +3068,7 @@ SkBoard class >> mazesSasquatch [
     #   # # #
     #####   #
         #####';
-		at: 14 put: '    #######
+		  at: 14 put: '    #######
     #     ###
     # ###$  ##
     #....$   #
@@ -3156,7 +3081,7 @@ SkBoard class >> mazesSasquatch [
     ###  $ #
       ##   #
        #####';
-		at: 15 put: '  #####
+		  at: 15 put: '  #####
   #   #####
   # $$#   #####
   #   . $ #   #####
@@ -3174,7 +3099,7 @@ SkBoard class >> mazesSasquatch [
             #####   #$$ #
                 #####  @#
                     #####';
-		at: 16 put: '#############
+		  at: 16 put: '#############
 #           #
 # .$.$.$.$. #
 # $.$.$.$.$ #
@@ -3187,7 +3112,7 @@ SkBoard class >> mazesSasquatch [
 # .$.$.$.$. #
 #           #
 #############';
-		at: 17 put: '#############################
+		  at: 17 put: '#############################
 #                           #
 # .$.$.$.$.$.$.$.$.$.$.$.$. #
 # $.$.$.$.$.$.$.$.$.$.$.$.$ #
@@ -3204,7 +3129,7 @@ SkBoard class >> mazesSasquatch [
 # .$.$.$.$.$.$.$.$.$.$.$.$. #
 #                           #
 #############################';
-		at: 18 put: '  #####################
+		  at: 18 put: '  #####################
  ##        #     #    #
  #  $ $ $  #$ $ $ $  $###
  # $##### $$  $## ## $  #
@@ -3221,7 +3146,7 @@ SkBoard class >> mazesSasquatch [
 ###$  $ $ $ $#  $ $ $  #
   #    #     #        ##
   #####################';
-		at: 19 put: '       #####  #####
+		  at: 19 put: '       #####  #####
        #   #  #   #
        # #.####.# #
        # ..    .. #
@@ -3236,7 +3161,7 @@ SkBoard class >> mazesSasquatch [
     ##  $  $ ##
      #####  ##
          ####';
-		at: 20 put: '          #########
+		  at: 20 put: '          #########
      #### #       #
   ####  # # $     #
   #  #  ####.#    #
@@ -3251,7 +3176,7 @@ SkBoard class >> mazesSasquatch [
   ## $$@##  #
    ##      ##
     ########';
-		at: 21 put: '   #############
+		  at: 21 put: '   #############
    #     #     #
    # $ $ $ $ $ #
    ### ##### ###
@@ -3266,7 +3191,7 @@ SkBoard class >> mazesSasquatch [
    # $ $ $ $ $ #
    #     #     #
    #############';
-		at: 22 put: '   ##########
+		  at: 22 put: '   ##########
   ##        #
  ##    ###  #######
  # $$ #    $#  #  #
@@ -3284,7 +3209,7 @@ SkBoard class >> mazesSasquatch [
   #####   ##$####  ##
       ######      ##
            ########';
-		at: 23 put: '############## #######
+		  at: 23 put: '############## #######
 #             #       #
 #.##########  #$#####  #
 #           #        #  #
@@ -3301,7 +3226,7 @@ SkBoard class >> mazesSasquatch [
 # # ###########  # # # # # # #
 #. @           $ * * * * * . #
 ##############################';
-		at: 24 put: '                    ####
+		  at: 24 put: '                    ####
               #######  #
               #      $ ##
     ########  # ..## $  #
@@ -3318,7 +3243,7 @@ SkBoard class >> mazesSasquatch [
 ## $      #
  #  #######
  ####';
-		at: 25 put: '  ######
+		  at: 25 put: '  ######
   ##   ###########
   # $ $  $  # *  ######
   # .*.#..*.# .$     ##
@@ -3336,7 +3261,7 @@ SkBoard class >> mazesSasquatch [
 ######  * #  $  *.$ #
      ###########   ##
                ######';
-		at: 26 put: '######    #######
+		  at: 26 put: '######    #######
 #  ..#    #  #  #
 #  ..###### $#  #
 ## #.  $ ##  $  #
@@ -3349,7 +3274,7 @@ SkBoard class >> mazesSasquatch [
  #.      $  $# #
  #. ########   #
  ####      #####';
-		at: 27 put: '################
+		  at: 27 put: '################
 #   #   ##  #  #
 # .$. $  # . . #
 ## ### #  $ #$ #
@@ -3365,7 +3290,7 @@ SkBoard class >> mazesSasquatch [
 # . . #@ $ .$. #
 #  #  ##   #   #
 ################';
-		at: 28 put: ' ##########
+		  at: 28 put: ' ##########
  #    #   #
  # $  #   #     ####  #####
  ### $$   #######  ####   #
@@ -3382,7 +3307,7 @@ SkBoard class >> mazesSasquatch [
  #.$$$$.#.# #   #  ####   #
  #  ..   .  #   ####  #####
  ############';
-		at: 29 put: '                #####
+		  at: 29 put: '                #####
           #######   # #####
      ######       #.###   #
     ##      # ### #.    * #
@@ -3398,7 +3323,7 @@ SkBoard class >> mazesSasquatch [
 ##### $ # ## ##### $$*$$ #
     #.#    #         .   #
     ######################';
-		at: 30 put: '    ####
+		  at: 30 put: '    ####
 #####  ##########
 #      #  #     #
 # #  ..   ##   $###
@@ -3409,7 +3334,7 @@ SkBoard class >> mazesSasquatch [
   #.############  #
   #.             ##
   ################';
-		at: 31 put: ' #####
+		  at: 31 put: ' #####
 ##   # ####
 #    ###  #
 #  # @#   #
@@ -3424,7 +3349,7 @@ SkBoard class >> mazesSasquatch [
     ######  ###  #
          ##     ##
           #######';
-		at: 32 put: '      #
+		  at: 32 put: '      #
     ## ##
     #   #
    # .$. #
@@ -3437,7 +3362,7 @@ SkBoard class >> mazesSasquatch [
     #   # # #
     ## ##   #
       #  ###';
-		at: 33 put: '#####
+		  at: 33 put: '#####
 #   ##
 #  $ #####
 ##  $ #  #
@@ -3452,14 +3377,14 @@ SkBoard class >> mazesSasquatch [
       ##########    # ##
                ####   #
                   #####';
-		at: 34 put: ' #####  #####
+		  at: 34 put: ' #####  #####
  #   ####   #
 ## #$.*.$ # #
 #   $.@.$   #
 # # $.*.$# ##
 #   ####   #
 #####  #####';
-		at: 35 put: '         #####
+		  at: 35 put: '         #####
 ##########   #
 #      $ $$$ #
 # $## #  # # #
@@ -3474,7 +3399,7 @@ SkBoard class >> mazesSasquatch [
  # $$$ $      #
  #   ##########
  #####';
-		at: 36 put: ' ####### #######
+		  at: 36 put: ' ####### #######
 ##  .  ###     ##
 # $$.$$ # .$.$. #
 # $ . $ # $.$.$ #
@@ -3491,7 +3416,7 @@ SkBoard class >> mazesSasquatch [
 # .$.$. # .$$$. #
 ##     ###     ##
  ####### #######';
-		at: 37 put: '            #####
+		  at: 37 put: '            #####
         #####   #####
     #####   # $ #   #####
 #####   # $$     $$ #   #####
@@ -3508,7 +3433,7 @@ SkBoard class >> mazesSasquatch [
     #####   # $ #   #####
         #####   #####
             #####';
-		at: 38 put: '#####                 #####
+		  at: 38 put: '#####                 #####
 #   ###################   #
 # # $ $ $ $ $ $ $ $ $ $ # #
 # $ #     #     #     # $ #
@@ -3523,7 +3448,7 @@ SkBoard class >> mazesSasquatch [
 # # $ $ $ $ $ $ $ $ $ $ # #
 #   ###################   #
 #####                 #####';
-		at: 39 put: ' #################
+		  at: 39 put: ' #################
  #               #
 ##$#.#.#.#.#.#.#$##
 #  $.$.$.$.$.$.$  #
@@ -3532,7 +3457,7 @@ SkBoard class >> mazesSasquatch [
 ##$#.#.#.#.#.#.#$##
  #               #
  #################';
-		at: 40 put: '                #####
+		  at: 40 put: '                #####
   ###############   ########
  ## $ $ $ $ $    $ $ $ $ $ ##
 ###     #         #        ###
@@ -3550,7 +3475,7 @@ SkBoard class >> mazesSasquatch [
  ## $ $ $ $ $    $ $ $ $ $ ##
   ########   ###############
          #####';
-		at: 41 put: ' ###########
+		  at: 41 put: ' ###########
 ##    #    ##
 # $$*.$.*$$ #
 #...     ...#
@@ -3561,7 +3486,7 @@ SkBoard class >> mazesSasquatch [
 # $$*.$.*$$ #
 ##    #    ##
  ###########';
-		at: 42 put: '###########
+		  at: 42 put: '###########
 #         #
 # $## ### ##   #####
 #  # $ $ $ #####   ###
@@ -3577,7 +3502,7 @@ SkBoard class >> mazesSasquatch [
          #     ##  ###
          #####    ##
              ######';
-		at: 43 put: '         #######
+		  at: 43 put: '         #######
   ########  #. #
   #        $ * #####
   # ## ##   #. #   #      ####
@@ -3592,7 +3517,7 @@ SkBoard class >> mazesSasquatch [
    #   #   ##  ##  ##
    ###   ###########
      #####';
-		at: 44 put: '     #######
+		  at: 44 put: '     #######
      #  @  #
 ###### ### ######
 #   #   $   #   #
@@ -3606,7 +3531,7 @@ SkBoard class >> mazesSasquatch [
 ###### ### ######
      #     #
      #######';
-		at: 45 put: '              ####
+		  at: 45 put: '              ####
            #### .#
      ####  #    .####
    ###  ####  ##..  ##
@@ -3619,7 +3544,7 @@ SkBoard class >> mazesSasquatch [
 ######  #  #
      ####  #
         ####';
-		at: 46 put: '         #### ####
+		  at: 46 put: '         #### ####
          #  ###  #
       #### $ $   #######
       #   $   #$   ##  ####
@@ -3637,7 +3562,7 @@ SkBoard class >> mazesSasquatch [
 # $      ###### ##         @ #
 #        .........           #
 ##############################';
-		at: 47 put: '      #####
+		  at: 47 put: '      #####
       # . #
   ##### . #####
   #   $ . $   #
@@ -3654,7 +3579,7 @@ SkBoard class >> mazesSasquatch [
   ##### . #####
       # . #
       #####';
-		at: 48 put: '        #
+		  at: 48 put: '        #
        # #
      ##   ##
      # $.$ #
@@ -3671,7 +3596,7 @@ SkBoard class >> mazesSasquatch [
      ##   ##
        # #
         #';
-		at: 49 put: '    ####
+		  at: 49 put: '    ####
     #  ######
     #  $ $  ###    ####
     #   $     #   ##  #
@@ -3689,7 +3614,7 @@ SkBoard class >> mazesSasquatch [
          ######$# #
               #   #
               #####';
-		at: 50 put: '#############################
+		  at: 50 put: '#############################
 #.      .   .   .   .      .#
 # ##  # #   # # #   # #  ## #
 # ##  $ # $ # $ # $ # $  ## #
@@ -3706,15 +3631,15 @@ SkBoard class >> mazesSasquatch [
 # ##  # #   # # #   # #  ## #
 #.      .   .   .   .      .#
 ############################# ';
-		yourself
+		  yourself
 ]
 
-{ #category : #mazes }
-SkBoard class >> mazesSasquatchIII [
+{ #category : #'as yet unclassified' }
+SkGameManager class >> mazesSasquatchIII [
 	"sasquatch/sokoban/sasquatchiii.html"
 
 	^ IdentityDictionary new
-		at: 1 put: ' #######
+		  at: 1 put: ' #######
  #  *  #
  #  @  #
  ##$#.##
@@ -3726,7 +3651,7 @@ SkBoard class >> mazesSasquatchIII [
 #   *  #
 ###   ##
   #####';
-		at: 2 put: '      ####
+		  at: 2 put: '      ####
 #######  #
 #     * .##
 # $$#  *  ##
@@ -3736,7 +3661,7 @@ SkBoard class >> mazesSasquatchIII [
  #   .  #  .#
  #   #  #####
  ########';
-		at: 3 put: '        ####
+		  at: 3 put: '        ####
 #########  #
 #          #
 # #*### #  #
@@ -3749,7 +3674,7 @@ SkBoard class >> mazesSasquatchIII [
   #@####### #
   #         #
   ###########';
-		at: 4 put: '   #############
+		  at: 4 put: '   #############
   ##           #
  ##  #########@###
 ##  #         *  #
@@ -3764,7 +3689,7 @@ SkBoard class >> mazesSasquatchIII [
           # $ $ #
           #     #
           #######';
-		at: 5 put: ' ###########
+		  at: 5 put: ' ###########
 ##         #
 #  #######$##
 # #       $ ###
@@ -3774,7 +3699,7 @@ SkBoard class >> mazesSasquatchIII [
 ##        $  ##
  ########   ##
         #####';
-		at: 6 put: '             ####
+		  at: 6 put: '             ####
      #########  ###
      #  . .   . . #
      # $$.$# #$.$ #
@@ -3791,7 +3716,7 @@ SkBoard class >> mazesSasquatchIII [
 # . .   . .  #
 ###  #########
   ####';
-		at: 7 put: '  #####
+		  at: 7 put: '  #####
   #   #####
 ### #     ##
 #  * ####  #
@@ -3804,7 +3729,7 @@ SkBoard class >> mazesSasquatchIII [
  #   #  #  #
  ##  #    ##
   #########';
-		at: 8 put: '       ####
+		  at: 8 put: '       ####
 ########@ #
 #   ...#$ #
 # $ $ $ * #
@@ -3816,7 +3741,7 @@ SkBoard class >> mazesSasquatchIII [
  ###.$#  #
    #  ####
    ####';
-		at: 9 put: '        #
+		  at: 9 put: '        #
  ###########
  #   #  #  #
  # $ #$ $  #
@@ -3829,7 +3754,7 @@ SkBoard class >> mazesSasquatchIII [
 ### # # #####
   ##@   #
    ######';
-		at: 10 put: '           #
+		  at: 10 put: '           #
     #     # #
    # #  ##   ##
   # . # # .$. #
@@ -3840,7 +3765,7 @@ SkBoard class >> mazesSasquatchIII [
    # #  ##   ##
     #     # #
            #';
-		at: 11 put: '       #
+		  at: 11 put: '       #
       # #
     ##   ##
     #  .  #     #
@@ -3855,7 +3780,7 @@ SkBoard class >> mazesSasquatchIII [
     ##   ##
       # #
        #';
-		at: 12 put: '########
+		  at: 12 put: '########
 #  . . #
 # $.$. #
 ##$#$# ##
@@ -3871,7 +3796,7 @@ SkBoard class >> mazesSasquatchIII [
    #$# ###
    #   #
    #####';
-		at: 13 put: '       ####
+		  at: 13 put: '       ####
 ########  #
 #@ $ $ $$ ###
 #  ....*.*  #
@@ -3884,7 +3809,7 @@ SkBoard class >> mazesSasquatchIII [
    # $ $  #
    #     ##
    #######';
-		at: 14 put: '          #####
+		  at: 14 put: '          #####
   #########   #
 ### $ $ $ $.  #
 #  .$.$ $.$.# #
@@ -3893,7 +3818,7 @@ SkBoard class >> mazesSasquatchIII [
 #  .$ $ $ $ ###
 #   #########
 #####';
-		at: 15 put: '           #####
+		  at: 15 put: '           #####
 ############   #######
 #     # # ## # # #   #
 # # #$  $  # .$  $ # ##
@@ -3902,7 +3827,7 @@ SkBoard class >> mazesSasquatchIII [
  #   # # # ## # #     #
  #######   ############
        #####';
-		at: 16 put: ' #########
+		  at: 16 put: ' #########
 ##   *   ##
 #  # # #  #
 # #.$.$.# #
@@ -3913,7 +3838,7 @@ SkBoard class >> mazesSasquatchIII [
 #  # # #  #
 ##   *   ##
  #########';
-		at: 17 put: '         #
+		  at: 17 put: '         #
     #  #####
   #####    ####
   #   ..$$ #  #
@@ -3930,7 +3855,7 @@ SkBoard class >> mazesSasquatchIII [
   ####    #####
      #####  #
        #';
-		at: 18 put: ' #############
+		  at: 18 put: ' #############
 ##    #   #  ##
 # .##$$  $  . #
 #  ...#.#.#.# #
@@ -3945,7 +3870,7 @@ SkBoard class >> mazesSasquatchIII [
 # .  $  $$##. #
 ##  #   #    ##
  #############';
-		at: 19 put: ' #############
+		  at: 19 put: ' #############
 ##     *     ##
 #  ##.# ##.#  #
 # # $ $ $ $ # #
@@ -3960,7 +3885,7 @@ SkBoard class >> mazesSasquatchIII [
 #  #.## #.##  #
 ##     *     ##
  #############';
-		at: 20 put: ' ### ### ###
+		  at: 20 put: ' ### ### ###
 ##  # @ #  ##
 #  $#$ $#$  #
 # . . . . . #
@@ -3973,7 +3898,7 @@ SkBoard class >> mazesSasquatchIII [
 #  $#$ $#$  #
 ##  #   #  ##
  ### ### ###';
-		at: 21 put: '   ###   ###
+		  at: 21 put: '   ###   ###
    #  ###  #
   #    #    #
 ##  $$$.$$$  ##
@@ -3988,7 +3913,7 @@ SkBoard class >> mazesSasquatchIII [
   #    #    #
    #  ###  #
    ###   ###';
-		at: 22 put: '   ###########
+		  at: 22 put: '   ###########
   #           #
  ##$####.####$##
 # $. $ $.$ $ .$ #
@@ -4005,7 +3930,7 @@ SkBoard class >> mazesSasquatchIII [
  ##$####.####$##
   #           #
    ###########';
-		at: 23 put: ' #### ### ####
+		  at: 23 put: ' #### ### ####
 #    #   #    #
 # #  #   #  # #
 #  **$***$**  #
@@ -4020,7 +3945,7 @@ SkBoard class >> mazesSasquatchIII [
 # #  #   #  # #
 #    #   #    #
  #### ### ####';
-		at: 24 put: ' ###############
+		  at: 24 put: ' ###############
  #.  $  .  $  .#
  # ##$# # #$## #
  #  .* .#. *.  #
@@ -4035,7 +3960,7 @@ SkBoard class >> mazesSasquatchIII [
  # ##$# # #$## #
  #.  $  .  $  .#
  ###############';
-		at: 25 put: '# ####  #  #### #
+		  at: 25 put: '# ####  #  #### #
  #    #   #    #
 # *.   ###   .* #
 # $# $ $ $ $ #$ #
@@ -4052,7 +3977,7 @@ SkBoard class >> mazesSasquatchIII [
 # *.   ###   .* #
  #    #   #    #
 # ####  #  #### #';
-		at: 26 put: ' ###############
+		  at: 26 put: ' ###############
 ##      #      ##
 # *$ $*$$$*$ $* #
 # $...$...$...$ #
@@ -4069,7 +3994,7 @@ SkBoard class >> mazesSasquatchIII [
 # *$ $*$$$*$ $* #
 ##      #      ##
  ###############';
-		at: 27 put: '  #############
+		  at: 27 put: '  #############
  ## .   .   . ##
 ## $.$ $.$ $.$ ##
 # $ * $ * $ * $ #
@@ -4086,7 +4011,7 @@ SkBoard class >> mazesSasquatchIII [
 ## $.$ $.$ $.$ ##
  ## .   .   . ##
   #############';
-		at: 28 put: '      #####
+		  at: 28 put: '      #####
    #### . ####
    # ##$.$## #
  ####   .   ####
@@ -4103,7 +4028,7 @@ SkBoard class >> mazesSasquatchIII [
    # ##$.$## #
    #### . ####
       #####';
-		at: 29 put: '#################
+		  at: 29 put: '#################
 #  .    .    .  #
 # ##$###$###$## #############
 #.##  ##  ## ##.#  .     .  #
@@ -4120,7 +4045,7 @@ SkBoard class >> mazesSasquatchIII [
 # ##$###$###$## #############
 #  .    .    .  #
 #################';
-		at: 30 put: ' ###############
+		  at: 30 put: ' ###############
 ##             ##
 #  ##### #####  # ###########
 # # . . . . . # ###         ##
@@ -4137,7 +4062,7 @@ SkBoard class >> mazesSasquatchIII [
 #  ##### #####  # ###########
 ##             ##
  ###############';
-		at: 31 put: '   ##### #####
+		  at: 31 put: '   ##### #####
  ###    #  @ ####
 ##    # $  #    ##
 #   #..*.#*...#  #
@@ -4154,7 +4079,7 @@ SkBoard class >> mazesSasquatchIII [
  ##    #  $ #    ##
   ####    #    ###
      ##### #####';
-		at: 32 put: '   ######  #####
+		  at: 32 put: '   ######  #####
   ##    ####   #
   #  ##  $   # #
   # # .# $# $  #
@@ -4171,7 +4096,7 @@ SkBoard class >> mazesSasquatchIII [
     # $$       #   #
     #  #############
     ####';
-		at: 33 put: '         ####
+		  at: 33 put: '         ####
    #######  ####
    #         $ ##
 ####$  ###.###  ##
@@ -4187,7 +4112,7 @@ SkBoard class >> mazesSasquatchIII [
 #  ####$    ###
 ##      #####
  ########';
-		at: 34 put: '            ####
+		  at: 34 put: '            ####
     #####   #  #####
    ##   #   #      #
    #  # ##### # #  #
@@ -4205,7 +4130,7 @@ SkBoard class >> mazesSasquatchIII [
     ##    $ $  #   #
      ##  ###########
       ####';
-		at: 35 put: '              ####
+		  at: 35 put: '              ####
  ####       ###  #
  #  #########  ..#
  #  $ @ $   $ #..#
@@ -4218,7 +4143,7 @@ SkBoard class >> mazesSasquatchIII [
 #   $$ $ #
 ##       #
  #########';
-		at: 36 put: '           #####
+		  at: 36 put: '           #####
           ## . ##
          ##.$ $.##
          # $ * $ #
@@ -4235,7 +4160,7 @@ SkBoard class >> mazesSasquatchIII [
 ##     ##  #####  ##     ##
  #######   #***#   #######
            #####';
-		at: 37 put: '#########     #######
+		  at: 37 put: '#########     #######
 #   #   #######  #  #
 # .$. $       # . . #
 ## ### # # # $ $ #$ #
@@ -4251,7 +4176,7 @@ SkBoard class >> mazesSasquatchIII [
 # . . #   @   $ .$. #
 #  #  #######   #   #
 #######     #########';
-		at: 38 put: '#####       ###
+		  at: 38 put: '#####       ###
 #  ###############
 # $   * @ *  #   #
 #  # * * * *     #
@@ -4264,7 +4189,7 @@ SkBoard class >> mazesSasquatchIII [
 # $           $ #
 #   ##########  #
 #####       #####';
-		at: 39 put: '   ####   ####
+		  at: 39 put: '   ####   ####
    #  #####  ####
 #### $ $        ##
 #   $   ###  ##  ##
@@ -4282,7 +4207,7 @@ SkBoard class >> mazesSasquatchIII [
      ##    ###  #
       ####     ##
          #######';
-		at: 40 put: '  ####### ## #######
+		  at: 40 put: '  ####### ## #######
   #     ######     ##
   #.###  ##  .  ##  ##
   # .  #  $*# .#  #  #
@@ -4299,7 +4224,7 @@ SkBoard class >> mazesSasquatchIII [
        ##  ##  .  ##  ###.#
         ##     ######     #
          ####### ## #######';
-		at: 41 put: '##############################
+		  at: 41 put: '##############################
 #        .........           #
 # $      ###### ##         @ #
 #######   # $    #############
@@ -4317,7 +4242,7 @@ SkBoard class >> mazesSasquatchIII [
       #### $ $    ######
          #  ####  #
          ####  ####';
-		at: 42 put: '#########################
+		  at: 42 put: '#########################
 #   #   #   #   #   #   #
 # $ # # # # # # # # # $ #
 #  * * $ $ * * $ $ * *  #
@@ -4334,7 +4259,7 @@ SkBoard class >> mazesSasquatchIII [
 # $ # # # # # # # # # $ #
 #   #   #   #   #   #   #
 #########################';
-		at: 43 put: '    ####
+		  at: 43 put: '    ####
    ##  ####
    # $   .########
    # $ # .   $ $ #
@@ -4350,7 +4275,7 @@ SkBoard class >> mazesSasquatchIII [
      # $$ #   #
      #   ######
      ##### ';
-		at: 44 put: '      #####
+		  at: 44 put: '      #####
      ##   ##
      #  $  #
     ## $.$ ##
@@ -4367,7 +4292,7 @@ SkBoard class >> mazesSasquatchIII [
      #  $  #
      ## @ ##
       #####';
-		at: 45 put: '      #####
+		  at: 45 put: '      #####
       #   #
      ## $ ##
    ### $.$ ###
@@ -4384,7 +4309,7 @@ SkBoard class >> mazesSasquatchIII [
      ## $ ##
       # @ #
       #####';
-		at: 46 put: '           #####
+		  at: 46 put: '           #####
  ########### @ ###########
  #   .   .   #     .     #
  # $$*$$$*$$ # .$ $$$.$. #
@@ -4399,7 +4324,7 @@ SkBoard class >> mazesSasquatchIII [
  #  .  .  .  #  . . . .  #
  ########### * ###########
            #####';
-		at: 47 put: '           #####
+		  at: 47 put: '           #####
  ########### @ ###########
  #  .     .  #    .$.    #
  # .$.$$$.$. #.$  $.$  $.#
@@ -4414,7 +4339,7 @@ SkBoard class >> mazesSasquatchIII [
  #  $.   .$  # .       $ #
  ########### * ###########
            #####';
-		at: 48 put: ' #########################
+		  at: 48 put: ' #########################
  #  #  #  #  #  #  #  #  #
  # $#$ # $#$ # $#$ # $#$ #
  #  #  #  #  #  #  #  #  #
@@ -4431,7 +4356,7 @@ SkBoard class >> mazesSasquatchIII [
  #########   #   #########
          #  ###  #
          #### ####';
-		at: 49 put: '  #########################
+		  at: 49 put: '  #########################
   #           #           #
 ###$$ $$ $$ $$.$$ $$ $$ $$###
 # $+.$..$..$..$..$..$..$..$ #
@@ -4448,7 +4373,7 @@ SkBoard class >> mazesSasquatchIII [
 ###$$ $$ $$ $$.$$ $$ $$ $$###
   #           #           #
   #########################';
-		at: 50 put: ' ####                   ####
+		  at: 50 put: ' ####                   ####
  #  #####################  #
  #    ....... @ .......    #
  #  # .###############. #  #
@@ -4466,15 +4391,15 @@ SkBoard class >> mazesSasquatchIII [
 #    # #  $   $  $   # #    #
 ###### #  #   #  #   # ######
        ############### ';
-		yourself
+		  yourself
 ]
 
-{ #category : #mazes }
-SkBoard class >> mazesSasquatchIV [
+{ #category : #'as yet unclassified' }
+SkGameManager class >> mazesSasquatchIV [
 	"sasquatch/sokoban/sasquatchiv.html"
 
 	^ IdentityDictionary new
-		at: 1 put: '   ####
+		  at: 1 put: '   ####
 ####  #
 #     ####
 # $ #  . ##
@@ -4484,7 +4409,7 @@ SkBoard class >> mazesSasquatchIV [
 # @ ###
 #   #
 #####';
-		at: 2 put: '     #####
+		  at: 2 put: '     #####
 ######   #
 #  $     #
 #  $### ##
@@ -4493,7 +4418,7 @@ SkBoard class >> mazesSasquatchIV [
  # @######
  #  #
  ####';
-		at: 3 put: '    #####
+		  at: 3 put: '    #####
  ####   #
  # @ $# #
  # #....#
@@ -4502,7 +4427,7 @@ SkBoard class >> mazesSasquatchIV [
 #      #
 #####  #
     ####';
-		at: 4 put: '  ######
+		  at: 4 put: '  ######
   #  . ##
   # #*  #
   # $.$ #
@@ -4512,7 +4437,7 @@ SkBoard class >> mazesSasquatchIV [
 #  $$.# #
 #      ##
 ########';
-		at: 5 put: ' ####
+		  at: 5 put: ' ####
  #  #
 ## .###
 #  .$ #
@@ -4522,7 +4447,7 @@ SkBoard class >> mazesSasquatchIV [
 ###*####
   #@#
   ###';
-		at: 6 put: '  ####
+		  at: 6 put: '  ####
 ###  #
 #  ..# #######
 # #..# #     ####
@@ -4532,7 +4457,7 @@ SkBoard class >> mazesSasquatchIV [
 #           #####
 ##  #########
  ####';
-		at: 7 put: ' ###############
+		  at: 7 put: ' ###############
 ## $.       .$ ##
 #  # ####### #  #
 # #           # #
@@ -4541,7 +4466,7 @@ SkBoard class >> mazesSasquatchIV [
   # ####@#### #
   #           #
   #############';
-		at: 8 put: '#######################
+		  at: 8 put: '#######################
 #      #   #   #      #
 # $@$$ # $     # .. ..#
 ## ## ### ### ### ## ##
@@ -4550,7 +4475,7 @@ SkBoard class >> mazesSasquatchIV [
  # ################# #
  #                   #
  #####################';
-		at: 9 put: '###########
+		  at: 9 put: '###########
 #@  #  #  #
 #  $#$   $#
 ##  #..#  #
@@ -4559,7 +4484,7 @@ SkBoard class >> mazesSasquatchIV [
  #$   $#$  #
  #  #  #   #
  ###########';
-		at: 10 put: '######
+		  at: 10 put: '######
 #    #
 # .$ #
 # ** #
@@ -4571,7 +4496,7 @@ SkBoard class >> mazesSasquatchIV [
  #.**$@#
  #  #  #
  #######';
-		at: 11 put: '  ########
+		  at: 11 put: '  ########
  ##.... @#
  #  # .  #
 ## #  # ##
@@ -4581,7 +4506,7 @@ SkBoard class >> mazesSasquatchIV [
   #   $$ #
   #   #  #
   ########';
-		at: 12 put: ' ######
+		  at: 12 put: ' ######
  #    #
  #    ###
  ##*#   #
@@ -4595,7 +4520,7 @@ SkBoard class >> mazesSasquatchIV [
  #   #####
  #   #
  #####';
-		at: 13 put: '      ####
+		  at: 13 put: '      ####
   #####  #
 ###.  #$ ##
 #  *   .*.#
@@ -4607,7 +4532,7 @@ SkBoard class >> mazesSasquatchIV [
  ## $#  .###
   #  #####
   ####';
-		at: 14 put: ' ######
+		  at: 14 put: ' ######
  #    #####
  # $ *#   #
  #  * * $ #
@@ -4618,7 +4543,7 @@ SkBoard class >> mazesSasquatchIV [
 #   #* $ #
 #####    #
     ######';
-		at: 15 put: '###########
+		  at: 15 put: '###########
 #    *    #
 # $$ ## $ #
 #  $..#$$ #
@@ -4629,7 +4554,7 @@ SkBoard class >> mazesSasquatchIV [
 # $ ## $$ #
 #    *    #
 ###########';
-		at: 16 put: '#############
+		  at: 16 put: '#############
 #     $   . #
 #.$ $### *$ #
 # ** ## .*  #
@@ -4642,7 +4567,7 @@ SkBoard class >> mazesSasquatchIV [
 # $* ###$ $.#
 # .   $     #
 #############';
-		at: 17 put: '###############
+		  at: 17 put: '###############
 #             #
 # $.$.$.$.$.$ #
 # .$.$.#.$.$. #
@@ -4657,7 +4582,7 @@ SkBoard class >> mazesSasquatchIV [
 # $.$.$.$.$.$ #
 #             #
 ###############';
-		at: 18 put: ' ###############
+		  at: 18 put: ' ###############
 ##  #   #   #  ##
 #   **.. ..**   #
 #  *   $$$   *  #
@@ -4674,7 +4599,7 @@ SkBoard class >> mazesSasquatchIV [
 #   **.. ..**   #
 ##  #   #   #  ##
  ###############';
-		at: 19 put: ' #########
+		  at: 19 put: ' #########
  #   *   #
  # ## ## #
  #  * *  #
@@ -4684,7 +4609,7 @@ SkBoard class >> mazesSasquatchIV [
 #  .$#$.  #
 ###  #  ###
   #######';
-		at: 20 put: '####
+		  at: 20 put: '####
 #  #########
 #    ##    #
 # $$$#     #
@@ -4694,7 +4619,7 @@ SkBoard class >> mazesSasquatchIV [
  #    ##$$$ #
  ####### @  #
        ######';
-		at: 21 put: '  #########
+		  at: 21 put: '  #########
  ##   #   #
 ## $# # #$###
 #   #. .#   #
@@ -4703,7 +4628,7 @@ SkBoard class >> mazesSasquatchIV [
 ###$# # #$ ##
   #   #   ##
   #########';
-		at: 22 put: '  ####  ####
+		  at: 22 put: '  ####  ####
   #  ####  ####
 ###     $ $   #
 #    # $  *...##
@@ -4713,7 +4638,7 @@ SkBoard class >> mazesSasquatchIV [
  #   #  #######
  ####   # #
     #####';
-		at: 23 put: '       ####
+		  at: 23 put: '       ####
   ######  #
  ##  $  $ #
 ##  $ #$  #
@@ -4724,7 +4649,7 @@ SkBoard class >> mazesSasquatchIV [
   #   ..####
   #  ####
   ####';
-		at: 24 put: '          ####
+		  at: 24 put: '          ####
           #  ###
           #    #
    ########$$  #
@@ -4737,7 +4662,7 @@ SkBoard class >> mazesSasquatchIV [
 #         ##
 #  #  #####
 #######';
-		at: 25 put: ' ###############
+		  at: 25 put: ' ###############
 ##  ....#      ##
 #  # #     ###  #
 #   ....# #   # #
@@ -4749,7 +4674,7 @@ SkBoard class >> mazesSasquatchIV [
     ##     ###  #
      #####     ##
          #######';
-		at: 26 put: '   ##### #####
+		  at: 26 put: '   ##### #####
    # @ ###   #
    # # $     #
 #### #$ $ ####
@@ -4760,7 +4685,7 @@ SkBoard class >> mazesSasquatchIV [
    #    #  #
    ######  #
         ####';
-		at: 27 put: '    ####
+		  at: 27 put: '    ####
   ###  ###
 ###      ##
 # $$#$$$@ ##
@@ -4774,7 +4699,7 @@ SkBoard class >> mazesSasquatchIV [
     #  .#####
     #  .#
     #####';
-		at: 28 put: ' ####
+		  at: 28 put: ' ####
  #  #####
  #  $ $ #
  #* . . #
@@ -4790,7 +4715,7 @@ SkBoard class >> mazesSasquatchIV [
 # $ $       . #
 ########  #####
        ####';
-		at: 29 put: ' # ## ####
+		  at: 29 put: ' # ## ####
 ## #  #  ###
    # ##$   #
 #### # * # #
@@ -4803,7 +4728,7 @@ SkBoard class >> mazesSasquatchIV [
 #      ##  #
 ######    ##
      ######';
-		at: 30 put: '      #####
+		  at: 30 put: '      #####
       #   #######
       #    ##   ##
       #.#       ###
@@ -4820,7 +4745,7 @@ SkBoard class >> mazesSasquatchIV [
    #  ####       #
    ##      #######
     ########';
-		at: 31 put: ' #############
+		  at: 31 put: ' #############
  #     @     #
  #**.*****.**#
  #  $     $  #
@@ -4832,7 +4757,7 @@ SkBoard class >> mazesSasquatchIV [
 #  $       $  #
 #   #######   #
 #####     #####';
-		at: 32 put: '           ####
+		  at: 32 put: '           ####
          ###  #
   ######## $$ ##
 ###   #   .*.$ #
@@ -4850,7 +4775,7 @@ SkBoard class >> mazesSasquatchIV [
   ## $$ ########
    #  ###
    ####';
-		at: 33 put: '      #######
+		  at: 33 put: '      #######
      ##     ##
      #  *.*  #
      # #$ $# #
@@ -4867,7 +4792,7 @@ SkBoard class >> mazesSasquatchIV [
      #  *.*  #
      ##     ##
       #######';
-		at: 34 put: '     #####
+		  at: 34 put: '     #####
      # @ #
      # $ #
      # $ #
@@ -4882,7 +4807,7 @@ SkBoard class >> mazesSasquatchIV [
      # $ #
      #   #
      #####';
-		at: 35 put: '      #####
+		  at: 35 put: '      #####
       #   #
      ## $ ##
     ## $.$ ##
@@ -4899,7 +4824,7 @@ SkBoard class >> mazesSasquatchIV [
      ## $ ##
       # @ #
       #####';
-		at: 36 put: '      #####
+		  at: 36 put: '      #####
      ###  ##
     ## $   ##
    ## $  *$ ##
@@ -4916,7 +4841,7 @@ SkBoard class >> mazesSasquatchIV [
     ##   $ ##
      ##  ###
       #####';
-		at: 37 put: '   ## ##
+		  at: 37 put: '   ## ##
  ##  #  ##
  ##     ##
 #  *$#$*  #
@@ -4927,7 +4852,7 @@ SkBoard class >> mazesSasquatchIV [
  ##     ##
  ##  #  ##
    ## ##';
-		at: 38 put: '    ## ##
+		  at: 38 put: '    ## ##
   ##  #  ##
  #  .$ $.  #
  #  *   *  #
@@ -4940,7 +4865,7 @@ SkBoard class >> mazesSasquatchIV [
  #  .$ $.  #
   ##  #  ##
     ## ##';
-		at: 39 put: '  ##### # #####
+		  at: 39 put: '  ##### # #####
  ## # ##### # ##
  #  #   #   #  #
 ## $* $   $ *$ ##
@@ -4957,7 +4882,7 @@ SkBoard class >> mazesSasquatchIV [
  #  #   #   #  #
  ## # ##### # ##
   ##### # #####';
-		at: 40 put: '             ###
+		  at: 40 put: '             ###
       #################
   ######   ##   ##   ######
 ####   # $$   #   $$ #   ####
@@ -4972,7 +4897,7 @@ SkBoard class >> mazesSasquatchIV [
   ######   ##   ##   ######
       #################
              ###';
-		at: 41 put: '###############
+		  at: 41 put: '###############
 #  ..  .   .  #
 # $##$ # $$##.#
 #  #  ###  #  #
@@ -4987,7 +4912,7 @@ SkBoard class >> mazesSasquatchIV [
 # $#$$###$# # #
 #  .   .  . . #
 ###############';
-		at: 42 put: '####   #####   ####
+		  at: 42 put: '####   #####   ####
 #  ##  #   #####  #
 # $.#  # $     $  #
 #  .#  #   #####  #
@@ -5002,7 +4927,7 @@ SkBoard class >> mazesSasquatchIV [
 # $.#   #  $   #
 #  ##   #  #   #
 ####    ########';
-		at: 43 put: ' ################
+		  at: 43 put: ' ################
 ##              ##
 #  ############  #
 # #            # #
@@ -5019,7 +4944,7 @@ SkBoard class >> mazesSasquatchIV [
         ######          #
              #   #  #   #
              ############';
-		at: 44 put: '###############################
+		  at: 44 put: '###############################
 #  .  .  .  .  .  .  .  .  .  #
 # $ $ # $ $ # $ $ # $ $ # $ $ #
 ###.#####.#####.#####.#####.###
@@ -5035,7 +4960,7 @@ SkBoard class >> mazesSasquatchIV [
 # $ $ # $ $ # $ $ # $ $ # $ $ #
 #  .  .  .  .  .  .  .  .  .  #
 ###############################';
-		at: 45 put: ' #####################
+		  at: 45 put: ' #####################
 ##   #   #   #   #   ##
 # * * * * * * * * * * #
 #  # # # # # # # # #  #
@@ -5050,7 +4975,7 @@ SkBoard class >> mazesSasquatchIV [
 # * * * * * * * * * * #
 ##   #   #   #   #   ##
  #####################';
-		at: 46 put: '   #    #    #    #    #
+		  at: 46 put: '   #    #    #    #    #
    #####################
   ##    #    #    #    ##
 ### .$$. .$$. .$$. .$$. ###
@@ -5067,7 +4992,7 @@ SkBoard class >> mazesSasquatchIV [
   ##    #    #    #    ##
    #####################
    #    #    #    #    #';
-		at: 47 put: '            #####
+		  at: 47 put: '            #####
  ############ @ ############
  #            #            #
  #$.$  .$.$.$.#**.**$$$*.**#
@@ -5084,7 +5009,7 @@ SkBoard class >> mazesSasquatchIV [
  #   ..  ..   # . $ .$ . $ #
  ############ * ############
             #####';
-		at: 48 put: '#############################
+		  at: 48 put: '#############################
 #   #   #   #   #   #   #   #
 # # #   #   #   #   #   # # #
 #   .$*$.$*$.$*$.$*$.$*$.   #
@@ -5101,7 +5026,7 @@ SkBoard class >> mazesSasquatchIV [
 # # #   #   #   #   #   # # #
 #   #   #   #   #   #   #   #
 #############################';
-		at: 49 put: ' #############################
+		  at: 49 put: ' #############################
  #         *   *   *         #
  #  $ ### $  #####  $ ### $  #
  # $ $ ### $  ###  $ ### $ $ #
@@ -5118,7 +5043,7 @@ SkBoard class >> mazesSasquatchIV [
  #  $ ### $  #####  $ ### $  #
  #         *   *   *         #
  #############################';
-		at: 50 put: '##############################
+		  at: 50 put: '##############################
 # .$ ## $. ## .$ ## $. ## .$ #
 #$  .  .  $##$  .  .  $##$  .#
 #.  $##$  .  .  $##$  .  .  $#
@@ -5136,15 +5061,15 @@ SkBoard class >> mazesSasquatchIV [
 #.  $##$  .  .  $##$  .  .  $#
 # $. ## .$ ## $. ## .$ ## $. #
 ##############################';
-		yourself
+		  yourself
 ]
 
-{ #category : #mazes }
-SkBoard class >> mazesSasquatchV [
+{ #category : #'as yet unclassified' }
+SkGameManager class >> mazesSasquatchV [
 	"sasquatch/sokoban/sasquatchv.html"
 
 	^ IdentityDictionary new
-		at: 1 put: '####
+		  at: 1 put: '####
 #  ###
 #    #
 # $  #
@@ -5154,7 +5079,7 @@ SkBoard class >> mazesSasquatchV [
 #  $  #
 ###  ##
   ####';
-		at: 2 put: '#####
+		  at: 2 put: '#####
 #  @####
 #  $.  #
 ###$.# #
@@ -5162,7 +5087,7 @@ SkBoard class >> mazesSasquatchV [
 # #$.  #
 #    ###
 ######';
-		at: 3 put: '   #####
+		  at: 3 put: '   #####
    #   #
 #### # #
 # . .# #
@@ -5172,7 +5097,7 @@ SkBoard class >> mazesSasquatchV [
  ##   $@#
   ##  ###
    ####';
-		at: 4 put: '#### ####
+		  at: 4 put: '#### ####
 #  ###  #
 #  # $$ #
 # $$ #  #
@@ -5181,7 +5106,7 @@ SkBoard class >> mazesSasquatchV [
   #..*.@.#
   ##   ###
    #####';
-		at: 5 put: '###### ####
+		  at: 5 put: '###### ####
 #    ###  #
 # *     * #
 ## #***#  #
@@ -5191,7 +5116,7 @@ SkBoard class >> mazesSasquatchV [
 #         #
 #  ########
 ####';
-		at: 6 put: '  ########
+		  at: 6 put: '  ########
  ##  . . #
  # *$# # #
  #.  #$# ##
@@ -5201,7 +5126,7 @@ SkBoard class >> mazesSasquatchV [
 #     $ ###
 ##  #   #
  ########';
-		at: 7 put: '   ####
+		  at: 7 put: '   ####
    #  #
    #$ #
    #  # ####
@@ -5211,7 +5136,7 @@ SkBoard class >> mazesSasquatchV [
 #   #$ $#$  #
 #####   #   #
     #########';
-		at: 8 put: '  ####
+		  at: 8 put: '  ####
   #  #
   #$ #
   #  # ####
@@ -5223,7 +5148,7 @@ SkBoard class >> mazesSasquatchV [
  #  ######  #
  ##        ##
   ##########';
-		at: 9 put: '     #######
+		  at: 9 put: '     #######
      #  @  #
      # ### ##
 #### # # #  #####
@@ -5235,7 +5160,7 @@ SkBoard class >> mazesSasquatchV [
 #  ####  # .   #
 ####     #  ####
          ####';
-		at: 10 put: ' ########
+		  at: 10 put: ' ########
 ##      ##
 # .####  #
 # .    # #
@@ -5245,7 +5170,7 @@ SkBoard class >> mazesSasquatchV [
 # $###  #
 ##     ##
  #######';
-		at: 11 put: ' #########
+		  at: 11 put: ' #########
 ##       ##
 # .#####  #
 # .     # #
@@ -5257,7 +5182,7 @@ SkBoard class >> mazesSasquatchV [
 # $###  #
 ##     ##
  #######';
-		at: 12 put: '#######
+		  at: 12 put: '#######
 #  @  #
 # $.$ #
 ##.$.##
@@ -5267,7 +5192,7 @@ SkBoard class >> mazesSasquatchV [
 # .$. #
 #  #  #
 #######';
-		at: 13 put: '    #####
+		  at: 13 put: '    #####
  ####   #
  #  $$# #
 ## *..$ #
@@ -5276,7 +5201,7 @@ SkBoard class >> mazesSasquatchV [
 # #$$  #
 #   ####
 #####';
-		at: 14 put: '        ######
+		  at: 14 put: '        ######
 ####### #    ##
 #     ### ##  ##
 # #  $.##$  #  ##
@@ -5285,7 +5210,7 @@ SkBoard class >> mazesSasquatchV [
  ##  ## ###     #
   ##    # #######
    ######';
-		at: 15 put: '#######
+		  at: 15 put: '#######
 #     ####
 # # # .  ##
 # $$$**$$ #
@@ -5294,7 +5219,7 @@ SkBoard class >> mazesSasquatchV [
 ##  . # # #
  ####     #
     #######';
-		at: 16 put: '  ########
+		  at: 16 put: '  ########
   # #   ##
 ##### # ####
 # $ $$ $ $ #
@@ -5303,7 +5228,7 @@ SkBoard class >> mazesSasquatchV [
 #### # #####
   ## @ # #
   ########';
-		at: 17 put: '       #####
+		  at: 17 put: '       #####
        #   #
       ## # #
       # *  #
@@ -5320,7 +5245,7 @@ SkBoard class >> mazesSasquatchV [
      # # ##
      #   #
      #####';
-		at: 18 put: '  #######
+		  at: 18 put: '  #######
   ##  ###
 ### .$###
 # $$.$ #
@@ -5332,7 +5257,7 @@ SkBoard class >> mazesSasquatchV [
  ###. ###
  ###@ ##
  ######';
-		at: 19 put: '                #######
+		  at: 19 put: '                #######
        ###### ###     #
      ###    # #  $$##.#
  #####  $ $ ### #$ ##.#
@@ -5345,7 +5270,7 @@ SkBoard class >> mazesSasquatchV [
 ## @#
  #  #
  ####';
-		at: 20 put: '     ###########
+		  at: 20 put: '     ###########
     ##         ##
     #  #######  #
     # #       # #
@@ -5356,7 +5281,7 @@ SkBoard class >> mazesSasquatchV [
 # #$    $ $  # @ #
 #   ###  #########
 ##### ####';
-		at: 21 put: '##############
+		  at: 21 put: '##############
 #      #  #  ####
 # #### #  @   . #
 # $.....  #  #$ #
@@ -5368,7 +5293,7 @@ SkBoard class >> mazesSasquatchV [
 #    ####
 ###  #
   ####';
-		at: 22 put: '     #####
+		  at: 22 put: '     #####
      #   ###
   ####     ##
 ###   #.##  ##
@@ -5380,7 +5305,7 @@ SkBoard class >> mazesSasquatchV [
 # $   ###  ###
 #   #     ##
 ###########';
-		at: 23 put: '     ######
+		  at: 23 put: '     ######
 ######    #
 # $    $$ #
 # $  ##   #
@@ -5393,7 +5318,7 @@ SkBoard class >> mazesSasquatchV [
  #  $    ##
  ####  ###
     ####';
-		at: 24 put: '  ########
+		  at: 24 put: '  ########
   #      #
 ###*####.#
 #    $ $ #
@@ -5404,7 +5329,7 @@ SkBoard class >> mazesSasquatchV [
 #  $   $   #
 #  #########
 ####';
-		at: 25 put: '        #####
+		  at: 25 put: '        #####
         #   #####
    ###### #     ##
    #  ## * ####  ##
@@ -5418,7 +5343,7 @@ SkBoard class >> mazesSasquatchV [
 #  ##  ######  ####
 ##            ##
  ##############';
-		at: 26 put: '        #####
+		  at: 26 put: '        #####
        ##   # #####
 ###### #  $ # #   ####
 #    ### #$#### #    ##
@@ -5433,7 +5358,7 @@ SkBoard class >> mazesSasquatchV [
 #  ###.# #
 #### #   #
      #####';
-		at: 27 put: '   #######        ########
+		  at: 27 put: '   #######        ########
    #     #        #  ##  #
 #### ### #    #####$    $##
 #  #     ###  #      ## $ #
@@ -5452,7 +5377,7 @@ SkBoard class >> mazesSasquatchV [
         # # ##################
         #   #
         #####';
-		at: 28 put: '  #####          ####
+		  at: 28 put: '  #####          ####
   #   ############..#
   #  $# $ $ $ $  $  #
   ## $  # # # #$  ..#
@@ -5464,7 +5389,7 @@ SkBoard class >> mazesSasquatchV [
 #  $  $ $ $ $ #$  #
 #..############   #
 ####          #####';
-		at: 29 put: '     #####
+		  at: 29 put: '     #####
      #   #
     ## # #####
    ## *  #   #
@@ -5482,7 +5407,7 @@ SkBoard class >> mazesSasquatchV [
        ##### # ##
            #   #
            #####';
-		at: 30 put: '        ####
+		  at: 30 put: '        ####
         #  #
         #  #
         #  #
@@ -5498,7 +5423,7 @@ SkBoard class >> mazesSasquatchV [
     #  #
     #  #
     ####';
-		at: 31 put: '          ####
+		  at: 31 put: '          ####
           #  #
           #  #
           #  #
@@ -5516,7 +5441,7 @@ SkBoard class >> mazesSasquatchV [
     #  #
     #  #
     ####';
-		at: 32 put: ' #########
+		  at: 32 put: ' #########
  #   #   #
 ## # # # ##
 # *.*$*.* #
@@ -5527,7 +5452,7 @@ SkBoard class >> mazesSasquatchV [
 ## # # # ##
  #   #   #
  #########';
-		at: 33 put: '           #
+		  at: 33 put: '           #
  # ######## #
   #        #
  # *$.$.$* #
@@ -5540,7 +5465,7 @@ SkBoard class >> mazesSasquatchV [
  #        #
 # ######## #
  #';
-		at: 34 put: ' #### # ####
+		  at: 34 put: ' #### # ####
 ##  #   #  ##
 #   #####   #
 #  $. * .$  #
@@ -5553,7 +5478,7 @@ SkBoard class >> mazesSasquatchV [
 #   #####   #
 ##  #   #  ##
  #### # ####';
-		at: 35 put: ' ###########
+		  at: 35 put: ' ###########
 ##    #    ##
 # .$$. .$$. #
 # $..$ $..$ #
@@ -5566,7 +5491,7 @@ SkBoard class >> mazesSasquatchV [
 # .$$.@.$$. #
 ##    #    ##
  ###########';
-		at: 36 put: '#############
+		  at: 36 put: '#############
 #     #     #
 # # #   # # #
 #  .$.$.$.  #
@@ -5579,7 +5504,7 @@ SkBoard class >> mazesSasquatchV [
 # # # # # # #
 #     #     #
 #############';
-		at: 37 put: '  ############
+		  at: 37 put: '  ############
  #      @     #
 # #  $ ## $  # #
 #  #.##  ##.#  #
@@ -5595,7 +5520,7 @@ SkBoard class >> mazesSasquatchV [
 # #  $ ## $  # #
  #            #
   ############';
-		at: 38 put: '    ##########
+		  at: 38 put: '    ##########
  #####   @ *#####
  ##  $$ ##. .  ##
  # #    ##    # #
@@ -5613,7 +5538,7 @@ SkBoard class >> mazesSasquatchV [
  ##  . .## $$  ##
  #####*     #####
     ##########';
-		at: 39 put: '    #########
+		  at: 39 put: '    #########
     #       #
   ###$#$ $#$###
   # . . . . . #
@@ -5630,7 +5555,7 @@ SkBoard class >> mazesSasquatchV [
   ###$#$ $#$###
     #       #
     #########';
-		at: 40 put: '  ###### ######
+		  at: 40 put: '  ###### ######
  #     ###     #
 # .$.$. # .$.$. #
 # $.$.$ # $.$.$ #
@@ -5647,7 +5572,7 @@ SkBoard class >> mazesSasquatchV [
 # .$.$. # .$.$. #
  #     ###     #
   ###### ######';
-		at: 41 put: '   #####
+		  at: 41 put: '   #####
   #    ##  ######
  #  ##  # ##     #
  # #  # # #  ###  #
@@ -5666,7 +5591,7 @@ SkBoard class >> mazesSasquatchV [
  #     ## #  ##  #
   ######  ##    #
            #####';
-		at: 42 put: '    #####   #####
+		  at: 42 put: '    #####   #####
     #   #   #   #
   ###   #####   ###
   # .$.$. #  $.$  #
@@ -5687,7 +5612,7 @@ SkBoard class >> mazesSasquatchV [
   ###   #####   ###
     #   #   #   #
     #####   #####';
-		at: 43 put: '         #####
+		  at: 43 put: '         #####
         ##   ##
        ##.$.$.##
        ##$.$.$##
@@ -5710,7 +5635,7 @@ SkBoard class >> mazesSasquatchV [
        ##.$.$.##
         ##   ##
          #####';
-		at: 44 put: '           #
+		  at: 44 put: '           #
           # #
         ##   ##
         #  $  #
@@ -5733,7 +5658,7 @@ SkBoard class >> mazesSasquatchV [
         ##   ##
           # #
            #';
-		at: 45 put: '     ####
+		  at: 45 put: '     ####
      #  ########
      #  .      #
      #  ### $$ #
@@ -5754,7 +5679,7 @@ SkBoard class >> mazesSasquatchV [
      #      .  #
      ########  #
             ####';
-		at: 46 put: '     #####
+		  at: 46 put: '     #####
      #   #####
      # # #   #####
      #     # #   #
@@ -5776,7 +5701,7 @@ SkBoard class >> mazesSasquatchV [
     #####   # # #
         #####   #
             #####';
-		at: 47 put: '################   #######
+		  at: 47 put: '################   #######
 #              #   #     #
 #  $ $ $ $ ### ##### ### ##
 # $ $ $ $ $  . #    $  . ##
@@ -5793,7 +5718,7 @@ SkBoard class >> mazesSasquatchV [
     ## ### ##### ### $ $ $ $  #
      #     #   #              #
      #######   ################';
-		at: 48 put: ' ##########################  #
+		  at: 48 put: ' ##########################  #
 ##                        ##
 # *.*.* *.*.* *.*.* *.*.* ###
 # .$ $.$.$ $.$.$ $.$.$ $. .###
@@ -5811,7 +5736,7 @@ SkBoard class >> mazesSasquatchV [
  ### *.*.* *.*.* *.*.* *.*.* #
   ##                        ##
 #  ##########################';
-		at: 49 put: '  ####################
+		  at: 49 put: '  ####################
   #      #    #      #
 ###$.$  $.$  $.$  $.$###
 # $. .$$.#.$$. .$$.#.$ #
@@ -5835,7 +5760,7 @@ SkBoard class >> mazesSasquatchV [
 ###$.$  $.$  $.$  $.$###
   #      #    #     @#
   ####################';
-		at: 50 put: ' #########################
+		  at: 50 put: ' #########################
 ##   #       #       #   ##
 # #  .$.$.$.$ $.$.$.$.  # #
 #   .$.$.$.$.$.$.$.$.$.   #
@@ -5862,15 +5787,15 @@ SkBoard class >> mazesSasquatchV [
 # #  .$.$.$.$ $.$.$.$.  # #
 ##   #       #       #   ##
  ######################### ';
-		yourself
+		  yourself
 ]
 
-{ #category : #mazes }
-SkBoard class >> mazesSasquatchVI [
+{ #category : #'as yet unclassified' }
+SkGameManager class >> mazesSasquatchVI [
 	"sasquatch/sokoban/sasquatchvi.html"
 
 	^ IdentityDictionary new
-		at: 1 put: ' ##### 
+		  at: 1 put: ' ##### 
 ##   ## #### 
 #  #  # #  # 
 # *$* ###$ ## 
@@ -5879,14 +5804,14 @@ SkBoard class >> mazesSasquatchVI [
 #  #  # #    @# 
 ##   ## ####### 
  ##### ';
-		at: 2 put: '########## 
+		  at: 2 put: '########## 
 #   #    # 
 # #$$$$$ # 
 #  .#.#  # 
 #  ...  ## 
 ### @ ### 
   ##### ';
-		at: 3 put: ' ######## 
+		  at: 3 put: ' ######## 
 ##      ## 
 #  *..*  # 
 # #$  $#@# 
@@ -5894,14 +5819,14 @@ SkBoard class >> mazesSasquatchVI [
 ##     ### 
  ###  ## 
    #### ';
-		at: 4 put: '  ####### 
+		  at: 4 put: '  ####### 
 ###  #  # 
 #  .$$. ## 
 #  *  *@ # 
 ## .$$.  # 
  #  #  ### 
  ####### ';
-		at: 5 put: '      #### 
+		  at: 5 put: '      #### 
   #####  #### 
  ##   #  $  # 
  # .# # #*  # 
@@ -5910,14 +5835,14 @@ SkBoard class >> mazesSasquatchVI [
 #  $  #   ## 
 ####  ##### 
    #### ';
-		at: 6 put: '  ######## 
+		  at: 6 put: '  ######## 
   #      # 
 ### ## # #### 
 #  *.** .*  # 
 #  $   $# @ # 
 #######   ### 
       ##### ';
-		at: 7 put: '   ######## 
+		  at: 7 put: '   ######## 
   ##  #   # 
   #   # # # 
   #       # 
@@ -5932,7 +5857,7 @@ SkBoard class >> mazesSasquatchVI [
 #  $ @ # 
 ##  #### 
  #### ';
-		at: 8 put: '########### 
+		  at: 8 put: '########### 
 #    @    # 
 # ###$### # 
 # # .$. # # 
@@ -5941,7 +5866,7 @@ SkBoard class >> mazesSasquatchVI [
 ###$. .$### 
   #  .  # 
   ####### ';
-		at: 9 put: ' ####### 
+		  at: 9 put: ' ####### 
  #     # 
  # $ $ #### 
 ### ## .  # 
@@ -5952,7 +5877,7 @@ SkBoard class >> mazesSasquatchVI [
 #   $ $ # 
 #   ##. # 
 ######### ';
-		at: 10 put: '      #### 
+		  at: 10 put: '      #### 
       #  # 
 #######$ # 
 # . $ $  # 
@@ -5964,7 +5889,7 @@ SkBoard class >> mazesSasquatchVI [
 # $#   ##### 
 #  # 
 #### ';
-		at: 11 put: '  #### 
+		  at: 11 put: '  #### 
   #  # 
   #  ## 
 ###   # 
@@ -5976,7 +5901,7 @@ SkBoard class >> mazesSasquatchVI [
  ###. ##   # 
    #  ##  ## 
    ######## ';
-		at: 12 put: '       #### 
+		  at: 12 put: '       #### 
   ######  # 
   #    #$.# 
  ## ## #  # 
@@ -5985,7 +5910,7 @@ SkBoard class >> mazesSasquatchVI [
 #     @   # 
 #   ####### 
 ##### ';
-		at: 13 put: '        #### 
+		  at: 13 put: '        #### 
      ####  # 
      #     # 
   #### **  # 
@@ -5997,7 +5922,7 @@ SkBoard class >> mazesSasquatchVI [
 ##### # @  # 
       #    # 
       ###### ';
-		at: 14 put: '  ##### 
+		  at: 14 put: '  ##### 
   # @ # 
 ### # ##### 
 # $   ##  # 
@@ -6013,7 +5938,7 @@ SkBoard class >> mazesSasquatchVI [
    #  .....# # 
    #######   # 
          ##### ';
-		at: 15 put: '       #### 
+		  at: 15 put: '       #### 
       ##  ## 
       # $  ## 
   #####  *  # 
@@ -6029,7 +5954,7 @@ SkBoard class >> mazesSasquatchVI [
    ##  $ # 
     ##  ## 
      #### ';
-		at: 16 put: '######## 
+		  at: 16 put: '######## 
 ##  #### 
 ##. #  # 
 #  *$$ ###### 
@@ -6044,7 +5969,7 @@ SkBoard class >> mazesSasquatchVI [
        #  # .## 
        ####  ## 
        ######## ';
-		at: 17 put: '         #####   #### 
+		  at: 17 put: '         #####   #### 
          #   #####  # 
          #   $ $    # 
          ## ## ###  # 
@@ -6061,7 +5986,7 @@ SkBoard class >> mazesSasquatchVI [
 #    $ $    # 
 #  ######   # 
 ####    ##### ';
-		at: 18 put: '####  ####  #  ####  #### 
+		  at: 18 put: '####  ####  #  ####  #### 
 #  ####  #######  ####  # 
 # .$. # .$. # .$. # .$. # 
 #. $ . . $ . . $ . . $ .# 
@@ -6070,7 +5995,7 @@ SkBoard class >> mazesSasquatchVI [
 # .$. # .$. # .$. # .$. # 
 #  ####  #######  ####  # 
 ####  ####  #  ####  #### ';
-		at: 19 put: '   ######## 
+		  at: 19 put: '   ######## 
   ##   # ## 
  ## $.$  ## 
 ## $.$.$ ## 
@@ -6093,7 +6018,7 @@ SkBoard class >> mazesSasquatchVI [
 # $.$.$.$ # 
 #   . .   # 
 ########### ';
-		at: 20 put: '##### ##### 
+		  at: 20 put: '##### ##### 
 ########### 
 ##   .   ## 
 ## .$.$. ## 
@@ -6104,7 +6029,7 @@ SkBoard class >> mazesSasquatchVI [
 ##   .   ## 
 ########### 
 ##### ##### ';
-		at: 21 put: '########## 
+		  at: 21 put: '########## 
 # ##  #  # 
 # # * #### 
 ###$ .$ ## 
@@ -6114,7 +6039,7 @@ SkBoard class >> mazesSasquatchVI [
 #### * # # 
 #  #  ## # 
 ########## ';
-		at: 22 put: '########## 
+		  at: 22 put: '########## 
 #   ##   # 
 # $.  .$ # 
 # .**$*. # 
@@ -6124,7 +6049,7 @@ SkBoard class >> mazesSasquatchVI [
 # $.  .$ # 
 #   ##   # 
 ########## ';
-		at: 23 put: '########## 
+		  at: 23 put: '########## 
 ###     ## 
 # $.*.*$## 
 # *#$ #. # 
@@ -6134,7 +6059,7 @@ SkBoard class >> mazesSasquatchVI [
 ##$*.*.$ # 
 ##     ### 
 ########## ';
-		at: 24 put: '########## 
+		  at: 24 put: '########## 
 ##    #### 
 ##.$.$.$ # 
 ##$.$.$. # 
@@ -6144,7 +6069,7 @@ SkBoard class >> mazesSasquatchVI [
 # $.$.$.## 
 ####    ## 
 ########## ';
-		at: 25 put: '########## 
+		  at: 25 put: '########## 
 #  $.    # 
 #  *  *  # 
 # * ** *$# 
@@ -6154,7 +6079,7 @@ SkBoard class >> mazesSasquatchVI [
 #  *  *  # 
 #    .$  # 
 ########## ';
-		at: 26 put: ' ######## 
+		  at: 26 put: ' ######## 
 ##  @   ## 
 # #$.$.# # 
 # $.$.$. # 
@@ -6164,7 +6089,7 @@ SkBoard class >> mazesSasquatchVI [
 # #.$.$# # 
 ##      ## 
  ######## ';
-		at: 27 put: '########## 
+		  at: 27 put: '########## 
 #       ## 
 # $.$.$. # 
 # .$.$.$ # 
@@ -6174,7 +6099,7 @@ SkBoard class >> mazesSasquatchVI [
 # .$.$.$ # 
 ##      @# 
 ########## ';
-		at: 28 put: '########## 
+		  at: 28 put: '########## 
 #   .$   # 
 #  .$.$  # 
 # .$.$.$ # 
@@ -6184,7 +6109,7 @@ SkBoard class >> mazesSasquatchVI [
 #  $.$.  # 
 #   $.  @# 
 ########## ';
-		at: 29 put: '  ####### 
+		  at: 29 put: '  ####### 
  ## ##  ## 
 #####  $### 
 # $ ..  # # 
@@ -6195,7 +6120,7 @@ SkBoard class >> mazesSasquatchVI [
 ###$  ##### 
  ##  ## ## 
   ####### ';
-		at: 30 put: '  ####### 
+		  at: 30 put: '  ####### 
  ##     ## 
 ###$   $### 
 # $.* *.$ # 
@@ -6206,7 +6131,7 @@ SkBoard class >> mazesSasquatchVI [
 ###$   $### 
  ##     ## 
   ####### ';
-		at: 31 put: '############# 
+		  at: 31 put: '############# 
 #####  .$   # 
 ####  .$.$  # 
 ###  .$.$ $ # 
@@ -6219,7 +6144,7 @@ SkBoard class >> mazesSasquatchVI [
 #  $.$.  #### 
 #   $.  ##### 
 ############# ';
-		at: 32 put: '###### ###### 
+		  at: 32 put: '###### ###### 
 #   #####   # 
 # #   #   # # 
 #  $.$.$.$  # 
@@ -6232,7 +6157,7 @@ SkBoard class >> mazesSasquatchVI [
 # #   #   # # 
 #   #####   # 
 ###### ###### ';
-		at: 33 put: ' ########### 
+		  at: 33 put: ' ########### 
 ##    #    ## 
 # $.$.$.$.$ # 
 # .$.$.$.$. # 
@@ -6245,7 +6170,7 @@ SkBoard class >> mazesSasquatchVI [
 # $.$.$.$.$ # 
 ##    #    ## 
  ########### ';
-		at: 34 put: '############### 
+		  at: 34 put: '############### 
 #      #      # 
 # #.$.$.$.$.# # 
 # .$.$.$.$.$. # 
@@ -6260,7 +6185,7 @@ SkBoard class >> mazesSasquatchVI [
 # #.$.$.$.$.# # 
 #      #      # 
 ############### ';
-		at: 35 put: '  ####   #### 
+		  at: 35 put: '  ####   #### 
   #  # # #  # 
 ###.$#####$.### 
 # $  .$ $.  $ # 
@@ -6275,7 +6200,7 @@ SkBoard class >> mazesSasquatchVI [
 ###$.#####.$### 
   #  # # #  # 
   ####   #### ';
-		at: 36 put: '     ##### 
+		  at: 36 put: '     ##### 
   ####   ### 
   #    #   ### 
  ## #  $.#   # 
@@ -6290,7 +6215,7 @@ SkBoard class >> mazesSasquatchVI [
  ###   #    # 
    ###   #### 
      ##### ';
-		at: 37 put: '    ####### 
+		  at: 37 put: '    ####### 
   ###     ### 
  ##    #    ## 
  # $#$.$.#.$ # 
@@ -6305,7 +6230,7 @@ SkBoard class >> mazesSasquatchVI [
  ##    #    ## 
   ###     ### 
     ####### ';
-		at: 38 put: '     ####### 
+		  at: 38 put: '     ####### 
  ######   ###### 
  ##   $. .$   ## 
  # $ $.$#$.$ $ # 
@@ -6322,7 +6247,7 @@ SkBoard class >> mazesSasquatchVI [
  ##   $. .$   ## 
  ######   ###### 
      ####### ';
-		at: 39 put: '       #### 
+		  at: 39 put: '       #### 
        #  ## 
       ## $#### 
      ###. .  # 
@@ -6340,7 +6265,7 @@ SkBoard class >> mazesSasquatchVI [
     ####$ ## 
       ## @# 
        #### ';
-		at: 40 put: '              #### 
+		  at: 40 put: '              #### 
               #  # 
               #  # 
               #  # 
@@ -6362,7 +6287,7 @@ SkBoard class >> mazesSasquatchVI [
     #  # 
     #  # 
     #### ';
-		at: 41 put: '          # 
+		  at: 41 put: '          # 
          # # 
         # . # 
        # $.$ # 
@@ -6383,7 +6308,7 @@ SkBoard class >> mazesSasquatchVI [
         # . # 
          # # 
           # ';
-		at: 42 put: '           # 
+		  at: 42 put: '           # 
           # # 
          # # # 
         #  #  # 
@@ -6406,7 +6331,7 @@ SkBoard class >> mazesSasquatchVI [
          # # # 
           # # 
            # ';
-		at: 43 put: '      #   #   # 
+		  at: 43 put: '      #   #   # 
  ################### 
  #    #   #   #    # 
  # #  #   #   #  # # 
@@ -6427,7 +6352,7 @@ SkBoard class >> mazesSasquatchVI [
  #    #   #   #    # 
  ################### 
       #   #   # ';
-		at: 44 put: '    #####   ##### 
+		  at: 44 put: '    #####   ##### 
 #####   #####   ##### 
 #   #   #   #   #   # 
 #  $.$$$.$ $.$$$.$  # 
@@ -6448,7 +6373,7 @@ SkBoard class >> mazesSasquatchVI [
 #   #   #   #   #   # 
 #####   #####   ##### 
     #####   ##### ';
-		at: 45 put: '####################### 
+		  at: 45 put: '####################### 
 ##  #      *      #  ## 
 #   # #   # #   # #   # 
 #  $.$.$ $.$.$ $.$.$  # 
@@ -6471,7 +6396,7 @@ SkBoard class >> mazesSasquatchVI [
 #   # #   # #   # #   # 
 ##  #      *      #  ## 
 ####################### ';
-		at: 46 put: '  ######     ########### 
+		  at: 46 put: '  ######     ########### 
  ##    #######. . . .  ## 
 ##.$.$.$     .$.$.$.$.$.## 
 # $.$.$.#####$.$.$.$.$.$ # 
@@ -6497,7 +6422,7 @@ SkBoard class >> mazesSasquatchVI [
 ##.$.$.$.$.$.  @  $.$.$.## 
  ##  . . . .#######    ## 
   ###########     ###### ';
-		at: 47 put: ' ###### ##### ##### ###### 
+		  at: 47 put: ' ###### ##### ##### ###### 
 ##    ###############    ## 
 # $ $ $.$ $ $.$ $ $.$ $ $ # 
 #  $.$ . $.$ . $.$ . $.$  # 
@@ -6524,7 +6449,7 @@ SkBoard class >> mazesSasquatchVI [
 # $ $ $.$ $ $.$ $ $.$ $ $ # 
 ##    ###############    ## 
  ###### ##### ##### ###### ';
-		at: 48 put: '       #    #    #    # 
+		  at: 48 put: '       #    #    #    # 
   ########################## 
  ##    #    #    #    #    ## 
  # $.$.#.$.$#$.$.#.$.$#$.$. # 
@@ -6554,7 +6479,7 @@ SkBoard class >> mazesSasquatchVI [
  ##    #    #    #    #    ## 
   ########################## 
        #    #    #    # ';
-		at: 49 put: '         #####     ##### 
+		  at: 49 put: '         #####     ##### 
         ##   ##   ##   ## 
        ##.$.$.## ##.$.$.## 
        ##$.$.$## ##$.$.$## 
@@ -6587,7 +6512,7 @@ SkBoard class >> mazesSasquatchVI [
        ##.$.$.## ##.$.$.## 
         ##   ##   ##   ## 
          #####     ##### ';
-		at: 50 put: '            #         # 
+		  at: 50 put: '            #         # 
   ##### ######### ######### ##### 
  ##   ###   #   ###   #   ###   ## 
  # $.$. .$.$ $.$. .$.$ $.$. .$.$ # 
@@ -6622,14 +6547,14 @@ SkBoard class >> mazesSasquatchVI [
  ##   ###   #   ###   #   ###   ## 
   ##### ######### ######### ##### 
             #         # ';
-		yourself
+		  yourself
 ]
 
-{ #category : #mazes }
-SkBoard class >> mazesUAlberta [
+{ #category : #'as yet unclassified' }
+SkGameManager class >> mazesUAlberta [
 
 	^ IdentityDictionary new
-		at: 1 put: '    #####
+		  at: 1 put: '    #####
     #   #
     #$  #
   ###  $##
@@ -6642,7 +6567,7 @@ SkBoard class >> mazesUAlberta [
     #######
 
 ';
-		at: 2 put: '############
+		  at: 2 put: '############
 #..  #     ###
 #..  # $  $  #
 #..  #$####  #
@@ -6655,7 +6580,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 3 put: '        ########
+		  at: 3 put: '        ########
         #     @#
         # $#$ ##
         # $  $#
@@ -6668,7 +6593,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 4 put: '           ########
+		  at: 4 put: '           ########
            #  ....#
 ############  ....#
 #    #  $ $   ....#
@@ -6685,7 +6610,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 5 put: '        #####
+		  at: 5 put: '        #####
         #   #####
         # #$##  #
         #     $ #
@@ -6701,7 +6626,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 6 put: '######  ###
+		  at: 6 put: '######  ###
 #..  # ##@##
 #..  ###   #
 #..     $$ #
@@ -6715,7 +6640,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 7 put: '       #####
+		  at: 7 put: '       #####
  #######   ##
 ## # @## $$ #
 #    $      #
@@ -6730,7 +6655,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 8 put: '  ####
+		  at: 8 put: '  ####
   #  ###########
   #    $   $ $ #
   # $# $ #  $  #
@@ -6749,7 +6674,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 9 put: '          #######
+		  at: 9 put: '          #######
           #  ...#
       #####  ...#
       #      . .#
@@ -6766,7 +6691,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 10 put: ' ###  #############
+		  at: 10 put: ' ###  #############
 ##@####       #   #
 # $$   $$  $ $ ...#
 #  $$$#    $  #...#
@@ -6785,7 +6710,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 11 put: '          ####
+		  at: 11 put: '          ####
      #### #  #
    ### @###$ #
   ##      $  #
@@ -6803,7 +6728,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 12 put: '################
+		  at: 12 put: '################
 #              #
 # # ######     #
 # #  $ $ $ $#  #
@@ -6819,7 +6744,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 13 put: '   #########
+		  at: 13 put: '   #########
   ##   ##  #####
 ###     #  #    ###
 #  $ #$ #  #  ... #
@@ -6835,7 +6760,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 14 put: '       #######
+		  at: 14 put: '       #######
  #######     #
  #     # $@$ #
  #$$ #   #########
@@ -6854,7 +6779,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 15 put: '   ########
+		  at: 15 put: '   ########
    #   #  #
    #  $   #
  ### #$   ####
@@ -6873,7 +6798,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 16 put: '#####
+		  at: 16 put: '#####
 #   ##
 #    #  ####
 # $  ####  #
@@ -6891,7 +6816,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 17 put: '   ##########
+		  at: 17 put: '   ##########
    #..  #   #
    #..      #
    #..  #  ####
@@ -6908,7 +6833,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 18 put: '     ###########
+		  at: 18 put: '     ###########
      #  .  #   #
      # #.    @ #
  ##### ##..# ####
@@ -6924,7 +6849,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 19 put: '  ######
+		  at: 19 put: '  ######
   #   @####
 ##### $   #
 #   ##    ####
@@ -6943,7 +6868,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 20 put: '    ##########
+		  at: 20 put: '    ##########
 #####        ####
 #     #   $  #@ #
 # #######$####  ###
@@ -6962,7 +6887,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 21 put: '#########
+		  at: 21 put: '#########
 #       #
 #       ####
 ## #### #  #
@@ -6980,7 +6905,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 22 put: '######     ####
+		  at: 22 put: '######     ####
 #    #######  #####
 #   $#  #  $  #   #
 #  $  $  $ # $ $  #
@@ -6999,7 +6924,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 23 put: '    #######
+		  at: 23 put: '    #######
     #  #  ####
 ##### $#$ #  ##
 #.. #  #  #   #
@@ -7016,7 +6941,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 24 put: '###############
+		  at: 24 put: '###############
 #..........  .####
 #..........$$.#  #
 ###########$ #   ##
@@ -7035,7 +6960,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 25 put: '####
+		  at: 25 put: '####
 #  ##############
 #  #   ..#......#
 #  # # ##### ...#
@@ -7054,7 +6979,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 26 put: ' #######
+		  at: 26 put: ' #######
  #  #  #####
 ##  #  #...###
 #  $#  #...  #
@@ -7069,7 +6994,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 27 put: ' #################
+		  at: 27 put: ' #################
  #...   #    #   ##
 ##.....  $## # #$ #
 #......#  $  #    #
@@ -7085,7 +7010,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 28 put: '         #####
+		  at: 28 put: '         #####
      #####   #
     ## $  $  ####
 ##### $  $ $ ##.#
@@ -7103,7 +7028,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 29 put: '#####
+		  at: 29 put: '#####
 #   ##
 # $  #########
 ## # #       ######
@@ -7119,7 +7044,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 30 put: '       ###########
+		  at: 30 put: '       ###########
        #   #     #
 #####  #     $ $ #
 #   ##### $## # ##
@@ -7136,8 +7061,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-
-		at: 31 put: '  ####
+		  at: 31 put: '  ####
   #  #########
  ##  ##  #   #
  #  $# $@$   ####
@@ -7156,7 +7080,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 32 put: '      ####
+		  at: 32 put: '      ####
   #####  #
  ##     $#
 ## $  ## ###
@@ -7174,7 +7098,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 33 put: '############
+		  at: 33 put: '############
 ##     ##  #
 ##   $   $ #
 #### ## $$ #
@@ -7192,7 +7116,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 34 put: ' #########
+		  at: 34 put: ' #########
  #....   ##
  #.#.#  $ ##
 ##....# # @##
@@ -7210,7 +7134,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 35 put: '############ ######
+		  at: 35 put: '############ ######
 #   #    # ###....#
 #   $$#   @  .....#
 #   # ###   # ....#
@@ -7229,7 +7153,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 36 put: '            #####
+		  at: 36 put: '            #####
 #####  ######   #
 #   ####  $ $ $ #
 # $   ## ## ##  ##
@@ -7248,7 +7172,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 37 put: '###########
+		  at: 37 put: '###########
 #......   #########
 #......   #  ##   #
 #..### $    $     #
@@ -7266,7 +7190,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 38 put: '      ####
+		  at: 38 put: '      ####
 ####### @#
 #     $  #
 #   $## $#
@@ -7280,7 +7204,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 39 put: '             ######
+		  at: 39 put: '             ######
  #############....#
 ##   ##     ##....#
 #  $$##  $ @##....#
@@ -7299,7 +7223,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 40 put: '    ############
+		  at: 40 put: '    ############
     #          ##
     #  # #$$ $  #
     #$ #$#  ## @#
@@ -7318,7 +7242,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 41 put: '           #####
+		  at: 41 put: '           #####
           ##   ##
          ##     #
         ##  $$  #
@@ -7336,7 +7260,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 42 put: '     ########
+		  at: 42 put: '     ########
   ####      ######
   #    ## $ $   @#
   # ## ##$#$ $ $##
@@ -7352,7 +7276,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 43 put: '        #######
+		  at: 43 put: '        #######
     #####  #  ####
     #   #   $    #
  #### #$$ ## ##  #
@@ -7366,7 +7290,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 44 put: ' #####
+		  at: 44 put: ' #####
  #   #
  # # #######
  #      $@######
@@ -7384,7 +7308,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 45 put: '##### ####
+		  at: 45 put: '##### ####
 #...# #  ####
 #...###  $  #
 #....## $  $###
@@ -7401,7 +7325,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 46 put: '##########
+		  at: 46 put: '##########
 #        ####
 # ###### #  ##
 # # $ $ $  $ #
@@ -7420,7 +7344,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 47 put: '         ####
+		  at: 47 put: '         ####
  #########  ##
 ##  $      $ #####
 #   ## ##   ##...#
@@ -7434,7 +7358,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 48 put: '  #########  
+		  at: 48 put: '  #########  
   #*.*#*.*#  
   #.*.*.*.#  
   #*.*.*.*#  
@@ -7453,7 +7377,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 49 put: '       ####
+		  at: 49 put: '       ####
        #  ##
        #   ##
        # $$ ##
@@ -7471,7 +7395,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 50 put: '      ############
+		  at: 50 put: '      ############
      ##..    #   #
     ##..* $    $ #
    ##..*.# # # $##
@@ -7490,7 +7414,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 51 put: ' #########
+		  at: 51 put: ' #########
  #       #
  # $ $$ $#
 ### #  $ #
@@ -7505,7 +7429,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 52 put: '           ########
+		  at: 52 put: '           ########
            #......#
    ####    #......#
    #  #########...#
@@ -7525,7 +7449,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 53 put: '##################  
+		  at: 53 put: '##################  
 #                ## 
 # $#   $ ##  $    # 
 #    $###    # $$ # 
@@ -7540,7 +7464,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 54 put: '####################
+		  at: 54 put: '####################
 #   #    #   #   #@#
 # $      $   $   # #
 ## ###..## ###     #
@@ -7555,7 +7479,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 55 put: '####################
+		  at: 55 put: '####################
 #    @##      #   ##
 #    ##    $    $ ##
 #  ###....# # #  ###
@@ -7570,7 +7494,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 56 put: '####################
+		  at: 56 put: '####################
 #  #  ##    #   @###
 ##    $    # $###  #
 ##$# $ ##$# $ $    #
@@ -7585,7 +7509,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 57 put: '####################
+		  at: 57 put: '####################
 #@     ###   #  #  #
 # # #  #  $  $     #
 #####     # $ $#$# #
@@ -7600,7 +7524,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 58 put: '####################
+		  at: 58 put: '####################
 ##...   ## #    #  #
 #....         $ ## #
 #....# # #$###$    #
@@ -7615,7 +7539,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 59 put: '####################
+		  at: 59 put: '####################
 #   #  #@# ##  #####
 # # #  $    $  #####
 # #    ###### $  ###
@@ -7630,7 +7554,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 60 put: '####################
+		  at: 60 put: '####################
 # #     #          #
 #       $  ## ### ##
 #####  ##   $  $   #
@@ -7645,8 +7569,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-
-		at: 61 put: '####################
+		  at: 61 put: '####################
 #     ###..###     #
 # $$  ###..###  $@ #
 #  # ##......#  $  #
@@ -7661,7 +7584,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 62 put: '####################
+		  at: 62 put: '####################
 #    #  # #  #  #  #
 # @# # ## $   $   ##
 #### #    #  # $   #
@@ -7676,7 +7599,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 63 put: '####################
+		  at: 63 put: '####################
 #....#       #  #  #
 #....# # $  $      #
 #.... ##  $# # $#$ #
@@ -7691,7 +7614,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 64 put: '####################
+		  at: 64 put: '####################
 #....###           #
 #....##### #  #$# ##
 #....###   #$  $   #
@@ -7706,7 +7629,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 65 put: '####################
+		  at: 65 put: '####################
 #     #     @#...###
 #     #      ##...##
 # # # ##$## ## ....#
@@ -7721,7 +7644,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 66 put: '####################
+		  at: 66 put: '####################
 #     #  #...#@    #
 # #       ....#    #
 #  $  #   #....#   #
@@ -7736,7 +7659,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 67 put: '####################
+		  at: 67 put: '####################
 #####@###.##...##  #
 #####$  ..#...#    #
 ####    ......#  $ #
@@ -7751,7 +7674,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 68 put: '####################
+		  at: 68 put: '####################
 #@     #   #       #
 ## ### ##  #### # ##
 #    # #  $$       #
@@ -7766,7 +7689,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 69 put: '####################
+		  at: 69 put: '####################
 #  #      #   #   ##
 # $# $ $ ##...$  $ #
 #  $  # ##....# $  #
@@ -7781,7 +7704,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 70 put: '####################
+		  at: 70 put: '####################
 #  #  # #    #  #  #
 #   $      $ $     #
 ## #  #$###$##  ## #
@@ -7796,7 +7719,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 71 put: '####################
+		  at: 71 put: '####################
 #  #     #  ##    ##
 # $#   $ #     ##  #
 # $  $  #..#     $ #
@@ -7811,7 +7734,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 72 put: '####################
+		  at: 72 put: '####################
 #      ....#    ####
 #      ....        #
 # # ##########     #
@@ -7826,7 +7749,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 73 put: '####################
+		  at: 73 put: '####################
 #        #   #@ #  #
 # $$  #$$# # #  ## #
 #  # $ $ #$$ #     #
@@ -7841,7 +7764,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 74 put: '####################
+		  at: 74 put: '####################
 #     #   #####    #
 ## $  #   ####  $  #
 #### $$   #..#  #  #
@@ -7856,7 +7779,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 75 put: '####################
+		  at: 75 put: '####################
 #   #   #    #   #@#
 #   $  $     # $ # #
 ##$# $### #    $$# #
@@ -7871,7 +7794,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 76 put: '####################
+		  at: 76 put: '####################
 # # # #   #@##   # #
 #             $    #
 #  ##$# ##### $ # ##
@@ -7886,7 +7809,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 77 put: '####################
+		  at: 77 put: '####################
 #    ##   #    #   #
 #  $  $     ## $   #
 ## #####  .###### ##
@@ -7904,7 +7827,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 78 put: '       ###########
+		  at: 78 put: '       ###########
        #         #
        #    $ $  #
 ###### # $ ##### #
@@ -7919,7 +7842,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 79 put: '#############
+		  at: 79 put: '#############
 #           #
 # ### $$    #
 #   # $  $  #
@@ -7934,7 +7857,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 80 put: '  #################
+		  at: 80 put: '  #################
 ###@##         ...#
 #    #         ...#
 # $  #         ...#
@@ -7950,7 +7873,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 81 put: '              #####
+		  at: 81 put: '              #####
      ##########   #
      #        #   #
      #  $ $    $$ #
@@ -7966,7 +7889,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 82 put: '    ######
+		  at: 82 put: '    ######
  ####    #
  #    ## #
  # $     #
@@ -7982,7 +7905,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 83 put: '####### #########
+		  at: 83 put: '####### #########
 #     # #   ##  #
 # ### # #   $   #
 # # $ ###   $   #
@@ -7998,7 +7921,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 84 put: '#######
+		  at: 84 put: '#######
 #     ##########
 #     #    #  ##
 # $   #   $ $  #
@@ -8013,7 +7936,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 85 put: '############
+		  at: 85 put: '############
 #      #   ##
 # $  $   #  ######
 ####  #####      #
@@ -8032,7 +7955,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 86 put: '################
+		  at: 86 put: '################
 #       #@ #   #
 # # # # # $  $$#
 # #...# #$$$   #
@@ -8045,7 +7968,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 87 put: '    #####
+		  at: 87 put: '    #####
  ####   ## #####
  #  $    ###   #
  # $@$ $    $  #
@@ -8062,7 +7985,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 88 put: '#############
+		  at: 88 put: '#############
 #........####
 #...#### #  #####
 #...#  ###    $ #
@@ -8081,7 +8004,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 89 put: ' ##################
+		  at: 89 put: ' ##################
  #   $       ...#.##
  #       ####..... #
  # #######  #..... #
@@ -8101,7 +8024,7 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		at: 90 put: '####################
+		  at: 90 put: '####################
 #..#    #          #
 #.$  $  #$$  $## $##
 #.$#  ###  ## ##   #
@@ -8121,232 +8044,35 @@ SkBoard class >> mazesUAlberta [
 
 
 ';
-		yourself
-]
-
-{ #category : #initialization }
-SkBoard >> addBox: aBox [
-
-	boxes add: aBox
-]
-
-{ #category : #printing }
-SkBoard >> asciiString [ 
-
-	^ String streamContents: [ :st |
-		self printOn: st ]	
-
-]
-
-{ #category : #'low level access' }
-SkBoard >> at: anInteger at: anInteger2 [
-	^ map at: anInteger at: anInteger2
-]
-
-{ #category : #'low level access' }
-SkBoard >> at: anInteger at: anInteger2 put: anElement [
-	map at: anInteger at: anInteger2 put: anElement 
+		  yourself
 ]
 
 { #category : #accessing }
-SkBoard >> atPosition: aCpPositionable [ 
-	^ (map at: aCpPositionable x @ aCpPositionable y)
-]
+SkGameManager >> currentLevelString [
 
-{ #category : #'low level access' }
-SkBoard >> atRow: anInteger atColumn: anInteger2 [
-	^ map at: anInteger2 @ anInteger
-]
-
-{ #category : #'low level access' }
-SkBoard >> atRow: anInteger atColumn: anInteger2 put: anElement [
-	map at: anInteger2 @ anInteger put: anElement 
-]
-
-{ #category : #inspector }
-SkBoard >> basicPrintOnInspector [
-	<inspectorPresentationOrder: 35 title: 'Game'>
-
-	^ SpTextPresenter new 
-		text: self printString;
-		yourself
-]
-
-{ #category : #building }
-SkBoard >> buildMapWidth: x height: y [
-
-	map := Array2D 
-				rows: y 
-				columns: x 
-				tabulate: [ :row :column | SkGround new basicPosition: column @ row ]
+	^ currentLevelString
 ]
 
 { #category : #accessing }
-SkBoard >> columnNumber [
-	^ map numberOfColumns
-]
+SkGameManager >> currentLevelString: aSkBoard [
 
-{ #category : #building }
-SkBoard >> do: aBlock [
-
-	map do: aBlock
+	currentLevelString := aSkBoard
 ]
 
 { #category : #'as yet unclassified' }
-SkBoard >> endGame [
+SkGameManager >> launchAgain [
+
+	self launchFromString: self currentLevelString
+]
+
+{ #category : #'as yet unclassified' }
+SkGameManager >> launchFromString: aString [
+
+	| board |
+	self currentLevelString: aString.
+	board := SkBoard
+		         board: (self class importFromString: aString)
+		         managedBy: self.
+	SkBoardElement openWithModel: board.
 	
-	ended ifFalse: [ ended := true. player inspect ]
-]
-
-{ #category : #accessing }
-SkBoard >> ended [ 
-
-	^ ended 
-]
-
-{ #category : #accessing }
-SkBoard >> gameManager [ 
-	
-	^ gameManager 
-]
-
-{ #category : #accessing }
-SkBoard >> gameManager: aSkGameManager [
-
-	gameManager:= aSkGameManager 
-]
-
-{ #category : #accessing }
-SkBoard >> height [
-	^ map height
-]
-
-{ #category : #accessing }
-SkBoard >> initialMap [ 
-	
-	^ initialMap 
-]
-
-{ #category : #accessing }
-SkBoard >> initialMap: aCTNewArray2D [
-
-	initialMap := aCTNewArray2D.
-]
-
-{ #category : #initialization }
-SkBoard >> initialize [
-
-	super initialize.
-	ended := false.
-	boxes := OrderedCollection new
-]
-
-{ #category : #initialization }
-SkBoard >> initializeElement: anElement atLine: lineNumber column: columnNumber [
-
-	anElement board: self.
-	anElement basicPosition: columnNumber @ lineNumber.
-	self atRow: lineNumber atColumn: columnNumber put: anElement.
-	anElement postCreationAction.
-]
-
-{ #category : #testing }
-SkBoard >> isFinished [
-	^ boxes allSatisfy: [ :each | each background isTarget ]
-]
-
-{ #category : #accessing }
-SkBoard >> lineNumber [
-	^ map numberOfRows
-]
-
-{ #category : #accessing }
-SkBoard >> map [ 
-	^ map
-]
-
-{ #category : #accessing }
-SkBoard >> map: aCTNewArray2D [
-
-	"self initialMap: aCTNewArray2D copy."
-	map := aCTNewArray2D.
-	map withIndexes: [ :column :row |
-		(map at: column @ row)
-			position: column @ row;
-			board: self ].
-	self
-		setBoxes;
-		setPlayer
-]
-
-{ #category : #move }
-SkBoard >> moveSteps: aCollectionOfDirection [
-
-	aCollectionOfDirection do: [ :each | player move: each ]
-]
-
-{ #category : #accessing }
-SkBoard >> player [
-	^ player
-]
-
-{ #category : #printing }
-SkBoard >> printOn: aStream [
-
-	(1 to: map height)
-		do: [ :rowNumber |
-			1 to: map width do: [ :columnNumber |
-				| el elClass |
-				el := (self atRow: rowNumber atColumn: columnNumber).
-				elClass := (el class inheritsFrom: SkMovable) ifFalse: [ el class ] ifTrue: [ el background class = SkGround ifTrue: [ el class ] ifFalse: [ (el class asString, 'OnTarget') asClass ] ].
-				aStream nextPut: elClass textualMapCharacter ] ]
-		separatedBy: [ aStream cr ]
-]
-
-{ #category : #initialization }
-SkBoard >> reset [
-
-	self gameManager launchAgain
-]
-
-{ #category : #initialization }
-SkBoard >> setBoxes [
-
-	map do: [ :each |
-		each className = 'SkBox' ifTrue: [ self addBox: each ] ]
-]
-
-{ #category : #initialization }
-SkBoard >> setPlayer [
-
-	player := map contents detect: #isPlayer
-]
-
-{ #category : #initialization }
-SkBoard >> setPlayer: aPlayer [
-	player := aPlayer
-]
-
-{ #category : #move }
-SkBoard >> updatePositionOf: aSkMovable from: previousPosition [
-	"Put back the previous position element."
-
-	self
-		atRow: previousPosition y
-		atColumn: previousPosition x
-		put: aSkMovable background.
-	"put the current position element as previous background of the moving element."
-	aSkMovable background:
-		(self atRow: aSkMovable position y atColumn: aSkMovable position x).
-	"finally place the moving element to its new location"
-	self
-		atRow: aSkMovable position y
-		atColumn: aSkMovable position x
-		put: aSkMovable.
-			self isFinished ifTrue: [ self endGame ]
-]
-
-{ #category : #accessing }
-SkBoard >> width [
-	^ map width
 ]
