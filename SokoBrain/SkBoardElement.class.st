@@ -164,7 +164,7 @@ SkBoardElement >> manageEvent: anEvent [
 SkBoardElement >> openWithModel: aSkBoard [
 
 	| space |
-	space := BlSpace new.
+	space := OBlSpace new.
 
 	self board: aSkBoard.
 
@@ -174,7 +174,8 @@ SkBoardElement >> openWithModel: aSkBoard [
 	space pulse
 		extent: 1000 @ 1000;
 		resizable: false;
-		show
+		show;
+		halt
 ]
 
 { #category : #initialization }
