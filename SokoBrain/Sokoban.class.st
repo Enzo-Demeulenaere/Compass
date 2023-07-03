@@ -89,9 +89,9 @@ Sokoban class >> menuLevel [
 
 		subMenuMicroban addItem:
 			((ToButtonMenuItem new labelText: stream) whenClickedDo: [
-				|string|
-				string := (SkGameManager mazesMicroban at: i).
-				manager launchFromString: string ])].
+				 | string |
+				 string := SkGameManager mazesMicroban at: i.
+				 manager launchFromString: string inDictionary: 'mazesMicroban' at: i  ]) ].
 	menu addItem: subMenuMicroban.
 
 

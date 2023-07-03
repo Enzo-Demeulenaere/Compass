@@ -8194,8 +8194,10 @@ SkBoard >> do: aBlock [
 
 { #category : #'as yet unclassified' }
 SkBoard >> endGame [
-	
-	ended ifFalse: [ ended := true. player inspect ]
+
+	ended ifTrue: [ ^ self ].
+	ended := true.
+	"gameManager registerLevel"
 ]
 
 { #category : #accessing }

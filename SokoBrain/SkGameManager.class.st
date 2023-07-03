@@ -3,7 +3,10 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'currentLevelString',
-		'currentBoardElement'
+		'currentBoardElement',
+		'currentMoveCount',
+		'currentLevel',
+		'packDictionary'
 	],
 	#category : #'SokoBrain-Model'
 }
@@ -8061,6 +8064,18 @@ SkGameManager >> currentBoardElement: aSkBoardElement [
 ]
 
 { #category : #accessing }
+SkGameManager >> currentLevel [ 
+	
+	^ currentLevel 
+]
+
+{ #category : #accessing }
+SkGameManager >> currentLevel: aDictionary [
+
+	currentLevel := aDictionary 
+]
+
+{ #category : #accessing }
 SkGameManager >> currentLevelString [
 
 	^ currentLevelString
@@ -8073,6 +8088,33 @@ SkGameManager >> currentLevelString: aString [
 	
 ]
 
+{ #category : #accessing }
+SkGameManager >> currentMoveCount [ 
+	
+	^ currentMoveCount 
+]
+
+{ #category : #accessing }
+SkGameManager >> currentMoveCount: aNumber [
+
+	currentMoveCount:= aNumber 
+]
+
+{ #category : #initialization }
+SkGameManager >> initialize [
+
+	super initialize.
+	currentMoveCount := 0.
+	self initializePackDictionary
+]
+
+{ #category : #initialization }
+SkGameManager >> initializePackDictionary [
+
+	self packDictionary: { 
+	'mazesMicroban' -> SkLevelPack new } asDictionary 
+]
+
 { #category : #'as yet unclassified' }
 SkGameManager >> launchAgain [
 
@@ -8083,10 +8125,41 @@ SkGameManager >> launchAgain [
 SkGameManager >> launchFromString: aString [
 
 	| board |
+	self currentMoveCount: 0.
 	self currentLevelString: aString.
 	self currentBoardElement: SkBoardElement new.
 	board := SkBoard
 		         board: (self class importFromString: aString)
 		         managedBy: self.
 	self currentBoardElement openWithModel: board
+]
+
+{ #category : #'as yet unclassified' }
+SkGameManager >> launchFromString: aString inDictionary: aDictionaryName at: aNumber [
+
+	self currentLevel: { aDictionaryName -> aNumber } asDictionary.
+	self launchFromString: aString
+]
+
+{ #category : #accessing }
+SkGameManager >> packDictionary [ 
+	
+	^ packDictionary 
+]
+
+{ #category : #accessing }
+SkGameManager >> packDictionary: aDictionary [
+
+	packDictionary := aDictionary
+]
+
+{ #category : #'as yet unclassified' }
+SkGameManager >> registerLevel [
+
+	| pack index |
+	pack := self currentLevel key.
+	index := self currentLevel at: pack.
+	(self packDictionary at: pack)
+		at: index
+		put: (SkLevelInformation count: self currentMoveCount)
 ]
