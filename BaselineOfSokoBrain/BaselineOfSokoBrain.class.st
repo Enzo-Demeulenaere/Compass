@@ -12,7 +12,7 @@ BaselineOfSokoBrain >> baseline: spec [
 		spec
 			baseline: 'ContainersArray2D'
 			with: [
-			spec repository: 'github://pharo-containers/Containers-Array2D/src' ].
+			spec repository: 'github://Enzo-Demeulenaere/Containers-Array2D/src' ].
 		spec
 			baseline: 'ContainersLinkedList'
 			with: [
@@ -38,6 +38,7 @@ BaselineOfSokoBrain >> baseline: spec [
 			with: [ spec requires: #( #Robots ) ];
 			package: #'Robots-WayBack-Tests'
 			with: [ spec requires: #( #Robots ) ];
-			package: #SokoBrain
-			with: [ spec requires: #( #Compass 'ContainersArray2D Toplo LevelImporter' ) ] ]
+			package: #SokoBrain with: [
+				spec requires:
+						#( #Compass 'ContainersArray2D Toplo LevelImporter' ) ] ]
 ]
