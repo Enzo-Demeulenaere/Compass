@@ -9,10 +9,9 @@ BaselineOfSokoBrain >> baseline: spec [
 
 	<baseline>
 	spec for: #common do: [
-		spec
-			baseline: 'ContainersArray2D'
-			with: [
-			spec repository: 'github://Enzo-Demeulenaere/Containers-Array2D/src' ].
+		spec baseline: 'ContainersArray2D' with: [
+			spec repository:
+				'github://Enzo-Demeulenaere/Containers-Array2D/src' ].
 		spec
 			baseline: 'ContainersLinkedList'
 			with: [
@@ -40,5 +39,5 @@ BaselineOfSokoBrain >> baseline: spec [
 			with: [ spec requires: #( #Robots ) ];
 			package: #SokoBrain with: [
 				spec requires:
-						#( #Compass 'ContainersArray2D Toplo LevelImporter' ) ] ]
+						#( #Compass #ContainersArray2D #Toplo #LevelImporter ) ] ]
 ]
