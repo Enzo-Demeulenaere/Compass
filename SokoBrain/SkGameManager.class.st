@@ -2,6 +2,7 @@ Class {
 	#name : #SkGameManager,
 	#superclass : #Object,
 	#instVars : [
+		'menu',
 		'currentLevelString',
 		'currentBoardElement',
 		'currentMoveCount',
@@ -8052,6 +8053,12 @@ SkGameManager class >> mazesUAlberta [
 ]
 
 { #category : #accessing }
+SkGameManager class >> menu: aToMenu [
+
+	^ self new menu: aToMenu 
+]
+
+{ #category : #accessing }
 SkGameManager >> currentBoardElement [
 
 	^ currentBoardElement 
@@ -8142,6 +8149,18 @@ SkGameManager >> launchFromString: aString inDictionary: aDictionaryName at: aNu
 ]
 
 { #category : #accessing }
+SkGameManager >> menu [ 
+
+	^ menu
+]
+
+{ #category : #accessing }
+SkGameManager >> menu: aToMenu [
+
+	menu := aToMenu
+]
+
+{ #category : #accessing }
 SkGameManager >> packDictionary [ 
 	
 	^ packDictionary 
@@ -8162,4 +8181,15 @@ SkGameManager >> registerLevel [
 	(self packDictionary at: pack)
 		at: index
 		put: (SkLevelInformation count: self currentMoveCount).
+	self updateButton.
+]
+
+{ #category : #accessing }
+SkGameManager >> updateButton [ 
+
+	|button elt|
+	button := self menu items first items at: self currentLevel values first.
+	elt := BlElement new background: (Smalltalk ui icons iconNamed: #glamorousAccept).
+elt size: elt background image extent.
+	button icon: elt
 ]

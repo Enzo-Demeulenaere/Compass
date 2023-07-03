@@ -79,7 +79,7 @@ Sokoban class >> menuLevel [
 	menu icon:
 		(ToImage inner: (Smalltalk ui icons iconNamed: #solidMenu)).
 
-	manager := SkGameManager new.
+	manager := SkGameManager menu: menu.
 
 	subMenuMicroban := ToMenu new label:
 		                   (ToLabel new text: 'mazesMicroban').
