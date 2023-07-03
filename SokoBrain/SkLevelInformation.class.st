@@ -11,7 +11,7 @@ Class {
 { #category : #accessing }
 SkLevelInformation class >> count: aNumber [
 
-	self new bestCount: aNumber 
+	^ (self new bestCount: aNumber) 
 ]
 
 { #category : #accessing }

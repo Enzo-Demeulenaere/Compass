@@ -8,19 +8,19 @@ Class {
 }
 
 { #category : #accessing }
-SkLevelPack >> at: anIndex put: aSkLevelInformation [
-
-	(self levelDictionary at: anIndex) ifAbsent: [ (self compareAt: anIndex with: aSkLevelInformation) ifTrue: [ ^ self ] ].
-	(self levelDictionary at: anIndex) put: aSkLevelInformation
-]
-
-{ #category : #accessing }
-SkLevelPack >> compareAt: anIndex with: aSkLevelInformation [
+SkLevelPack >> at: anIndex isBetterThan: aSkLevelInformation [
 
 	| registeredCount newCount|
 	registeredCount := (self levelDictionary at: anIndex) bestCount.
 	newCount := aSkLevelInformation bestCount.
-	^ registeredCount >= newCount 
+	^ registeredCount < newCount 
+]
+
+{ #category : #accessing }
+SkLevelPack >> at: anIndex put: aSkLevelInformation [
+
+	self levelDictionary at: anIndex ifPresent: [ (self at: anIndex isBetterThan: aSkLevelInformation) ifTrue: [ ^ self ] ].
+	self levelDictionary at: anIndex put: aSkLevelInformation
 ]
 
 { #category : #initialization }
