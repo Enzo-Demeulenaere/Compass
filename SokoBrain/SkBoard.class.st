@@ -8197,7 +8197,7 @@ SkBoard >> endGame [
 
 	ended ifTrue: [ ^ self ].
 	ended := true.
-	"gameManager registerLevel"
+	gameManager registerLevel
 ]
 
 { #category : #accessing }

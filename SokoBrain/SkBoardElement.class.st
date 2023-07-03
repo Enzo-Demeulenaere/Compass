@@ -174,8 +174,7 @@ SkBoardElement >> openWithModel: aSkBoard [
 	space pulse
 		extent: 1000 @ 1000;
 		resizable: false;
-		show;
-		halt
+		show
 ]
 
 { #category : #initialization }

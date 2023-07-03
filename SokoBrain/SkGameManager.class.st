@@ -8157,9 +8157,9 @@ SkGameManager >> packDictionary: aDictionary [
 SkGameManager >> registerLevel [
 
 	| pack index |
-	pack := self currentLevel key.
+	pack := self currentLevel keys first.
 	index := self currentLevel at: pack.
 	(self packDictionary at: pack)
 		at: index
-		put: (SkLevelInformation count: self currentMoveCount)
+		put: (SkLevelInformation count: self currentMoveCount).
 ]
