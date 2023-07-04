@@ -48,10 +48,7 @@ SkBoardElement >> board: aSkBoard [
 		c vertical fitContent ].
 	self
 		initializeBackgroundLayer;
-		initializeForegroundLayer;
-		addChildren: {
-				backgroundLayer.
-				foregroundLayer }
+		initializeForegroundLayer
 ]
 
 { #category : #accessing }
@@ -88,10 +85,9 @@ SkBoardElement >> initializeBackgroundLayer [
 				          columnCount: board width;
 				          cellSpacing: 2);
 		         constraintsDo: [ :c |
-					         c horizontal matchParent.
-					         c vertical fitContent ]
-				  .
-
+			         c horizontal matchParent.
+			         c vertical fitContent ].
+	self addChild: layer.
 	self board do: [ :aBox |
 		| boxElement tmpBox |
 		tmpBox := aBox.
@@ -99,9 +95,9 @@ SkBoardElement >> initializeBackgroundLayer [
 			tmpBox := aBox background ].
 		boxElement := (SkBoxElement box: tmpBox)
 			              positionInField: aBox position;
-			              board: board;
-			              updateBackgroundColor.
-		layer addChild: boxElement ].
+			              board: board.
+		layer addChild: boxElement.
+		boxElement updateBackgroundColor ].
 
 	self backgroundLayer: layer
 ]
@@ -116,8 +112,9 @@ SkBoardElement >> initializeForegroundLayer [
 				          columnCount: board width;
 				          cellSpacing: 2);
 		         constraintsDo: [ :c |
-					         c horizontal matchParent.
-					         c vertical fitContent ].
+			         c horizontal matchParent.
+			         c vertical fitContent ].
+	self addChild: layer.
 	self board do: [ :aBox |
 		| boxElement tmpBox |
 		tmpBox := aBox.
@@ -125,10 +122,11 @@ SkBoardElement >> initializeForegroundLayer [
 			tmpBox := SkGround new ].
 		boxElement := (SkBoxElement box: tmpBox)
 			              positionInField: aBox position;
-			              board: board;
-			              updateBackgroundColor.
+			              board: board.
+			             
 
-		layer addChild: boxElement as: aBox position asString ].
+		layer addChild: boxElement as: aBox position asString.
+		boxElement  updateBackgroundColor ].
 
 	self foregroundLayer: layer
 ]

@@ -14,7 +14,7 @@ SkBox class >> textualMapCharacter [
 SkBox >> backgroundRepresentation [
 
 	^ self background className = 'SkTarget'
-		  ifTrue: [ Color lightGreen ]
+		  ifTrue: [ MyIcons boxIcon darker darker]
 		  ifFalse: [ MyIcons boxIcon ]
 ]
 

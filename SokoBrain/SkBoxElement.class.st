@@ -97,8 +97,12 @@ SkBoxElement >> updateBackgroundColor [
 
 	| bg |
 	bg := self box backgroundRepresentation.
-	"bg class = Form ifTrue: [ bg := bg scaledIntoFormOfSize: self extent ]."
-	"self box class = SkPlayer ifTrue: [ self parent extent inspect ]."
-	self background: bg.
-	"self textChild"
+	bg class = Form ifTrue: [
+		| size |
+		"magic numbers :
+		- 1000 is the size of the space
+		- 2 is the size of the cellSpacing"
+		size := 1000 / self parent parent board width - 2.
+		bg := bg scaledIntoFormOfSize: size ].
+	self background: bg
 ]
