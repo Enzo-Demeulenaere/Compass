@@ -26,6 +26,66 @@ MyIcons class >> icons [
 	^ icons ifNil: [ icons := Dictionary new ]
 ]
 
+{ #category : #'accessing - icons' }
+MyIcons class >> playerDownIcon [
+	"Private - Generated method"
+
+	^ self icons at: #playerDownIcon ifAbsentPut: [
+		  Form fromBinaryStream:
+			  self playerDownIconContents base64Decoded asByteArray readStream ]
+]
+
+{ #category : #'as yet unclassified' }
+MyIcons class >> playerDownIconContents [ 
+
+	^ 'iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAD3ElEQVR4XuWYP2tUQRTFDYgpRLAIGkUwRkRZEKNYWAQECyGBgCCYStTCwnwGi1T5BFpYaWGrnY2VhSCC2FlYG7URBC380zw5A7/l7GTe27cqOpO5cHhv5829O+fcO3fe7o76rX6r3+q3+q1+q9/qt/qtfqvf6rf/ZTt3zzZgamq62bYk24gfvHyrmT482N7kRRKCTlzYc25lC3mvClA0eWUYIiLs5PVs18yREbI+p9jqgLzICCLJvcPHIe1+xW4NMgmUyZQAqXGJIhRNPiaWIto1p1gByLwItGW9De5T7P73Jsb+dlJ9tkHcJIsSIdXF48y6EDyPybt4RQoQk4GQd3rII4gLwdFYnABarJe0yHG+p/a34POoFn83KE4AL3kR+PHmaYCLoHnxOGRdgGJPgpQAkHXyAqQZ15V5xw/MlSWAFuxVkCLrnxnz8c2Ht8PnVxs3m3sXFssSQYv1TIuMPv/89DEgJo8APNd8F0DPixQA8gKZFBDEoTGeay4+zC1SAAESq683AwlB9y5C23OyX5wALgICfPn2PZC4svE43McVoDE90xzduwDFkXcRBLI9WFwKaBOA51QF/sURPzE71wAR8FLuC/nI12MVQ35l+Wrz/Mn9AH1ua3xtoCHKlziKmb0IkHd7/+FFMzu9r/MESJ0E8pGvW/YikLFYgDMn15rFpUfhCsE2+NxYACoqW/J319dHFq17BLi49jJcfU+n4HPx93j6jixFcAFiKKMipSt7ug0+NxUrewEEEeEqKJs3HnweyWobfC7+HlPI7mjUgmhwghaphsXCRUxZHUceMBfSxCJ+dj+OeNlxaNF+HFLafeBbhThx/OwE4Fcer7A0NapApFTafYAA7HfBfxjpu7IUYGH/0SH8vUBEEGBc9hGA0qfheezsBGBhb++cbr4+Oz8UwJujb4G2zPsWiLu9Yiq2vsNFzkYAyCOAVwEvN5DrKn3m8M7gAhMfEbIToHl3PcBF0CutCwDBVOPze/nI18kTO0sBfIEugkiIEHCS48YRgJjEjbdZVltAi7x26lhYoBpVnP1JjkL5KoZiKWbWFaBFxX0AASYlD1wA3//ZCRBXgS+Sru/l3ZV1nuMTi5sl+fg49Aboxx5ZpcE5GI/neyPM7vjrshR5GpuQmk/DTIlQ3P+CkInP+S4yv+OTtQDxCxCl/zd9shcg7up9BJjEp4gKIJN9BYj9ShSgOTQ/38yfGIxg78yMiHSRCXNiP8Ua45efAFr4YOHsED2JDIWLfUsSIJBwAhMQ2UIelFQFSQJ/KoBQjACQWL60OsQEBJK+xW2DFvwr//qtfutpvwBSavUchoxN+gAAAABJRU5ErkJggg=='
+]
+
+{ #category : #'accessing - icons' }
+MyIcons class >> playerLeftIcon [
+	"Private - Generated method"
+
+	^ self icons at: #playerLeftIcon ifAbsentPut: [
+		  Form fromBinaryStream:
+			  self playerLeftIconContents base64Decoded asByteArray readStream ]
+]
+
+{ #category : #'as yet unclassified' }
+MyIcons class >> playerLeftIconContents [
+
+	^ 'iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAADWElEQVR4XuWYPWtUQRiFExC3CILFEjchkLgiCQuSKCksFgQLIYGAIJhKjEWK5DekSJVfkBRWprDVziaVRSAExM4itVEbQdDCj2bCGTyXk5eZzTYK78zA4e7cuRt8nnln5q4j9bf6W/2t/lZ/q7/V3+pv9bf6W/2t/vav2+X29aCpUsKlsU5oTffC5KONKAH9lKiiZtoCAfrK3ZUoAUGfIijItQRAEA4BLCERwAESoQh9Bv0iJCighnApCdp3vxQoQUEZwBFYxyiGolJ7hCsBAOLs5qKSKIb33QrQ3V6BhhFh77mTYOEt2EUidIlwc3QlYHS01UCm4Lm+LbQK0z3CpQA9z3VWc1Vh77sWQAmEoBDOvB6DOXjdGN0KwD8c198fDgKXBYLPeuSl4FWC25OA8BRghbBKFF7fHfgajedcCpidmDknQIXofQXV/YMSihCg+fP1Swz7rIzTl1vh3c76ud8LHHMrAFAKj/7z+/0YwKJPeD6rywJj+DtuX4dtFaCPrL4/jSG0itLNz+3s5wQ83nkdBXz/+StGKwPRzdA9fEpAr78Uk4MvZuYH7QO5cBN0v+5TEgA2DDw3yLnOTExREgCWqoYU/OGbF2Fl+UkZEgDRaY2HO7c2G8hUMI5n2T59PvIvgfAPNo8bQE1/6VUzBmBEGyrBvQAAAhQwGsLjSngrwX0VPNv/lgREBo1p9ra3/Z4KmOEcmB3T6iA44roCMMMsdQ3vp2absa/QbisApW5DCVznWgWYcfve4FYAT4BUdOfX8ke541jUn8zuBejs65KABIKz9K0AvCi5FLBw7UZAVAJLX/cCSqAAfg+BACwHtwJ+vL0XQbjpWXgGEhB+J3xci0Ef1VCEgNQ+oFLw3Mnu7QhOCfy+WwEAwjW3EerSYNmrBH7f7aswoQbBq4Cn8zcjOOHdC9CTwK5/ezpw9lWAe3grABsdfxqjb1+O9AQoAp4C9JcfJdgq4HsBxor6LzGFpQRWgW6COlacAJ7zeu5bMbZCihOQqwIrplgBCkoBuhSsnFL4ARKmut3QneuF3sJivCJ/x0YoosQqaGAJnxDQCKIkBJ8pyLWA5YerMYSngKvtdgOPzwME+S//XDDLKoZhNZQg4MLlwQpBWPo1wA9TIfW3+tt/aGdDAKg7ZNioHgAAAABJRU5ErkJggg=='
+]
+
+{ #category : #'accessing - icons' }
+MyIcons class >> playerRightIcon [
+	"Private - Generated method"
+
+	^ self icons at: #playerRightIcon ifAbsentPut: [
+		  Form fromBinaryStream:
+			  self playerRightIconContents base64Decoded asByteArray readStream ]
+]
+
+{ #category : #'as yet unclassified' }
+MyIcons class >> playerRightIconContents [
+
+	^ 'iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAADTklEQVR4XuWXMWtUQRSFEwhuEQIWi64iGFckYUGMksJiQbAQEggIgqlELSzMb7BIlV8QCyst0sbOxspCEEHsLKyN2giCFhqbkTN4Hic3M7qd3DsXLu+9mRfY77t3Zl6m2o/2o/1oP9qP9qP9aD/aj/aj/Wg//kcc6Z9JmmEh7djM7CADn7xxP/VOjxKew8IrIK5IgCPnLq8dgrdd4bYzCA9QggOY4JhD4j3O6ztMt93BFidsDZ6SNPmOW3j8cIIRFFAKj3sd1zn3+wIFEIyVVvhaQhqXRQh4W/Va6rzr04EbWanF/wWuotxK0A5g6+sGaOEJWpKA6/R0z7+AkgQ7rt2i3w9uBdijrnQU6hzPfABTgjt4K4CAVoIejYDkHO733z3PV5fVR+BH8xNWz3R9ZnVLwHjm2MKJeb8CFJ6wFKOgCmzH3QrgMuAHDWDebN3rKq2Qv758zmmFuBVACdruBNrbedBVGfeQ8ujqOCeeFR7PrgXoZmjBeF1/u5cToMgQ1bcSuB8QWiv97cfPnIC9ufU0loBSJ1CAlTAar+QMJ4ASAIP1btd5LV2vf43FwXxCcqObRALeCQO/tnorvXz2eCIJGMM8N8QQ8B8/vUoMjF06v9GJqOWgdyy/614AKq8BGUhIuLbxOo1XdhOXCJNzriWUqk94JuDvPvmaJdnEOOW4FID1+3Bz8xB0SQKqXZpjh7juAEigCK2wBa0JwpzbDtDdnSJKXYEqsxM0OR5CAI49HocKjyA81r3NEB2Af3NxtPFUsMuAu34pcRK4FcAPHRXAZUAJCs9TQavvWgDaHgKWjp/tUgUAXte+LgXC8+9cCkDV8ePThzs5v7+4kp8BTni7AeoY3uXfuBRAAMLj+n77Yh5X2NLady8AgR8OYAtPAWz1WvLv3QugBOTtC+cOCPibBLfrv9YFSFbU7valzdDtCVCSoGk/egCMTRHAejKEEcBNkYC2/QFs4TkWToC2OgWw+nYZhBJgK2xB9buA3wkhBdRAbfVDCrDVJyTnwnZAqfoE//NKGi6Oco6WlvP11HCIOab7yECExL0BPCCAEpgRJBQBj/b7nQDc6/zq9fWcuA8hgFUnoKbthkpOhZGASrPCyChtPpGEyBVuP7zGb3ukwHwaKb/xAAAAAElFTkSuQmCC'
+]
+
+{ #category : #'accessing - icons' }
+MyIcons class >> playerUpIcon [
+	"Private - Generated method"
+
+	^ self icons at: #playerUpIcon ifAbsentPut: [
+		  Form fromBinaryStream:
+			  self playerUpIconContents base64Decoded asByteArray readStream ]
+]
+
+{ #category : #'as yet unclassified' }
+MyIcons class >> playerUpIconContents [
+
+	^ 'iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAADj0lEQVR4XuWYvYsUQRDFPRA3EMFg0VUEdUU8FsRTDAwOBAPBgwPBwEjUwMD7Gwwu8i/QwEgDU0MTIwNBBFMDY78SwcBIk5bX8oa3ZXfP7HFC13ZBMR/dXdPv19U1s7unfWvf2rf2rX1r39q39q19a9/at/atffvPtrIyCnv3TzpvFsLo+CwcvXE/CYKQXIuksJLIA5c2Y7vto+PcrzJXGmI19feNT8Z7dNtHM2RpIFBkzm370kDAakOMpvwiEFwDSKW7FUo4OXcLQfdySZxmSAoK211BoPi+tGd22CzR+xjrGgBF9BVBmxUWnksAEEIxfCOUhBNYCpo7ABSi6a373cJgG4+2ULoFgPMh+14zRrcBM8clAK0FqQJoq71uAbYThisA/AAigBKE3DnHEQBiugRgIaRgaAHUe7ot3AHQHz66n0sfPnbfK0RXAFIQdDXt28C+AbSvS/GlTLCvyJy7Xfk+CPq/gP2PYGnEr05OBHX7X6Be49y2876N40b85sat8Obl0+iT0aHoFAr//PzB3Lleq2Mc4yBm9RAoXu3L17dh/dqLcPfZj3ik4JxrX4xVqx4CJqeTxjn9wtmtTphNbTrFo6+O1XjVAsDEHm9vz03cOoRd3XoXhTK16biHNiveOp5RJQQCgJghAGzbEACIXS2AM0f+7n9MkJ6CkYJQEk/RdDwDz6pO/JMr63PFjDAsBAKgYHudEo9YGhvPqgoCJvP+4b3w68OrOEGcs7CVIKDgwUviGQcxCQDn1QHAxAgAK6SvRQtBAaRWX1ee+50ZxmdUB+D392/R7eSYBVoXNO0VgN3vWuwUMrw6AJgUADA96boNcuItBE1/jcVtVh2AtcOngnVOGp+zEMZK3+fox+KIsYyTekZVAH6+vhzCpzvxePvc6ThBitdVZ+HLuX1DIAZiISbjw6sD8PHR+Q4CJotr3LcVf6gTAmMrAMauDgAh6Cox9XcCAGOZXXQ+pyoANgu4Yrinr7tFxPPI9NfY1YnPFUPsX/u+H+ocwxpQZfHrMwWgac3ipq5vCu2PNrf/B2Ly/I2vWZASRVgKAGOXAoDdBkMAMFvcA7AfQTlRCstulaUAQM+JWqSvFwsHx+N/MqAPgM0AxEAstwDg09XZwhmAMRzvFsCx6TT6bO1i2Lh+Mx5xnRGU7Fvo7wMAVnKnADDWM4BuGxACxBRSOrYRAreAZ/GdsITvRt/2rX3bBfsD2+HczNUFQvoAAAAASUVORK5CYII='
+]
+
 { #category : #'accessing - reset' }
 MyIcons class >> resetIcons [
 	<script>
