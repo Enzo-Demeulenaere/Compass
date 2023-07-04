@@ -6556,6 +6556,12 @@ SkGameManager class >> mazesSasquatchVI [
 ]
 
 { #category : #'as yet unclassified' }
+SkGameManager class >> mazesTest [
+
+	^ IdentityDictionary new at: 1 put: '#@$ .#'; yourself
+]
+
+{ #category : #'as yet unclassified' }
 SkGameManager class >> mazesUAlberta [
 
 	^ IdentityDictionary new
@@ -8118,8 +8124,17 @@ SkGameManager >> initialize [
 { #category : #initialization }
 SkGameManager >> initializePackDictionary [
 
-	self packDictionary: { 
-	'mazesMicroban' -> SkLevelPack new } asDictionary 
+	self packDictionary: {
+	('mazesTest' -> SkLevelPack new).
+			('mazesMicroban' -> SkLevelPack new).
+			('mazesLoma' -> SkLevelPack new).
+			('mazesPack' -> SkLevelPack new).
+			('mazesSasquatch' -> SkLevelPack new).
+			('mazesSasquatchIII' -> SkLevelPack new).
+			('mazesSasquatchIV' -> SkLevelPack new).
+			('mazesSasquatchV' -> SkLevelPack new).
+			('mazesSasquatchVI' -> SkLevelPack new).
+			('mazesUAlberta' -> SkLevelPack new) } asDictionary
 ]
 
 { #category : #'as yet unclassified' }
@@ -8181,7 +8196,7 @@ SkGameManager >> registerLevel [
 	(self packDictionary at: pack)
 		at: index
 		put: (SkLevelInformation count: self currentMoveCount).
-	self updateButton.
+	self menu ifNotNil: [ self updateButton ].
 ]
 
 { #category : #accessing }

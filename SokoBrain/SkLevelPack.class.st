@@ -19,7 +19,9 @@ SkLevelPack >> at: anIndex isBetterThan: aSkLevelInformation [
 { #category : #accessing }
 SkLevelPack >> at: anIndex put: aSkLevelInformation [
 
-	self levelDictionary at: anIndex ifPresent: [ (self at: anIndex isBetterThan: aSkLevelInformation) ifTrue: [ ^ self ] ].
+	self levelDictionary at: anIndex ifPresent: [
+		(self at: anIndex isBetterThan: aSkLevelInformation) ifTrue: [
+			^ self ] ].
 	self levelDictionary at: anIndex put: aSkLevelInformation
 ]
 
