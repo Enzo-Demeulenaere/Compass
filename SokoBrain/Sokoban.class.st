@@ -73,7 +73,7 @@ Have fun !' asRopedText.
 { #category : #'as yet unclassified' }
 Sokoban class >> menuLevel [
 
-	| menu manager subMenuMicroban subMenuLoma |
+	| menu manager subMenuMicroban subMenuLoma subMenuPack subMenuSasquatch subMenuSasquatchIII subMenuSasquatchIV subMenuSasquatchV subMenuSasquatchVI subMenuUAlberta  |
 	menu := ToMenu new.
 	menu label: (ToLabel text: 'Levels').
 	menu icon:
@@ -83,9 +83,25 @@ Sokoban class >> menuLevel [
 
 	subMenuLoma := self subMenuLoma: manager.
 	subMenuMicroban := self subMenuMicroban: manager.
+	subMenuPack := self subMenuPack: manager.
+	subMenuSasquatch := self subMenuSasquatch: manager.
+	subMenuSasquatchIII := self subMenuSasquatchIII: manager.
+	subMenuSasquatchIV := self subMenuSasquatchIV: manager.
+	subMenuSasquatchV := self subMenuSasquatchV: manager.
+	subMenuSasquatchVI := self subMenuSasquatchVI: manager.
+	subMenuUAlberta := self subMenuUAlberta: manager.
 
 	menu addItem: subMenuLoma.
 	menu addItem: subMenuMicroban.
+	menu addItem: subMenuPack.
+	menu addItem: subMenuSasquatch.
+	menu addItem: subMenuSasquatchIII.
+	menu addItem: subMenuSasquatchIV.
+	menu addItem: subMenuSasquatchV.
+	menu addItem: subMenuSasquatchVI.
+	menu addItem: subMenuUAlberta.
+	
+	
 
 
 
@@ -148,6 +164,140 @@ Sokoban class >> subMenuMicroban: aManager [
 					 inDictionary: 'mazesMicroban'
 					 at: i ]) ].
 		^ subMenu
+]
+
+{ #category : #'as yet unclassified' }
+Sokoban class >> subMenuPack: aManager [
+
+	| subMenu |
+	subMenu := ToMenu new label: (ToLabel new text: 'mazesPack').
+	1 to: SkGameManager mazesPack size do: [ :i |
+		| stream |
+		stream := String streamContents: [ :out | out print: i ].
+
+		subMenu addItem:
+			((ToButtonMenuItem new labelText: stream) whenClickedDo: [
+				 | string |
+				 string := SkGameManager mazesPack at: i.
+				 aManager launchFromString: string inDictionary: 'mazesPack' at: i ]) ].
+	^ subMenu
+]
+
+{ #category : #'as yet unclassified' }
+Sokoban class >> subMenuSasquatch: aManager [
+
+	| subMenu |
+	subMenu := ToMenu new label: (ToLabel new text: 'mazesSasquatch').
+	1 to: SkGameManager mazesSasquatch size do: [ :i |
+		| stream |
+		stream := String streamContents: [ :out | out print: i ].
+
+		subMenu addItem:
+			((ToButtonMenuItem new labelText: stream) whenClickedDo: [
+				 | string |
+				 string := SkGameManager mazesSasquatch at: i.
+				 aManager launchFromString: string inDictionary: 'mazesSasquatch' at: i ]) ].
+	^ subMenu
+]
+
+{ #category : #'as yet unclassified' }
+Sokoban class >> subMenuSasquatchIII: aManager [
+
+	| subMenu |
+	subMenu := ToMenu new label: (ToLabel new text: 'mazesSasquatchIII').
+	1 to: SkGameManager mazesSasquatchIII size do: [ :i |
+		| stream |
+		stream := String streamContents: [ :out | out print: i ].
+
+		subMenu addItem:
+			((ToButtonMenuItem new labelText: stream) whenClickedDo: [
+				 | string |
+				 string := SkGameManager mazesSasquatchIII at: i.
+				 aManager
+					 launchFromString: string
+					 inDictionary: 'mazesSasquatchIII'
+					 at: i ]) ].
+	^ subMenu
+]
+
+{ #category : #'as yet unclassified' }
+Sokoban class >> subMenuSasquatchIV: aManager [
+
+	| subMenu |
+	subMenu := ToMenu new label: (ToLabel new text: 'mazesSasquatchIV').
+	1 to: SkGameManager mazesSasquatchIV size do: [ :i |
+		| stream |
+		stream := String streamContents: [ :out | out print: i ].
+
+		subMenu addItem:
+			((ToButtonMenuItem new labelText: stream) whenClickedDo: [
+				 | string |
+				 string := SkGameManager mazesSasquatchIV at: i.
+				 aManager
+					 launchFromString: string
+					 inDictionary: 'mazesSasquatchIV'
+					 at: i ]) ].
+	^ subMenu
+]
+
+{ #category : #'as yet unclassified' }
+Sokoban class >> subMenuSasquatchV: aManager [
+
+	| subMenu |
+	subMenu := ToMenu new label: (ToLabel new text: 'mazesSasquatchV').
+	1 to: SkGameManager mazesSasquatchV size do: [ :i |
+		| stream |
+		stream := String streamContents: [ :out | out print: i ].
+
+		subMenu addItem:
+			((ToButtonMenuItem new labelText: stream) whenClickedDo: [
+				 | string |
+				 string := SkGameManager mazesSasquatchV at: i.
+				 aManager
+					 launchFromString: string
+					 inDictionary: 'mazesSasquatchV'
+					 at: i ]) ].
+	^ subMenu
+]
+
+{ #category : #'as yet unclassified' }
+Sokoban class >> subMenuSasquatchVI: aManager [
+
+	| subMenu |
+	subMenu := ToMenu new label: (ToLabel new text: 'mazesSasquatchVI').
+	1 to: SkGameManager mazesSasquatchVI size do: [ :i |
+		| stream |
+		stream := String streamContents: [ :out | out print: i ].
+
+		subMenu addItem:
+			((ToButtonMenuItem new labelText: stream) whenClickedDo: [
+				 | string |
+				 string := SkGameManager mazesSasquatchVI at: i.
+				 aManager
+					 launchFromString: string
+					 inDictionary: 'mazesSasquatchVI'
+					 at: i ]) ].
+	^ subMenu
+]
+
+{ #category : #'as yet unclassified' }
+Sokoban class >> subMenuUAlberta: aManager [
+
+	| subMenu |
+	subMenu := ToMenu new label: (ToLabel new text: 'mazesUAlberta').
+	1 to: SkGameManager mazesUAlberta size do: [ :i |
+		| stream |
+		stream := String streamContents: [ :out | out print: i ].
+
+		subMenu addItem:
+			((ToButtonMenuItem new labelText: stream) whenClickedDo: [
+				 | string |
+				 string := SkGameManager mazesUAlberta at: i.
+				 aManager
+					 launchFromString: string
+					 inDictionary: 'mazesUAlberta'
+					 at: i ]) ].
+	^ subMenu
 ]
 
 { #category : #accessing }
