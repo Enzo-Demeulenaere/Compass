@@ -8185,11 +8185,15 @@ SkGameManager >> registerLevel [
 ]
 
 { #category : #accessing }
-SkGameManager >> updateButton [ 
+SkGameManager >> updateButton [
 
-	|button elt|
-	button := self menu items first items at: self currentLevel values first.
-	elt := BlElement new background: (Smalltalk ui icons iconNamed: #glamorousAccept).
-elt size: elt background image extent.
+	| menuButton button elt |
+	menuButton := self menu items detect: [ :each |
+		              each label text asString
+		              = self currentLevel keys first ].
+	button := menuButton items at: self currentLevel values first.
+	elt := BlElement new background:
+		       (Smalltalk ui icons iconNamed: #glamorousAccept).
+	elt size: elt background image extent.
 	button icon: elt
 ]

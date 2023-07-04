@@ -73,7 +73,7 @@ Have fun !' asRopedText.
 { #category : #'as yet unclassified' }
 Sokoban class >> menuLevel [
 
-	| menu manager subMenuMicroban |
+	| menu manager subMenuMicroban subMenuLoma |
 	menu := ToMenu new.
 	menu label: (ToLabel text: 'Levels').
 	menu icon:
@@ -81,17 +81,10 @@ Sokoban class >> menuLevel [
 
 	manager := SkGameManager menu: menu.
 
-	subMenuMicroban := ToMenu new label:
-		                   (ToLabel new text: 'mazesMicroban').
-	1 to: SkGameManager mazesMicroban size do: [ :i |
-		| stream |
-		stream := String streamContents: [ :out | out print: i ].
+	subMenuLoma := self subMenuLoma: manager.
+	subMenuMicroban := self subMenuMicroban: manager.
 
-		subMenuMicroban addItem:
-			((ToButtonMenuItem new labelText: stream) whenClickedDo: [
-				 | string |
-				 string := SkGameManager mazesMicroban at: i.
-				 manager launchFromString: string inDictionary: 'mazesMicroban' at: i  ]) ].
+	menu addItem: subMenuLoma.
 	menu addItem: subMenuMicroban.
 
 
@@ -117,6 +110,44 @@ Sokoban class >> openWithMenuBar [
 	space root addChild: bar.
 	space extent: 1000 @ 1000.
 	space show
+]
+
+{ #category : #'as yet unclassified' }
+Sokoban class >> subMenuLoma: aManager [
+
+	| subMenu |
+	subMenu := ToMenu new label: (ToLabel new text: 'mazesLoma').
+	1 to: SkGameManager mazesLoma size do: [ :i |
+		| stream |
+		stream := String streamContents: [ :out | out print: i ].
+
+		subMenu addItem:
+			((ToButtonMenuItem new labelText: stream) whenClickedDo: [
+				 | string |
+				 string := SkGameManager mazesLoma at: i.
+				 aManager launchFromString: string inDictionary: 'mazesLoma' at: i ]) ].
+	^ subMenu
+]
+
+{ #category : #'as yet unclassified' }
+Sokoban class >> subMenuMicroban: aManager [
+
+	|subMenu|
+	subMenu := ToMenu new label:
+		                   (ToLabel new text: 'mazesMicroban').
+	1 to: SkGameManager mazesMicroban size do: [ :i |
+		| stream |
+		stream := String streamContents: [ :out | out print: i ].
+
+		subMenu addItem:
+			((ToButtonMenuItem new labelText: stream) whenClickedDo: [
+				 | string |
+				 string := SkGameManager mazesMicroban at: i.
+				 aManager
+					 launchFromString: string
+					 inDictionary: 'mazesMicroban'
+					 at: i ]) ].
+		^ subMenu
 ]
 
 { #category : #accessing }
