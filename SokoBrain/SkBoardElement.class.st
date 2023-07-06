@@ -134,7 +134,7 @@ SkBoardElement >> initializeForegroundLayer [
 { #category : #initialization }
 SkBoardElement >> manageEvent: anEvent [
 
-	| dict player position |
+	| dict player playerPosition moved element direction |
 	anEvent key name = #SPACE ifTrue: [
 		self resetBoard.
 		^ self ].
@@ -142,20 +142,29 @@ SkBoardElement >> manageEvent: anEvent [
 		self loseFocus.
 		^ self ].
 	player := self board player.
-	position := player position.
+	playerPosition := player position.
 	dict := {
 		        (#DOWN -> CpDirection south).
 		        (#UP -> CpDirection north).
 		        (#LEFT -> CpDirection west).
 		        (#RIGHT -> CpDirection east) } asDictionary.
-	player move: (dict at: anEvent key name ifAbsent: [ 1 @ 1 ]).
-	(self foregroundLayer childNamed: position asString) boxForForeground
-		updateBackgroundColor.
+	direction := dict at: anEvent key name ifAbsent: [ 1 @ 1 ].
+	moved := player move: direction.
+
+	moved ifTrue: [
+		| originalPosition |
+		element := self foregroundLayer childNamed:
+			           (direction * player position) asString.
+		originalPosition := element position.
+		element addAnimation: (BlTransformAnimation translate: direction * element position). 
+		element position: originalPosition ].
+	(self foregroundLayer childNamed: playerPosition asString)
+		boxForForeground updateBackgroundColor.
 	(self foregroundLayer childNamed: player position asString)
 		boxForForeground updateBackgroundColor.
 	(self foregroundLayer childNamed:
-		 ((dict at: anEvent key name) * player position) asString)
-		boxForForeground updateBackgroundColor
+		 (direction * player position) asString) boxForForeground
+		updateBackgroundColor
 ]
 
 { #category : #'as yet unclassified' }

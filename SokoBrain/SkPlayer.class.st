@@ -52,7 +52,7 @@ SkPlayer >> isPlayer [
 SkPlayer >> move: aCpDirection [
 
 	self facing: aCpDirection class.
-	super move: aCpDirection
+	^ super move: aCpDirection
 ]
 
 { #category : #move }

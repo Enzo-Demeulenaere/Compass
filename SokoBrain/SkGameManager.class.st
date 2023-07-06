@@ -17,6 +17,7 @@ SkGameManager class >> importFromString: aString [
 
 	| tmp |
 	tmp := LevelImporter fromString: aString fromPackage: SkBoard package.
+	tmp := tmp collect: [ :each | each configured ].
 	tmp width < tmp height ifTrue: [ tmp := tmp rotateLeft ].
 	^ tmp
 ]
