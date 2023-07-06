@@ -45,6 +45,13 @@ SkBoxElement >> box: aSkElement [
 	box := aSkElement.
 ]
 
+{ #category : #'as yet unclassified' }
+SkBoxElement >> boxAnimationMovingInDirection: aCpDirection [
+
+	^ (BlTransformAnimation translate:
+		   aCpDirection * (0 @ 0) * self width) duration: 150 milliSeconds
+]
+
 { #category : #accessing }
 SkBoxElement >> boxForForeground [
 
@@ -77,6 +84,12 @@ SkBoxElement >> positionInField [
 SkBoxElement >> positionInField: aPoint [
 
 	positionInField := aPoint
+]
+
+{ #category : #initialization }
+SkBoxElement >> resetAnimation [ 
+
+	self transformation: BlElementIdentityTransformation uniqueInstance
 ]
 
 { #category : #'as yet unclassified' }

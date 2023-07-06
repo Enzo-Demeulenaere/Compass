@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'board',
 		'backgroundLayer',
-		'foregroundLayer'
+		'foregroundLayer',
+		'directionDict'
 	],
 	#category : #'SokoBrain-UI'
 }
@@ -52,6 +53,32 @@ SkBoardElement >> board: aSkBoard [
 ]
 
 { #category : #accessing }
+SkBoardElement >> directionDict [
+
+	^ directionDict
+]
+
+{ #category : #'as yet unclassified' }
+SkBoardElement >> elementsToUpdateAtPosition: aPoint goingIn: aCpDirection [
+
+	| layer elements playerElement neighborElement nextNeighborElement |
+	layer := self foregroundLayer.
+	playerElement := layer childNamed: aPoint asString.
+	neighborElement := layer childNamed:
+		                   (aCpDirection * aPoint) asString.
+	elements := {
+		            playerElement.
+		            neighborElement } asOrderedCollection.
+	(neighborElement board map at: neighborElement positionInField) class
+	= SkWall ifFalse: [
+		nextNeighborElement := layer childNamed:
+			                       (aCpDirection * (aCpDirection * aPoint))
+				                       asString.
+		elements add: nextNeighborElement ].
+	^ elements
+]
+
+{ #category : #accessing }
 SkBoardElement >> foregroundLayer [
 
 	^ foregroundLayer
@@ -67,6 +94,7 @@ SkBoardElement >> foregroundLayer: aBlElement [
 SkBoardElement >> initialize [
 
 	super initialize.
+	self initializeDirectionDict.
 	self
 		background: (BlBackground paint: Color veryLightGray);
 		layout: BlFrameLayout new;
@@ -102,6 +130,16 @@ SkBoardElement >> initializeBackgroundLayer [
 	self backgroundLayer: layer
 ]
 
+{ #category : #initialization }
+SkBoardElement >> initializeDirectionDict [
+
+	directionDict := {
+		        (#DOWN -> CpDirection south).
+		        (#UP -> CpDirection north).
+		        (#LEFT -> CpDirection west).
+		        (#RIGHT -> CpDirection east) } asDictionary.
+]
+
 { #category : #accessing }
 SkBoardElement >> initializeForegroundLayer [
 
@@ -134,37 +172,33 @@ SkBoardElement >> initializeForegroundLayer [
 { #category : #initialization }
 SkBoardElement >> manageEvent: anEvent [
 
-	| dict player playerPosition moved element direction |
+	| player moved direction neighborElement elements |
 	anEvent key name = #SPACE ifTrue: [
 		self resetBoard.
 		^ self ].
 	board isFinished ifTrue: [
-		self loseFocus.
 		^ self ].
 	player := self board player.
-	playerPosition := player position.
-	dict := {
-		        (#DOWN -> CpDirection south).
-		        (#UP -> CpDirection north).
-		        (#LEFT -> CpDirection west).
-		        (#RIGHT -> CpDirection east) } asDictionary.
-	direction := dict at: anEvent key name ifAbsent: [ 1 @ 1 ].
+	direction := self directionDict
+		             at: anEvent key name
+		             ifAbsent: [ 1 @ 1 ].
+
+	elements := self
+		            elementsToUpdateAtPosition: player position
+		            goingIn: direction.
 	moved := player move: direction.
 
-	moved ifTrue: [
-		| originalPosition |
-		element := self foregroundLayer childNamed:
-			           (direction * player position) asString.
-		originalPosition := element position.
-		element addAnimation: (BlTransformAnimation translate: direction * element position). 
-		element position: originalPosition ].
-	(self foregroundLayer childNamed: playerPosition asString)
-		boxForForeground updateBackgroundColor.
-	(self foregroundLayer childNamed: player position asString)
-		boxForForeground updateBackgroundColor.
-	(self foregroundLayer childNamed:
-		 (direction * player position) asString) boxForForeground
-		updateBackgroundColor
+	neighborElement := elements second.
+
+	(moved and: [ neighborElement box class = SkBox ])
+		ifTrue: [
+			| animation |
+			animation := neighborElement boxAnimationMovingInDirection:
+				             direction.
+			neighborElement addAnimation: (animation onFinishedDo: [
+					 neighborElement resetAnimation.
+					 self updateElements: elements ]) ]
+		ifFalse: [ self updateElements: elements ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -189,4 +223,10 @@ SkBoardElement >> resetBoard [
 
 	self space close.
 	self board reset
+]
+
+{ #category : #'as yet unclassified' }
+SkBoardElement >> updateElements: anOrderedCollection [
+
+	anOrderedCollection do: [ :each | each boxForForeground updateBackgroundColor ]
 ]
