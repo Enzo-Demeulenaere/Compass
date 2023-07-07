@@ -176,8 +176,10 @@ SkBoardElement >> manageEvent: anEvent [
 	anEvent key name = #SPACE ifTrue: [
 		self resetBoard.
 		^ self ].
-	board isFinished ifTrue: [
+	anEvent key name = #ESCAPE ifTrue: [
+		self space close.
 		^ self ].
+	board isFinished ifTrue: [ ^ self ].
 	player := self board player.
 	direction := self directionDict
 		             at: anEvent key name
