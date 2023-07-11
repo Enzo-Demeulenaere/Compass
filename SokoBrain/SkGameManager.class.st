@@ -17,6 +17,7 @@ SkGameManager class >> importFromString: aString [
 
 	| tmp |
 	tmp := LevelImporter fromString: aString fromPackage: SkBoard package.
+	tmp := tmp collect: [ :each | each configured ].
 	tmp width < tmp height ifTrue: [ tmp := tmp rotateLeft ].
 	^ tmp
 ]
@@ -6558,7 +6559,7 @@ SkGameManager class >> mazesSasquatchVI [
 { #category : #'as yet unclassified' }
 SkGameManager class >> mazesTest [
 
-	^ IdentityDictionary new at: 1 put: '#@$ .#'; yourself
+	^ IdentityDictionary new at: 1 put: '#@*..#$$'; yourself
 ]
 
 { #category : #'as yet unclassified' }

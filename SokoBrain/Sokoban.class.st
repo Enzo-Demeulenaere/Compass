@@ -22,8 +22,7 @@ Sokoban class >> menuHelp [
 
 	| menu |
 	menu := ToMenu new.
-	menu
-		label: (ToLabel text: 'Help').
+	menu label: (ToLabel text: 'Help').
 	menu icon:
 		(ToImage inner: (Smalltalk ui icons iconNamed: #glamorousHelp)).
 	menu whenClickedDo: [
@@ -44,6 +43,13 @@ The puzzle is solved when all boxes are placed at storage locations
 	
 -----
 
+Bindings :
+
+Arrows : to move the player around
+Spacebar : to reset the level or replay it when finished
+Escape : to exit the current level
+
+-----
 You can start playing with the ''Levels'' menu and choose a level you would like to play
 			
 Have fun !' asRopedText.
@@ -73,7 +79,7 @@ Have fun !' asRopedText.
 { #category : #'as yet unclassified' }
 Sokoban class >> menuLevel [
 
-	| menu manager subMenuMicroban subMenuLoma subMenuPack subMenuSasquatch subMenuSasquatchIII subMenuSasquatchIV subMenuSasquatchV subMenuSasquatchVI subMenuUAlberta  |
+	| menu manager subMenuMicroban subMenuLoma subMenuPack subMenuSasquatch subMenuSasquatchIII subMenuSasquatchIV subMenuSasquatchV subMenuSasquatchVI subMenuUAlberta |
 	menu := ToMenu new.
 	menu label: (ToLabel text: 'Levels').
 	menu icon:
@@ -100,8 +106,8 @@ Sokoban class >> menuLevel [
 	menu addItem: subMenuSasquatchV.
 	menu addItem: subMenuSasquatchVI.
 	menu addItem: subMenuUAlberta.
-	
-	
+	menu addItem: (self subMenuTest: manager).
+
 
 
 
@@ -148,9 +154,8 @@ Sokoban class >> subMenuLoma: aManager [
 { #category : #'as yet unclassified' }
 Sokoban class >> subMenuMicroban: aManager [
 
-	|subMenu|
-	subMenu := ToMenu new label:
-		                   (ToLabel new text: 'mazesMicroban').
+	| subMenu |
+	subMenu := ToMenu new label: (ToLabel new text: 'mazesMicroban').
 	1 to: SkGameManager mazesMicroban size do: [ :i |
 		| stream |
 		stream := String streamContents: [ :out | out print: i ].
@@ -163,7 +168,7 @@ Sokoban class >> subMenuMicroban: aManager [
 					 launchFromString: string
 					 inDictionary: 'mazesMicroban'
 					 at: i ]) ].
-		^ subMenu
+	^ subMenu
 ]
 
 { #category : #'as yet unclassified' }
@@ -276,6 +281,26 @@ Sokoban class >> subMenuSasquatchVI: aManager [
 				 aManager
 					 launchFromString: string
 					 inDictionary: 'mazesSasquatchVI'
+					 at: i ]) ].
+	^ subMenu
+]
+
+{ #category : #'as yet unclassified' }
+Sokoban class >> subMenuTest: aManager [
+
+	| subMenu |
+	subMenu := ToMenu new label: (ToLabel new text: 'mazesTest').
+	1 to: SkGameManager mazesTest size do: [ :i |
+		| stream |
+		stream := String streamContents: [ :out | out print: i ].
+
+		subMenu addItem:
+			((ToButtonMenuItem new labelText: stream) whenClickedDo: [
+				 | string |
+				 string := SkGameManager mazesTest at: i.
+				 aManager
+					 launchFromString: string
+					 inDictionary: 'mazesTest'
 					 at: i ]) ].
 	^ subMenu
 ]

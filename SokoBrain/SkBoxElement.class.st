@@ -30,8 +30,14 @@ SkBoxElement >> board: aSkBoard [
 
 	board := aSkBoard.
 
-	self constraintsDo: [ :c | c horizontal matchParent ]
-			
+	self
+		constraintsDo: [ :c | c horizontal matchParent ]
+		"addEventHandlerOn: BlElementBackgroundChangedEvent do: [ :evt |
+			self transformDo: [ :builder |
+					builder
+						topLeftOrigin;
+						scaleBy: evt currentTarget extent / self background image extent.
+					self halt ] ]"
 ]
 
 { #category : #accessing }
@@ -43,6 +49,13 @@ SkBoxElement >> box [
 SkBoxElement >> box: aSkElement [
 
 	box := aSkElement.
+]
+
+{ #category : #'as yet unclassified' }
+SkBoxElement >> boxAnimationMovingInDirection: aCpDirection [
+
+	^ (BlTransformAnimation translate:
+		   aCpDirection * (0 @ 0) * self width) duration: 150 milliSeconds
 ]
 
 { #category : #accessing }
@@ -77,6 +90,12 @@ SkBoxElement >> positionInField [
 SkBoxElement >> positionInField: aPoint [
 
 	positionInField := aPoint
+]
+
+{ #category : #initialization }
+SkBoxElement >> resetAnimation [ 
+
+	self transformation: BlElementIdentityTransformation uniqueInstance
 ]
 
 { #category : #'as yet unclassified' }
