@@ -22,8 +22,7 @@ Sokoban class >> menuHelp [
 
 	| menu |
 	menu := ToMenu new.
-	menu
-		label: (ToLabel text: 'Help').
+	menu label: (ToLabel text: 'Help').
 	menu icon:
 		(ToImage inner: (Smalltalk ui icons iconNamed: #glamorousHelp)).
 	menu whenClickedDo: [
@@ -44,6 +43,13 @@ The puzzle is solved when all boxes are placed at storage locations
 	
 -----
 
+Bindings :
+
+Arrows : to move the player around
+Spacebar : to reset the level or replay it when finished
+Escape : to exit the current level
+
+-----
 You can start playing with the ''Levels'' menu and choose a level you would like to play
 			
 Have fun !' asRopedText.

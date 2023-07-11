@@ -30,8 +30,14 @@ SkBoxElement >> board: aSkBoard [
 
 	board := aSkBoard.
 
-	self constraintsDo: [ :c | c horizontal matchParent ]
-			
+	self
+		constraintsDo: [ :c | c horizontal matchParent ]
+		"addEventHandlerOn: BlElementBackgroundChangedEvent do: [ :evt |
+			self transformDo: [ :builder |
+					builder
+						topLeftOrigin;
+						scaleBy: evt currentTarget extent / self background image extent.
+					self halt ] ]"
 ]
 
 { #category : #accessing }
